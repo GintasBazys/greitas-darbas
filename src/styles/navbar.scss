@@ -1,0 +1,42 @@
+a.nav-link {
+  color: white !important;
+  font-weight: bold;
+}
+
+.navbar-expand-lg .navbar-nav .dropdown-menu {
+  left: -3.5em;
+}
+
+.dropdown-item  > a {
+  color: #212529;
+  text-decoration: none;
+}
+
+.dropdown-menu-item {
+  display: flex;
+  width: 100%;
+  padding: .25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  text-align: inherit;
+  white-space: nowrap;
+}
+a.dropdown-menu-item {
+  color: #16181b;
+  text-decoration: none;
+}
+
+.nav-position {
+  top:0;
+  width: 100%;
+  position: fixed;
+}
+
+.content-show {
+  margin-top: 3.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.dropdown-toggle::after {
+  content: none;
+}

@@ -1,11 +1,24 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-// @ts-ignore
-const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-        {...rest}
-        render={(props: any) => (false ? <Component {...props} /> : <Redirect to="/" />)}
-    />
-);
+import React from "react"
+import { Redirect, Route } from "react-router-dom"
+import {auth} from "./firebase";
 
-export default PrivateRoute;
+// @ts-ignore
+const PrivateRoute = ({ component: Component, ...rest }) => {
+
+    const isLoggedIn = auth.currentUser;
+
+    return (
+        <Route
+            {...rest}
+            render={props =>
+                isLoggedIn ? (
+                    <Component {...props} />
+                ) : (
+                    <Redirect to={{ pathname: "/", }} />
+                )
+            }
+        />
+    )
+}
+
+export default PrivateRoute
