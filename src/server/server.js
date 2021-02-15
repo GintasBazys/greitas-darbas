@@ -13,7 +13,7 @@ app.use(cors());
 
 
 app.post("/stripe/mokejimas", cors(), async (req, res) => {
-    let { amount, id } = req.body;
+    let { amount, id } = req.body;//also request user
     try {
         const payment = await stripe.paymentIntents.create({
             amount: amount,

@@ -19,7 +19,7 @@ const Checkout = () => {
         if (!error) {
             try {
                 // @ts-ignore
-                const {id} = paymentMethod;
+                const {id} = paymentMethod;//TODO instead of id use username
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
@@ -31,7 +31,7 @@ const Checkout = () => {
                 if (response.data.success) {
                 }
             } catch (error) {
-                console.log("CheckoutForm.js 28 | ", error);
+                console.log(error);
             }
         } else {
             console.log(error.message);
