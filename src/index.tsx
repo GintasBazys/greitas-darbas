@@ -12,14 +12,14 @@ import {fetchProfilePicture, fetchUserAsync} from "./features/user/userSlice";
 
 auth.onAuthStateChanged( async user => {
 
-    const matchAnyDashboardUrl = history.location.pathname.match(/dashboard/);
+    const matchAnyDashboardUrl = history.location.pathname.match(/pradzia/);
 
     if (user) {
         ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
         await store.dispatch(fetchUserAsync(user));
         await store.dispatch(fetchProfilePicture(user));
         if(matchAnyDashboardUrl === null) {
-            history.push("/dashboard");
+            history.push("/pradzia");
         }
     }
 

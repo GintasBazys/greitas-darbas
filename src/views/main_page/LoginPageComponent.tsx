@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button, Container, Form, Row, Col} from "react-bootstrap";
 import {changeRemember, selectError} from "../../features/user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
@@ -6,10 +6,23 @@ import NotificationComponent from "./NotificationComponent";
 import NavbarComponent from "./NavbarComponent";
 import login from "../../assets/login.svg";
 import FooterComponent from "./FooterComponent";
+import PasswordResetComponent from "./PasswordResetComponent";
+import SignUpModalComponent from "./SignUpModalComponent";
 
 const LoginPageComponent = (props: any) => {
     const dispatch = useDispatch();
     let errorMessage = useSelector(selectError);
+
+    const [modalShow, setModalShow] = useState(false);
+    const [passwordResetModalShow, setPasswordResetModalShow] = useState(false);
+
+    const handleModalShow = () => {
+        setModalShow(!modalShow)
+    }
+
+    const handleResetPasswordModalShow = () => {
+        setPasswordResetModalShow(!passwordResetModalShow)
+    }
 
     return (
         <div className="content-show">
@@ -24,33 +37,32 @@ const LoginPageComponent = (props: any) => {
                             <Form onSubmit={props.handleSubmit}>
                                 <NotificationComponent message={errorMessage} />
                                 <Form.Group controlId="email">
-                                    <Form.Label>Email address</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" value={props.email} autoComplete="on"
+                                    <Form.Label>El. pašto adresas</Form.Label>
+                                    <Form.Control type="email" placeholder="Įveskite el. pašto adresą" value={props.email} autoComplete="on"
                                                   onChange={props.handleEmailChange}/>
-                                    <Form.Text className="text-muted">
-                                        We'll never share your email with anyone else.
-                                    </Form.Text>
                                 </Form.Group>
 
                                 <Form.Group controlId="password">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" autoComplete="on" value={props.password}
+                                    <Form.Label>Slaptažodis</Form.Label>
+                                    <Form.Control type="password" placeholder="Įveskite slaptažodį" autoComplete="on" value={props.password}
                                                   onChange={props.handlePasswordChange}/>
                                 </Form.Group>
                                 <Form.Group controlId="checkbox">
-                                    <Form.Check type="checkbox" label="Keep me logged in" checked={props.checkedUser}
+                                    <Form.Check type="checkbox" label="Išlikti prisijungus" checked={props.checkedUser}
                                                 onChange={() => dispatch(changeRemember(!props.checkedUser))}/>
                                 </Form.Group>
                                 <Button variant="primary" type="submit">
-                                    Login
+                                    Prisijungti
                                 </Button>
-                                <Button variant="link">
-                                    Dont have an account?
+                                <Button variant="link" onClick={() => handleModalShow()}>
+                                    Neturite paskyros?
                                 </Button>
-                                <Button variant="link">
-                                    Forgot password?
+                                <Button variant="link" onClick={() => handleResetPasswordModalShow()}>
+                                    Pamiršote slaptažodį?
                                 </Button>
                             </Form>
+                            <PasswordResetComponent show={passwordResetModalShow} onHide={() => handleResetPasswordModalShow()} />
+                            <SignUpModalComponent show={modalShow} onHide={() => handleModalShow()} />
                         </Col>
                     </Row>
                 </div>

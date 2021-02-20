@@ -6,7 +6,7 @@ const FooterComponent = () => {
         <div>
             <Navbar className="footer-copyright fixed-bottom" style={{justifyContent: "center"}}>
                 <Container fluid className="footer-text">
-                    © {new Date().getFullYear()} | By Gintas Bazys
+                    © {new Date().getFullYear()}
                 </Container>
             </Navbar>
         </div>

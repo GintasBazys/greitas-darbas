@@ -10,34 +10,35 @@ import Stripe from "../../Stripe";
 
 const HomeComponent = () => {
 
-    const {
-        items,
-        isLoading,
-        isStart,
-        isEnd,
-        getPrev,
-        getNext,
-    } = usePagination(
-        db
-            .collection("users")
-            .orderBy("username", "asc"),
-        {
-            limit: 15
-        }
-    );
+    // const {
+    //     items,
+    //     isLoading,
+    //     isStart,
+    //     isEnd,
+    //     getPrev,
+    //     getNext,
+    // } = usePagination(
+    //     db
+    //         .collection("users")
+    //         .orderBy("username", "asc"),
+    //     {
+    //         limit: 1
+    //     }
+    // );
 
     const handleChangePage = () => {
-        history.push("/login")
+        history.push("/prisijungti")
     }
 
-    const nextPage = () => {
-        getNext()
-        console.log(items)
-    }
-
-    const prevPage = () => {
-        getPrev()
-    }
+    // const nextPage = () => {
+    //     getNext()
+    //     console.log(items)
+    // }
+    //
+    // const prevPage = () => {
+    //     getPrev()
+    //     console.log(items)
+    // }
 
     return <div className="content-show">
         <NavbarComponent />
@@ -47,10 +48,11 @@ const HomeComponent = () => {
             <img style={{marginTop: "1.5rem", width: "600px"}} src={main2} alt="Main picture"/>
             <h3 style={{textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h3>
             <Button variant="outline-dark" className="btn-lg" onClick={() => handleChangePage()}> Pradeti</Button>
-            <Button variant="outline-dark" className="btn-lg" onClick={() => nextPage()}> Next page</Button>
+            {/*<Button variant="outline-dark" className="btn-lg" onClick={() => nextPage()}> Next page</Button>*/}
+            {/*<Button variant="outline-dark" className="btn-lg" onClick={() => prevPage()}> Prev page</Button>*/}
         </div>
         <div>
-            <Stripe />
+            {/*<Stripe />*/}
         </div>
         <FooterComponent />
     </div>

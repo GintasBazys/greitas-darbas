@@ -1,7 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import * as firebase from "../../firebase";
 import {auth, db} from "../../firebase";
-import history from "../../history";
 import defaultAvatar from "../../assets/avatar.png";
 
 export const userSlice = createSlice( {
@@ -40,11 +39,36 @@ export const userSlice = createSlice( {
 
 export const {signIn, sendError, changeRemember, fetchUser, setEmptyProfile, fetchPicture} = userSlice.actions;
 
-export const loginAsync = (info: { password: string; email: string; checkedRemember: boolean; }) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const signUpAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+
+    firebase.auth.createUserWithEmailAndPassword(
+        info.email,
+        info.password
+    ).then((user) => {
+        firebase.usersCollection.doc(user?.user?.uid).set({
+            username: info.username,
+            email: info.email,
+            role: "nepatvirtintas",
+            aboutMe: "Įveskite informacijos apie save...",
+        })
+            .then(() => {
+                console.log("Document successfully written!");
+            })
+    })
+        .catch((error) => {
+            dispatch(sendError(error.message))//TODO pakeisti klaidos pranesima
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 5000)
+            console.error("Error writing document: ", error.message);
+        });
+
+}
+
+export const loginAsync = (info: { email: string; password: string; checkedRemember: boolean; }) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
     if(!info.checkedRemember) {
         firebase.auth.setPersistence(firebase.Auth.Persistence.SESSION)
             .then(() => {
-
                 return firebase.auth.signInWithEmailAndPassword(info.email, info.password);
             })
             .catch(function(error) {
@@ -66,15 +90,8 @@ export const loginAsync = (info: { password: string; email: string; checkedRemem
     ).then((user) => {
         firebase.usersCollection.doc(user?.user?.uid).get().then((userProfile => {
             dispatch(signIn(userProfile.data()));
-            //history.push("/");
         }))
     }).catch((error) => {
-        //TODO Send error in lithuanian
-        dispatch(sendError(error.message))
-        setTimeout(() => {
-            dispatch(sendError("fdgfdgdfg"))
-        }, 5000)
-        console.error("Error writing document: ", error.message);
     });
 }
 

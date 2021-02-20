@@ -12,7 +12,7 @@ const NavbarComponent = () => {
                 <Navbar.Toggle />
                 <Navbar.Collapse>
                     <Nav className="ml-auto">
-                        {history.location.pathname === "/" ? <Link className="nav-link" to="/login">Prisijungti</Link> : <Link className="nav-link" to="/">Pradzia</Link>}
+                        {history.location.pathname === "/" ? <Link className="nav-link" to="/prisijungti">Prisijungti</Link> : <Link className="nav-link" to="/">Pradžia</Link>}
                         <NavDropdown title="Daugiau" id="basic-nav-dropdown">
                             <Link to="/help" className="dropdown-menu-item">Pagalba</Link>
                             <Link to="/about" className="dropdown-menu-item">Apie</Link>
