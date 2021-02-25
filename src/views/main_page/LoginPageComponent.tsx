@@ -31,7 +31,7 @@ const LoginPageComponent = (props: any) => {
                 <div>
                     <Row>
                         <Col md={6} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            <img src={login} style={{width: "calc(100vh - 96px)", marginTop: "100px"}} alt="login picture"/>
+                            <img src={login} style={{width: "calc(100vh - 96px)", marginTop: "100px", height: "auto", maxWidth: "100%"}} alt="login picture"/>
                         </Col>
                         <Col md={6} className="login-form">
                             <Form onSubmit={props.handleSubmit}>

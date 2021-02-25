@@ -72,7 +72,7 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
                 return firebase.auth.signInWithEmailAndPassword(info.email, info.password);
             })
             .catch(function(error) {
-
+                console.log(error.message)
             });
 
     } else if(info.checkedRemember){
@@ -81,6 +81,7 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
                 return firebase.auth.signInWithEmailAndPassword(info.email, info.password);
             })
             .catch(function(error) {
+                console.log(error.message)
             });
     }
 
@@ -92,6 +93,7 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
             dispatch(signIn(userProfile.data()));
         }))
     }).catch((error) => {
+        console.log(error.message)
     });
 }
 
@@ -119,8 +121,16 @@ export const fetchPictureAsync = (image: string) => async (dispatch: (arg0: { pa
 
 }
 
+export const fetchUpdateUserStatusToReview = (p: {user: any, documentURLS: Array<any>}) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+
+    await db.collection("users").doc(p.user.uid).update({
+        status: "nepatvirtintas",
+        documentURLS: p.documentURLS
+    })
+}
+
 export const fetchProfilePicture = (user: any) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
-    const userRef = db.collection('users').doc(user.uid);
+    const userRef = db.collection("users").doc(user.uid);
     userRef
         .get()
         .then(doc => {
@@ -136,8 +146,8 @@ export const fetchProfilePicture = (user: any) => (dispatch: (arg0: { payload: o
 }
 
 export const selectCheckedUser = (state: { user: { userProfile: {checkedRemember: boolean}; }; }) => state.user.userProfile.checkedRemember;
-export const selectUser = (state: {user: {userProfile: {name: string};}; }) => state.user.userProfile.name;
 export  const selectError = (state: { user: { errorMessage: string; }; }) => state.user.errorMessage;
 export const selectImage = (state: { user: { userProfile: { image: string; }; }; }) => state.user.userProfile.image;
+export const selectUser = (state: {user: {userProfile: {name: string};}; }) => state.user.userProfile.name;
 
 export default userSlice.reducer;
