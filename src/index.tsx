@@ -22,7 +22,14 @@ auth.onAuthStateChanged( async user => {
             .then((doc) => {
                 userStatus =doc.data()?.status;
             })
-        console.log(userStatus);
+
+        if(userStatus === "administratorius") {
+            ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
+            await store.dispatch(fetchUserAsync(user));
+            await store.dispatch(fetchProfilePicture(user));
+            history.push("/administracija");
+        }
+
         if(userStatus === "naujas") {
             ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
             await store.dispatch(fetchUserAsync(user));

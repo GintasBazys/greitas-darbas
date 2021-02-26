@@ -1,15 +1,18 @@
-a.nav-link {
+a.admin-navbar-link {
   color: white !important;
-  font-weight: bold;
 }
 
-.navbar-expand-lg .navbar-nav .dropdown-menu {
-  left: -3.5em;
-}
+//.navbar-expand-lg .navbar-nav .dropdown-menu {
+//  left: -3.5em;
+//}
 
 .dropdown-item  > a {
   color: #212529;
   text-decoration: none;
+}
+
+span.dashboard-user-margin {
+  color: white !important;
 }
 
 .dropdown-menu-item {
@@ -26,6 +29,11 @@ a.dropdown-menu-item {
   text-decoration: none;
 }
 
+.dropdown-menu-item.btn.btn-link{
+  color: #212529;
+  text-decoration: none;
+}
+
 .nav-position {
   top:0;
   width: 100%;
@@ -39,4 +47,18 @@ a.dropdown-menu-item {
 
 .dropdown-toggle::after {
   content: none;
+}
+
+.dashboard-nav-width {
+  width: 100%;
+}
+
+.dashboard-profile-image {
+  height: 3.5rem;
+  width: 3.4rem;
+  padding: 0.3rem;
+}
+
+.dashboard-user-margin {
+  margin-left: 1rem;
 }

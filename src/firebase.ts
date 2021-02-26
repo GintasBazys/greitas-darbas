@@ -14,11 +14,13 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
 
 const db = firebase.firestore();
 const auth = firebase.auth();
 const Auth = firebase.auth.Auth;
 const storageRef = firebase.storage().ref();
+const emailProvider = firebase.auth.EmailAuthProvider;
 
 const usersCollection = db.collection("users");
 
@@ -27,5 +29,7 @@ export {
     auth,
     Auth,
     usersCollection,
-    storageRef
+    storageRef,
+    secondaryApp,
+    emailProvider
 };
