@@ -8,11 +8,13 @@ import "filepond/dist/filepond.min.css";
 import * as Pond from 'filepond';
 import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import {Button} from "react-bootstrap";
+import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import {auth, storageRef} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUpdateUserStatusToReview, logout, selectUser} from "../../features/user/userSlice";
+import {fetchUpdateUserStatusToReview, logout, selectImage, selectUser} from "../../features/user/userSlice";
 import history from "../../history";
+import welcome from "../../assets/sveiki_atvyke.svg";
+import {Link} from "react-router-dom";
 
 const DashboardComponent = () => {
 
@@ -24,6 +26,8 @@ const DashboardComponent = () => {
     const [files, setFiles] = useState([]);
 
     const user = auth.currentUser;
+
+    const image = useSelector(selectImage);
 
     window.addEventListener('popstate', function(event) {
         history.go(1);
@@ -47,32 +51,53 @@ const DashboardComponent = () => {
 
     return (
         <div>
-            <div style={{width: "50%"}}>
-                <FilePond
-                    allowImagePreview={true}
-                    files={files}
-                    // @ts-ignore
-                    onupdatefiles={setFiles}
-                    allowMultiple={true}
-                    maxFiles={2}
-                    allowReorder={true}
-                    allowFileTypeValidation={true}
-                    acceptedFileTypes={["image/*"]}
-                    name="dokumentas"
-                    fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
-                    labelFileTypeNotAllowed="Negalimas failo tipas"
-                    credits={false}
-                    labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
-                    allowFileSizeValidation={true}
-                    maxTotalFileSize="20MB"
-                    labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
-                    labelMaxTotalFileSize="Didziausias galimas failu dydis 20MB"
-                />
-            </div>
-            <div>
-            <Button variant="outline-dark" className="btn-lg" onClick={() => sendPicturesForReview()}> Pateikti</Button>
-            <Button variant="outline-warning" className="btn-lg" onClick={() => dispatch(logout())}> Atsijungti</Button>
-            </div>
+            <Container fluid>
+                <Row>
+                    <Col md={3}>
+                        <div className="center">
+                            <Link to="/profilis"><h1>Peržiūrėti profilį</h1></Link>
+                            <Image src={image} alt="profilis" />
+                        </div>
+
+                    </Col>
+
+                    <Col md={6} style={{textAlign: "center"}}>
+                        <Image src={welcome} alt="Sveiki atvyke" height="40%" />
+                        <h1>Sveiki atvykę. Tolimesniam darbui reikalingas tapatybės patvirtinimas.</h1>
+                        <h1>Pateikite ne daugiau nei dvi dokumento nuotraukas.</h1>
+                        <FilePond
+                            allowImagePreview={true}
+                            files={files}
+                            // @ts-ignore
+                            onupdatefiles={setFiles}
+                            allowMultiple={true}
+                            maxFiles={2}
+                            allowReorder={true}
+                            allowFileTypeValidation={true}
+                            acceptedFileTypes={["image/*"]}
+                            name="dokumentas"
+                            fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
+                            labelFileTypeNotAllowed="Negalimas failo tipas"
+                            credits={false}
+                            labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
+                            allowFileSizeValidation={true}
+                            maxTotalFileSize="20MB"
+                            labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
+                            labelMaxTotalFileSize="Didziausias galimas failu dydis 20MB"
+                        />
+                        <Button style={{marginRight: "2rem"}} variant="outline-dark" className="btn-lg" onClick={() => sendPicturesForReview()}> Pateikti</Button>
+                        <Button variant="outline-info" className="btn-lg" onClick={() => dispatch(logout())}> Atsijungti</Button>
+                    </Col>
+
+                    <Col md={3}>
+                        <div className="center">
+                            <Link to="/pagalba"><h1>Pagalba</h1></Link>
+                        </div>
+
+                    </Col>
+
+                </Row>
+            </Container>
         </div>
     )
 }

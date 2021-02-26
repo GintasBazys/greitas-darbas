@@ -51,6 +51,7 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             email: info.email,
             status: "naujas",
             aboutMe: "Įveskite informacijos apie save...",
+            image: defaultAvatar
         })
             .then(() => {
                 console.log("Document successfully written!");
@@ -104,6 +105,7 @@ export const fetchUserAsync = (user: { uid: string | undefined }) => async (disp
     await dispatch(fetchUser(userProfile.data()))
 }
 
+//nuotraukos pakeitimui
 export const fetchPictureAsync = (image: string) => async (dispatch: (arg0: { payload: any; type: string; }) => void) => {
     await firebase.usersCollection.doc(auth.currentUser?.uid).set({
         image: image
