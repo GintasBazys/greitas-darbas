@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import * as firebase from "../../firebase";
 import {auth, db} from "../../firebase";
 import defaultAvatar from "../../assets/avatar.png";
+import history from "../../history";
 
 export const userSlice = createSlice( {
     name: "user",
@@ -48,7 +49,7 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
         firebase.usersCollection.doc(user?.user?.uid).set({
             username: info.username,
             email: info.email,
-            role: "nepatvirtintas",
+            status: "naujas",
             aboutMe: "Įveskite informacijos apie save...",
         })
             .then(() => {
@@ -142,6 +143,16 @@ export const fetchProfilePicture = (user: any) => (dispatch: (arg0: { payload: o
 
         }).catch((error) => {
         console.log(error);
+    })
+}
+
+export const logout = () => (dispatch: (arg0: { payload: undefined; type: string; }) => void) => {
+    firebase.auth.signOut()
+        .then(() => {
+            history.push("/");
+            dispatch(setEmptyProfile())
+        }).catch(error => {
+        console.log(error)
     })
 }
 

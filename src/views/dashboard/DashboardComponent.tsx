@@ -11,7 +11,7 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {Button} from "react-bootstrap";
 import {auth, storageRef} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchUpdateUserStatusToReview, selectUser} from "../../features/user/userSlice";
+import {fetchUpdateUserStatusToReview, logout, selectUser} from "../../features/user/userSlice";
 import history from "../../history";
 
 const DashboardComponent = () => {
@@ -24,6 +24,10 @@ const DashboardComponent = () => {
     const [files, setFiles] = useState([]);
 
     const user = auth.currentUser;
+
+    window.addEventListener('popstate', function(event) {
+        history.go(1);
+    });
 
     const sendPicturesForReview = async () => {
         let urlsFromFirebaseStorage: Array<string> = [];
@@ -55,11 +59,6 @@ const DashboardComponent = () => {
                     allowFileTypeValidation={true}
                     acceptedFileTypes={["image/*"]}
                     name="dokumentas"
-                    fileValidateTypeDetectType={(source: any, type: any) => new Promise((resolve, reject) => {
-
-                        resolve(type);
-                    })
-                    }
                     fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
                     labelFileTypeNotAllowed="Negalimas failo tipas"
                     credits={false}
@@ -72,6 +71,7 @@ const DashboardComponent = () => {
             </div>
             <div>
             <Button variant="outline-dark" className="btn-lg" onClick={() => sendPicturesForReview()}> Pateikti</Button>
+            <Button variant="outline-warning" className="btn-lg" onClick={() => dispatch(logout())}> Atsijungti</Button>
             </div>
         </div>
     )
