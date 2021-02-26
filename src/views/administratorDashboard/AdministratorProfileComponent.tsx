@@ -8,7 +8,7 @@ import {
 } from "../../features/user/userSlice";
 import history from "../../history";
 import {auth, db, emailProvider} from "../../firebase";
-import {Button, Form, Image} from "react-bootstrap";
+import {Button, Form, Image, Container, Row, Col} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import * as firebase from "../../firebase";
@@ -65,7 +65,7 @@ const AdministratorProfileComponent = () => {
                 aboutMe: aboutMe
             })
             //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/administracija/");
+            await history.push("/administracija");
             //console.log(username);
         }
 
@@ -141,43 +141,65 @@ const AdministratorProfileComponent = () => {
 
     return <div>
         <AdministratorDashboardNavbar profileImage={image}/>
-        <Form>
-            <NotificationComponent message={errorMessage} />
-            <Form.Group>
-                <Image src={image} className="dashboard-profile-image" roundedCircle alt="profile picture" />
-                <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
-            </Form.Group>
-            <Form.Group>
-                <Form.Label>Pakeisti el. pašto adresą</Form.Label>
-                <Form.Control type="email" value={email} onChange={handleEmailChange}/>
-            </Form.Group>
-            <Button type="primary" onClick={(e) => changeEmail(e)}>Atnaujinti</Button>
-            <Form.Group>
-                <Form.Label>Papildyti profilio informaciją</Form.Label>
-                <Form.Control as="textarea" rows={6} value={aboutMe} onChange={handleAboutMeChange} />
-            </Form.Group>
-            <Button type="primary" onClick={(e) => changeAboutMe(e)}>Atnaujinti</Button>
-        </Form>
+        <Container fluid>
+            <Row>
+                <Col md={2}></Col>
+                <Col md={8}>
 
-        <Form style={{justifyContent: "center"}}>
-            <Form.Group controlId="newusername">
-                <Form.Label>Vartotojo vardas</Form.Label>
-                <Form.Control type="text" value={newUsername} autoComplete="on" autoFocus placeholder="Įveskite vartotojo vardą" onChange={handleNewUserNameChange}/>
-            </Form.Group>
+                    <Form>
+                        <NotificationComponent message={errorMessage} />
+                        <Form.Group>
+                            <Image src={image} className="dashboard-profile-image" roundedCircle alt="profile picture" />
+                            <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Pakeisti el. pašto adresą</Form.Label>
+                            <Form.Control type="email" value={email} onChange={handleEmailChange}/>
+                        </Form.Group>
 
-            <Form.Group controlId="newemail">
-                <Form.Label>El. pašto adresas</Form.Label>
-                <Form.Control type="text" value={newUserEmail} autoComplete="on" placeholder="Įveskite el. pašto adresą" autoFocus onChange={handleNewEmailChange} />
-            </Form.Group>
+                        <div className="text-center">
+                            <Button variant="outline-dark" onClick={(e) => changeEmail(e)}>Atnaujinti</Button>
+                        </div>
 
-            <Form.Group controlId="newpassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" value={newPassword} autoComplete="on" placeholder="Įveskite slaptažodį" autoFocus onChange={handleNewPasswordChange}/>
-            </Form.Group>
-            <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
-                Sukurti naują darbuotojo paskyrą
-            </Button>
-        </Form>
+                        <Form.Group>
+                            <Form.Label>Papildyti profilio informaciją</Form.Label>
+                            <Form.Control as="textarea" rows={6} value={aboutMe} onChange={handleAboutMeChange} />
+                        </Form.Group>
+
+                        <div className="text-center">
+                            <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeAboutMe(e)}>Atnaujinti</Button>
+                        </div>
+
+                    </Form>
+
+                    <Form style={{justifyContent: "center"}}>
+                        <Form.Group controlId="newusername">
+                            <Form.Label>Vartotojo vardas</Form.Label>
+                            <Form.Control type="text" value={newUsername} autoComplete="on" autoFocus placeholder="Įveskite vartotojo vardą" onChange={handleNewUserNameChange}/>
+                        </Form.Group>
+
+                        <Form.Group controlId="newemail">
+                            <Form.Label>El. pašto adresas</Form.Label>
+                            <Form.Control type="text" value={newUserEmail} autoComplete="on" placeholder="Įveskite el. pašto adresą" autoFocus onChange={handleNewEmailChange} />
+                        </Form.Group>
+
+                        <Form.Group controlId="newpassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control type="password" value={newPassword} autoComplete="on" placeholder="Įveskite slaptažodį" autoFocus onChange={handleNewPasswordChange}/>
+                        </Form.Group>
+
+                        <div className="text-center">
+                            <Button variant="outline-dark" type="submit" onClick={(e) => handleSubmit(e)}>
+                                Sukurti naują darbuotojo paskyrą
+                            </Button>
+                        </div>
+
+                    </Form>
+
+                </Col>
+                <Col md={2}></Col>
+            </Row>
+        </Container>
     </div>
 }
 
