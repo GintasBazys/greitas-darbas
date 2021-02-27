@@ -6,6 +6,7 @@ import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import {Button, ListGroup, Image} from "react-bootstrap";
+import firebase from "firebase";
 
 const AdministratorUserManagementComponent = () => {
 
@@ -32,7 +33,8 @@ const AdministratorUserManagementComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         db.collection("users").doc(doc.id).update({
-                            status: "patvirtintas"
+                            status: "patvirtintas",
+                            documentURLS: []
                         })
                     })
                     //db.collection("users").doc()
@@ -65,7 +67,8 @@ const AdministratorUserManagementComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         db.collection("users").doc(doc.id).update({
-                            status: "naujas"
+                            status: "naujas",
+                            documentURLS: []
                         })
                     })
                     //db.collection("users").doc()
