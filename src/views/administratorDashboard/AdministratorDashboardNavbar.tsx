@@ -12,7 +12,7 @@ const AdministratorDashboardNavbar = ({profileImage}) => {
 
     return (
         <div>
-            <Navbar bg="dark" expand="lg" className="sticky-top dashboard-nav-width" variant="dark">
+            <Navbar bg="dark" expand="lg" className=" py-0 sticky-top dashboard-nav-width" variant="dark">
                 <Navbar.Brand><Link to="/administracija" className="admin-navbar-brand">Pradžia</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">

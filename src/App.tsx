@@ -9,6 +9,7 @@ import DashboardComponent from "./views/dashboard/DashboardComponent";
 import UnconfirmedStatusComponent from "./views/dashboard/UnconfirmedStatusComponent";
 import AdministratorDashboardComponent from "./views/administratorDashboard/AdministratorDashboardComponent";
 import AdministratorProfileComponent from "./views/administratorDashboard/AdministratorProfileComponent";
+import AdministratorUserManagementComponent from "./views/administratorDashboard/AdministratorUserManagementComponent";
 
 function App() {
   return <Router history={history}>
@@ -19,6 +20,7 @@ function App() {
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
+      <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
     </Switch>
   </Router>
 }
