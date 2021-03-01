@@ -35,7 +35,7 @@ const Login = () => {
                 querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                     if(doc.data()?.status !== "administratorius" || doc.data()?.status !== "darbuotojas") {
-                        dispatch(sendError("paskyra uzimta"));
+                        dispatch(sendError("Netinkami paskyros duomenys"));
                         setTimeout(() => {
                             dispatch(sendError(""));
                         }, 5000)

@@ -20,6 +20,8 @@
 
 /src/server/.env
 
+/src/server/greitas-darbas.json
+
 /client/npm-debug.log*
 /client/yarn-debug.log*
 /client/yarn-error.log*

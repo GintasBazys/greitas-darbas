@@ -33,5 +33,6 @@ export {
     storageRef,
     secondaryApp,
     emailProvider,
-    workerCollection
+    workerCollection,
+    firebaseConfig
 };
