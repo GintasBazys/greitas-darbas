@@ -10,17 +10,22 @@ import UnconfirmedStatusComponent from "./views/dashboard/UnconfirmedStatusCompo
 import AdministratorDashboardComponent from "./views/administratorDashboard/AdministratorDashboardComponent";
 import AdministratorProfileComponent from "./views/administratorDashboard/AdministratorProfileComponent";
 import AdministratorUserManagementComponent from "./views/administratorDashboard/AdministratorUserManagementComponent";
+import AdministratorWorkerManagementComponent
+  from "./views/administratorDashboard/AdministratorWorkerManagementComponent";
+import WorkerLogin from "./features/worker/WorkerLogin";
 
 function App() {
   return <Router history={history}>
     <Switch>
       <Route exact path="/" component={HomeComponent} />
       <Route exact path="/prisijungti" component={Login} />
+      <Route path="/darbuotojas/prisijungimas" component={WorkerLogin} />
       <PrivateRoute exact path="/pradzia" component={DashboardComponent} />
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
+      <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
     </Switch>
   </Router>
 }

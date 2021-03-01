@@ -1,11 +1,10 @@
 import {
-    fetchPictureAsync,
-    selectError,
-    sendError,
-    selectImage,
-    selectUser,
-    signUpWorkerAsync
-} from "../../features/user/userSlice";
+    fetchWorkerPictureAsync,
+    selectWorkerError,
+    sendWorkerError,
+    selectWorkerImage,
+    selectWorker,
+} from "../../features/worker/workerSlice";
 import history from "../../history";
 import {auth, db, emailProvider} from "../../firebase";
 import {Button, Form, Image, Container, Row, Col} from "react-bootstrap";
@@ -17,16 +16,16 @@ import NotificationComponent from "../main_page/NotificationComponent";
 
 const AdministratorProfileComponent = () => {
     const dispatch = useDispatch();
-    let image = useSelector(selectImage);
-    let errorMessage = useSelector(selectError);
+    let image = useSelector(selectWorkerImage);
+    let errorMessage = useSelector(selectWorkerError);
 
     const [email, setEmail] = useState("");
     const [aboutMe, setAboutMe] = useState("");
     const user = firebase.auth.currentUser;
-    const userBeforeChange = useSelector(selectUser);
+    const userBeforeChange = useSelector(selectWorker);
     console.log(userBeforeChange);
     useEffect(() => {
-        db.collection("users").doc(auth.currentUser?.uid).get()
+        db.collection("workers").doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 //@ts-ignore
                 setEmail(user?.email);
@@ -42,7 +41,7 @@ const AdministratorProfileComponent = () => {
                 // @ts-ignore
                 image = e.target.result;
 
-                dispatch(fetchPictureAsync(image))
+                dispatch(fetchWorkerPictureAsync(image))
             };
             reader.readAsDataURL(event.target.files[0]);
         }
@@ -55,13 +54,13 @@ const AdministratorProfileComponent = () => {
     const changeAboutMe = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
         if (aboutMe === "") {
-            dispatch(sendError("Laukas negali būti tuščias"));
+            dispatch(sendWorkerError("Laukas negali būti tuščias"));
             setTimeout(() => {
-                dispatch(sendError(""))
+                dispatch(sendWorkerError(""))
             }, 5000);
 
         } else {
-            await db.collection("users").doc(auth.currentUser?.uid).update({
+            await db.collection("workers").doc(auth.currentUser?.uid).update({
                 aboutMe: aboutMe
             })
             //await dispatch(fetchUserAsync({uid: userId}));
@@ -82,7 +81,7 @@ const AdministratorProfileComponent = () => {
         if(email !== "") {
             user?.updateEmail(email)
                 .then(async () => {
-                    await db.collection("users").doc(auth.currentUser?.uid).update({
+                    await db.collection("workers").doc(auth.currentUser?.uid).update({
                         email: email
                     })
                     history.push("/administracija");
@@ -98,10 +97,10 @@ const AdministratorProfileComponent = () => {
                 user?.reauthenticateWithCredential(cred).then(() => {
                     user?.updateEmail(email)
                         .then(async () => {
-                            await db.collection("users").doc(auth.currentUser?.uid).update({
+                            await db.collection("workers").doc(auth.currentUser?.uid).update({
                                 email: email
                             })
-                            history.push("administratorius/");
+                            history.push("administracija");
                         })
                 }).catch((error) => {
                     console.log(error.message);
@@ -113,32 +112,6 @@ const AdministratorProfileComponent = () => {
 
     }
 
-    const [newUserEmail, setnewUserEmail] = useState("");
-    const [newPassword, setNewPassword] = useState("")
-    const [newUsername, setNewUsername] = useState("")
-
-
-    const handleNewEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setnewUserEmail(event.target.value)
-    }
-
-    const handleNewPasswordChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setNewPassword(event.target.value)
-    }
-
-    const handleNewUserNameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setNewUsername(event.target.value)
-    }
-
-    const handleSubmit = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        event.preventDefault();
-        if(newUsername !== "" || newPassword !== "" || newUserEmail !== "") {
-            await dispatch(signUpWorkerAsync({username: newUsername, email: newUserEmail, password: newPassword}))
-            await history.push("/administracija");
-        }
-
-    }
-
     return <div>
         <AdministratorDashboardNavbar profileImage={image}/>
         <Container fluid>
@@ -147,7 +120,6 @@ const AdministratorProfileComponent = () => {
                 <Col md={8}>
 
                     <Form>
-                        <NotificationComponent message={errorMessage} />
                         <Form.Group>
                             <Image src={image} className="dashboard-profile-image" roundedCircle alt="profile picture" />
                             <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
@@ -171,31 +143,6 @@ const AdministratorProfileComponent = () => {
                         </div>
 
                     </Form>
-
-                    <Form style={{justifyContent: "center"}}>
-                        <Form.Group controlId="newusername">
-                            <Form.Label>Vartotojo vardas</Form.Label>
-                            <Form.Control type="text" value={newUsername} autoComplete="on" autoFocus placeholder="Įveskite vartotojo vardą" onChange={handleNewUserNameChange}/>
-                        </Form.Group>
-
-                        <Form.Group controlId="newemail">
-                            <Form.Label>El. pašto adresas</Form.Label>
-                            <Form.Control type="text" value={newUserEmail} autoComplete="on" placeholder="Įveskite el. pašto adresą" autoFocus onChange={handleNewEmailChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="newpassword">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" value={newPassword} autoComplete="on" placeholder="Įveskite slaptažodį" autoFocus onChange={handleNewPasswordChange}/>
-                        </Form.Group>
-
-                        <div className="text-center">
-                            <Button variant="outline-dark" type="submit" onClick={(e) => handleSubmit(e)}>
-                                Sukurti naują darbuotojo paskyrą
-                            </Button>
-                        </div>
-
-                    </Form>
-
                 </Col>
                 <Col md={2}></Col>
             </Row>

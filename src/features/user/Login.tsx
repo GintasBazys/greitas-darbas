@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {loginAsync, selectCheckedUser, selectError, sendError} from "./userSlice";
 import LoginPageComponent from "../../views/main_page/LoginPageComponent";
+import {db} from "../../firebase";
 
 const Login = () => {
 
@@ -29,8 +30,25 @@ const Login = () => {
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
 
+        db.collection("users").where("email", "==", email).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.data());
+                    if(doc.data()?.status !== "administratorius" || doc.data()?.status !== "darbuotojas") {
+                        dispatch(sendError("paskyra uzimta"));
+                        setTimeout(() => {
+                            dispatch(sendError(""));
+                        }, 5000)
+                    } else {
+                        dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
+                    }
+                })
+            }).catch((error) => {
+                console.log(error.errorMessage)
+        })
+
         event.preventDefault();
-        dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
+        //dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
         setEmail("");
         setPassword("");
 

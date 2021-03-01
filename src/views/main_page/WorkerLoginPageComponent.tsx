@@ -1,33 +1,21 @@
-import React, {useState} from "react";
+import React from "react";
 import {Button, Container, Form, Row, Col} from "react-bootstrap";
-import {changeRemember, selectError} from "../../features/user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
 import NotificationComponent from "./NotificationComponent";
 import NavbarComponent from "./NavbarComponent";
 import login from "../../assets/login.svg";
 import FooterComponent from "./FooterComponent";
-import PasswordResetComponent from "./PasswordResetComponent";
-import SignUpModalComponent from "./SignUpModalComponent";
 import history from "../../history";
+import {selectWorkerError, changeWorkerRemember} from "../../features/worker/workerSlice";
 import {withRouter } from 'react-router-dom';
 
-const LoginPageComponent = (props: any) => {
+const WorkerLoginPageComponent = (props: any) => {
     const dispatch = useDispatch();
-    let errorMessage = useSelector(selectError);
+    let errorMessage = useSelector(selectWorkerError);
 
-    const [modalShow, setModalShow] = useState(false);
-    const [passwordResetModalShow, setPasswordResetModalShow] = useState(false);
-
-    const handleModalShow = () => {
-        setModalShow(!modalShow)
-    }
-
-    const handleResetPasswordModalShow = () => {
-        setPasswordResetModalShow(!passwordResetModalShow)
-    }
 
     const handleLoginPageChange = () => {
-        history.push("/darbuotojas/prisijungimas");
+        history.go(-1);
     }
 
     return (
@@ -39,9 +27,9 @@ const LoginPageComponent = (props: any) => {
                         <Col md={6} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                             <img src={login} style={{width: "calc(100vh - 96px)", marginTop: "100px", height: "auto", maxWidth: "100%"}} alt="login picture"/>
                         </Col>
+                        <NotificationComponent message={errorMessage} />
                         <Col md={6} className="login-form">
-                            <Form onSubmit={props.handleSubmit}>
-                                <NotificationComponent message={errorMessage} />
+                            <Form onSubmit={props.handleSubmit} style={{width: "75%"}}>
                                 <Form.Group controlId="email">
                                     <Form.Label>El. pašto adresas</Form.Label>
                                     <Form.Control type="email" placeholder="Įveskite el. pašto adresą" value={props.email} autoComplete="on"
@@ -55,21 +43,13 @@ const LoginPageComponent = (props: any) => {
                                 </Form.Group>
                                 <Form.Group controlId="checkbox">
                                     <Form.Check type="checkbox" label="Išlikti prisijungus" checked={props.checkedUser}
-                                                onChange={() => dispatch(changeRemember(!props.checkedUser))}/>
+                                                onChange={() => dispatch(changeWorkerRemember(!props.checkedUser))}/>
                                 </Form.Group>
-                                <Button variant="outline-dark" type="submit">
+                                <Button variant="outline-dark" type="submit" style={{marginRight: "2rem"}}>
                                     Prisijungti
                                 </Button>
-                                <Button variant="link" onClick={() => handleModalShow()}>
-                                    Neturite paskyros?
-                                </Button>
-                                <Button variant="link" onClick={() => handleResetPasswordModalShow()}>
-                                    Pamiršote slaptažodį?
-                                </Button>
-                                <Button variant="outline-dark" onClick={() => handleLoginPageChange()}>Darbuotojo prisijungimas</Button>
+                                <Button variant="outline-dark" onClick={() => handleLoginPageChange()}>Grįžti atgal</Button>
                             </Form>
-                            <PasswordResetComponent show={passwordResetModalShow} onHide={() => handleResetPasswordModalShow()} />
-                            <SignUpModalComponent show={modalShow} onHide={() => handleModalShow()} />
                         </Col>
                     </Row>
                 </div>
@@ -79,4 +59,4 @@ const LoginPageComponent = (props: any) => {
     )
 }
 
-export default withRouter(LoginPageComponent);
+export default withRouter(WorkerLoginPageComponent);

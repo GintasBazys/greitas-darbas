@@ -158,32 +158,7 @@ export const logout = () => (dispatch: (arg0: { payload: undefined; type: string
     })
 }
 
-export const signUpWorkerAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
-    secondaryApp.auth().createUserWithEmailAndPassword(
-        info.email,
-        info.password
-    ).then((user) => {
-        console.log(user.user?.uid);
-        firebase.usersCollection.doc(user?.user?.uid).set({
-            username: info.username,
-            email: info.email,
-            status: "darbuotojas",
-            aboutMe: "Įveskite informacijos apie save..",
-        })
-            .then(() => {
-                console.log("Document successfully written!");
-            })
-    })
-        .catch((error) => {
-            dispatch(sendError(error.message))
-            setTimeout(() => {
-                dispatch(sendError(""))
-            }, 5000)
-            console.error("Error writing document: ", error.message);
-        });
-
-}
 
 export const selectCheckedUser = (state: { user: { userProfile: {checkedRemember: boolean}; }; }) => state.user.userProfile.checkedRemember;
 export  const selectError = (state: { user: { errorMessage: string; }; }) => state.user.errorMessage;

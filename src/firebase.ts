@@ -23,6 +23,7 @@ const storageRef = firebase.storage().ref();
 const emailProvider = firebase.auth.EmailAuthProvider;
 
 const usersCollection = db.collection("users");
+const workerCollection = db.collection("workers");
 
 export {
     db,
@@ -31,5 +32,6 @@ export {
     usersCollection,
     storageRef,
     secondaryApp,
-    emailProvider
+    emailProvider,
+    workerCollection
 };

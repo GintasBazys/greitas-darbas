@@ -1,14 +1,14 @@
 import React from "react";
 import {Button, Navbar, NavDropdown, Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
-import {logout, selectUser} from "../../features/user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
+import {selectWorker, logout} from "../../features/worker/workerSlice";
 
 // @ts-ignore
 const AdministratorDashboardNavbar = ({profileImage}) => {
 
     const dispatch = useDispatch();
-    const user = useSelector(selectUser);
+    const user = useSelector(selectWorker);
 
     return (
         <div>

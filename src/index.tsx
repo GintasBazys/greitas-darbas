@@ -10,6 +10,7 @@ import history from "./history";
 import LoadingComponent from "./views/LoadingComponent";
 import {fetchProfilePicture, fetchUserAsync} from "./features/user/userSlice";
 import firebase from "firebase";
+import {fetchWorkerAsync, fetchWorkerProfilePicture} from "./features/worker/workerSlice";
 
 auth.onAuthStateChanged( async user => {
 
@@ -17,17 +18,31 @@ auth.onAuthStateChanged( async user => {
 
     let userStatus = "";
 
+    let workerStatus = "";
+
     if (user) {
         await db.collection("users").doc(user.uid).get()
             .then((doc) => {
                 userStatus =doc.data()?.status;
             })
 
-        if(userStatus === "administratorius") {
+        await db.collection("workers").doc(user.uid).get()
+            .then((doc) => {
+                workerStatus = doc.data()?.status;
+            })
+
+        if(workerStatus === "administratorius") {
             ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
-            await store.dispatch(fetchUserAsync(user));
-            await store.dispatch(fetchProfilePicture(user));
+            await store.dispatch(fetchWorkerAsync(user));
+            await store.dispatch(fetchWorkerProfilePicture(user));
             history.push("/administracija");
+        }
+
+        if(workerStatus === "darbuotojas") {
+            ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
+            await store.dispatch(fetchWorkerAsync(user));
+            await store.dispatch(fetchWorkerProfilePicture(user));
+            history.push("/darbuotojas/pagrindinis");
         }
 
         if(userStatus === "naujas") {
