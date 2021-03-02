@@ -2,10 +2,13 @@ import React from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
+import {selectWorkerEmail} from "./features/worker/workerSlice";
+import {useSelector} from "react-redux";
 
 const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
+    const userMail = useSelector(selectWorkerEmail);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -25,6 +28,7 @@ const Checkout = () => {
                     {
                         amount: 100,
                         id: id,
+                        customer: userMail
                     }
                 );
 

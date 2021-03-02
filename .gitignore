@@ -21,6 +21,7 @@
 /src/server/.env
 
 /src/server/greitas-darbas.json
+.env.development
 
 /client/npm-debug.log*
 /client/yarn-debug.log*

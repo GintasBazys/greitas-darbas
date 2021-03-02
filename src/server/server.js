@@ -19,7 +19,7 @@ admin.initializeApp({
 });
 
 app.post("/stripe/mokejimas", cors(), async (req, res) => {
-    let { amount, id } = req.body;//taip pat reikia username
+    let { amount, id, customer } = req.body;//taip pat reikia username
     try {
         const payment = await stripe.paymentIntents.create({
             amount: amount,
@@ -27,6 +27,7 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
             description: "Greitas Darbas Ltd",
             payment_method: id,
             confirm: true,
+            receipt_email: customer
         });
         res.json({
             message: "Sekmingas mokejimas",

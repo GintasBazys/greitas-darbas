@@ -10,6 +10,7 @@ export const workerSlice = createSlice( {
         workerProfile: {
             name: auth.currentUser,
             image: auth.currentUser,
+            email: auth.currentUser,
             checkedWorkerRemember: true
         },
         workerErrorMessage: ""
@@ -19,18 +20,21 @@ export const workerSlice = createSlice( {
             state.workerProfile.checkedWorkerRemember = action.payload;
         },
         signIn: (state, action) => {
-            state.workerProfile.name = action.payload.username
+            state.workerProfile.name = action.payload.username;
             state.workerProfile.checkedWorkerRemember = action.payload.checkedRemember;
+            state.workerProfile.email = action.payload.email;
         },
         sendWorkerError: (state, action) => {
             state.workerErrorMessage = action.payload;
         },
         fetchUser: (state, action) => {
             state.workerProfile.name = action.payload.username;
+            state.workerProfile.email = action.payload.email;
         },
         setEmptyProfile: (state) => {
             state.workerProfile.name = null;
             state.workerProfile.checkedWorkerRemember = true;
+            state.workerProfile.email = null;
         },
         fetchPicture: (state, action) => {
             state.workerProfile.image = action.payload;
@@ -155,5 +159,6 @@ export const selectCheckedWorker = (state: { worker: { workerProfile: {checkedWo
 export  const selectWorkerError = (state: { worker: { workerErrorMessage: string; }; }) => state.worker.workerErrorMessage;
 export const selectWorkerImage = (state: { worker: { workerProfile: { image: string; }; }; }) => state.worker.workerProfile.image;
 export const selectWorker = (state: {worker: {workerProfile: {name: string};}; }) => state.worker.workerProfile.name;
+export const selectWorkerEmail = (state: {worker: {workerProfile: {email: string};}; }) => state.worker.workerProfile.email;
 
 export default workerSlice.reducer;

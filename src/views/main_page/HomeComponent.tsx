@@ -3,8 +3,6 @@ import {Button} from "react-bootstrap";
 import main2 from "../../assets/main_2.svg";
 import FooterComponent from "./FooterComponent";
 import NavbarComponent from "./NavbarComponent";
-import {usePagination} from "use-pagination-firestore";
-import {db} from "../../firebase";
 import history from "../../history";
 
 const HomeComponent = () => {

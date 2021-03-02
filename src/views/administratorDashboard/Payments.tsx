@@ -21,7 +21,7 @@ const Payments = ({items, loading}: Props) => {
                     return (
                         <div style={{display: "flex"}}>
                             <div>
-                                {payment.amount/ 100} {payment.currency} - mokėjimo statusas: {payment.status}
+                                {payment.receipt_email} Mokėta: {payment.amount/ 100} {payment.currency} - mokėjimo statusas: {payment.status}
                             </div>
                             <Button style={{marginLeft: "2rem"}} variant="outline-dark">Daugiau informacijos</Button>
                         </div>

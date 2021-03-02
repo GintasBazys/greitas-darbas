@@ -1,6 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import * as firebase from "../../firebase";
-import {auth, db, secondaryApp} from "../../firebase";
+import {auth, db} from "../../firebase";
 import defaultAvatar from "../../assets/avatar.png";
 import history from "../../history";
 
@@ -10,7 +10,8 @@ export const userSlice = createSlice( {
         userProfile: {
             name: auth.currentUser,
             image: auth.currentUser,
-            checkedRemember: true
+            checkedRemember: true,
+            email: auth.currentUser
         },
         errorMessage: ""
     },
@@ -21,16 +22,19 @@ export const userSlice = createSlice( {
         signIn: (state, action) => {
             state.userProfile.name = action.payload.username
             state.userProfile.checkedRemember = action.payload.checkedRemember;
+            state.userProfile.email = action.payload.email;
         },
         sendError: (state, action) => {
             state.errorMessage = action.payload;
         },
         fetchUser: (state, action) => {
             state.userProfile.name = action.payload.username;
+            state.userProfile.email = action.payload.email;
         },
         setEmptyProfile: (state) => {
             state.userProfile.name = null;
             state.userProfile.checkedRemember = true;
+            state.userProfile.email = null;
         },
         fetchPicture: (state, action) => {
             state.userProfile.image = action.payload;
@@ -164,5 +168,6 @@ export const selectCheckedUser = (state: { user: { userProfile: {checkedRemember
 export  const selectError = (state: { user: { errorMessage: string; }; }) => state.user.errorMessage;
 export const selectImage = (state: { user: { userProfile: { image: string; }; }; }) => state.user.userProfile.image;
 export const selectUser = (state: {user: {userProfile: {name: string};}; }) => state.user.userProfile.name;
+export const selectUserEmail = (state: {user: {userProfile: {email: string};}; }) => state.user.userProfile.email;
 
 export default userSlice.reducer;

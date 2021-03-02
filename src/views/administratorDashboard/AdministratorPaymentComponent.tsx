@@ -5,6 +5,7 @@ import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import axios from "axios";
 import PaymentPaginationComponent from "./PaymentPaginationComponent";
 import Payments from "./Payments";
+import Stripe from "../../Stripe";
 
 const AdministratorPaymentComponent = () => {
 
@@ -13,7 +14,7 @@ const AdministratorPaymentComponent = () => {
     const [payments, setPayments] = useState([]);
 
     const config = {
-        headers: { Authorization: `Bearer sk_test_51IEDvEJIin4U4oiGASk92FsbExcjn60sdsraDxd5XER9LH4YUF2HcODYBtSAd8OPBMNeOMNGzuBiBdK42G69dOLC00x2a35IUF` }
+        headers: { Authorization: `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}` },
     };
 
     const renderPayments = () => {
@@ -52,7 +53,6 @@ const AdministratorPaymentComponent = () => {
                 {/*@ts-ignore*/}
                 <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
             </div>
-
         </div>
     )
 }
