@@ -13,6 +13,7 @@ import AdministratorUserManagementComponent from "./views/administratorDashboard
 import AdministratorWorkerManagementComponent
   from "./views/administratorDashboard/AdministratorWorkerManagementComponent";
 import WorkerLogin from "./features/worker/WorkerLogin";
+import AdministratorPaymentComponent from "./views/administratorDashboard/AdministratorPaymentComponent";
 
 function App() {
   return <Router history={history}>
@@ -26,6 +27,7 @@ function App() {
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
+      <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
     </Switch>
   </Router>
 }

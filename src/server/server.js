@@ -2,7 +2,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const stripe = require("stripe")(process.env.REACT_APP_STRIPE_SECRET_KEY);
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
@@ -12,7 +12,7 @@ app.use(cors());
 
 const admin = require("firebase-admin");
 
-const serviceAccount = require("../../src/server/greitas-darbas.json");
+const serviceAccount = require("./greitas-darbas.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
