@@ -57,6 +57,21 @@ app.post("/firebase/darbuotojai", cors(), async (req, res) => {
     }
 })
 
+app.post("/firebase/naudotojai", cors(), async (req, res) => {
+    let {uid} = req.body;
+    //console.log(uid);
+    try {
+        await admin.auth().deleteUser(uid).then(() => {
+            console.log("Istrynimas pavyko")
+        })
+        res.json({
+            message: "Pavyko"
+        })
+    } catch (e) {
+
+    }
+})
+
 app.listen(process.env.PORT || 8080, () => {
     console.log("Serveris veikia");
 });

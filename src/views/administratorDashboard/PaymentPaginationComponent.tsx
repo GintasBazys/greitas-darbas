@@ -8,8 +8,7 @@ const PaymentPaginationComponent = ({itemsPerPage, totalItems, paginate}: any) =
     }
 
     return (
-        <nav>
-            <ul className="pagination" style={{justifyContent: "center", display: "flex"}}>
+            <ul className="pagination" style={{justifyContent: "center", display: "flex", marginTop: "2rem"}}>
                 {
                     pageNumbers.map(number => (
                         <li key={number} className="page-item">
@@ -20,7 +19,6 @@ const PaymentPaginationComponent = ({itemsPerPage, totalItems, paginate}: any) =
                     ))
                 }
             </ul>
-        </nav>
     )
 
 }

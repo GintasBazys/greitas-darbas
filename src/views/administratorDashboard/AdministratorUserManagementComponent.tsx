@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {usePagination} from "use-pagination-firestore";
 import {db, storageRef} from "../../firebase";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
@@ -9,6 +9,8 @@ import userControlImage from "../../assets/admin_user_control.svg";
 import adminUserLink from "../../assets/admin_user_link.svg";
 import {Link} from "react-router-dom";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
+import EmployeeListComponent from "./EmplyeeListComponent";
+import UserListComponent from "./UserListComponent";
 
 const AdministratorUserManagementComponent = () => {
 
@@ -94,6 +96,13 @@ const AdministratorUserManagementComponent = () => {
 
     }
 
+    const [usersList, setUsersList] = useState(false);
+
+    const handleShowUsersList = () => {
+        setUsersList(!usersList);
+    }
+
+
     return (
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
@@ -145,6 +154,15 @@ const AdministratorUserManagementComponent = () => {
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
                         </div>
+
+                        <div className="text-center">
+                            <Button style={{marginTop: "2rem"}} variant="outline-dark" type="submit" onClick={() => handleShowUsersList()}>
+                                Rodyti naudotoju sąrašą
+                            </Button>
+                        </div>
+                        {
+                            usersList ? <UserListComponent users={usersList} setUsers={setUsersList}/> : <div></div>
+                        }
 
                     </Col>
                     <Col md={3}>
