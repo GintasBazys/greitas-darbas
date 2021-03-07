@@ -56,7 +56,8 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             status: "naujas",
             aboutMe: "Įveskite informacijos apie save...",
             image: defaultAvatar,
-            portfolioImages: []
+            portfolioImages: [],
+            rating: 0
         })
             .then(() => {
                 console.log("Document successfully written!");
