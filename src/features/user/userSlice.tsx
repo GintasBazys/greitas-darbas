@@ -44,7 +44,7 @@ export const userSlice = createSlice( {
 
 export const {signIn, sendError, changeRemember, fetchUser, setEmptyProfile, fetchPicture} = userSlice.actions;
 
-export const signUpAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const signUpAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: any; type: string; }) => void) => {
 
     firebase.auth.createUserWithEmailAndPassword(
         info.email,
@@ -73,7 +73,7 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
 
 }
 
-export const loginAsync = (info: { email: string; password: string; checkedRemember: boolean; }) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const loginAsync = (info: { email: string; password: string; checkedRemember: boolean; }) => (dispatch: (arg0: { payload: any; type: string; }) => void) => {
     if(!info.checkedRemember) {
         firebase.auth.setPersistence(firebase.Auth.Persistence.SESSION)
             .then(() => {
@@ -105,7 +105,7 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
     });
 }
 
-export const fetchUserAsync = (user: { uid: string | undefined }) => async (dispatch: (arg0: { payload: any; type: string; }) => void) => {
+export const fetchUserAsync = (user: { uid: string | undefined }) => async (dispatch: (arg0: { payload: any; type: string; }) => any) => {
     const userProfile = await firebase.usersCollection.doc(user.uid).get()
 
     await dispatch(fetchUser(userProfile.data()))

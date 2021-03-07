@@ -3,7 +3,7 @@ import {
     selectError,
     sendError,
     selectImage,
-    selectUser, fetchUpdateUserWorkPicturesToReview,
+    selectUser, fetchUpdateUserWorkPicturesToReview, fetchUserAsync,
 } from "../../features/user/userSlice";
 import history from "../../history";
 import {auth, db, emailProvider, storageRef} from "../../firebase";
@@ -22,6 +22,7 @@ import * as Pond from 'filepond';
 import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import LoadingComponent from "../LoadingComponent";
+import {updateOffers, updateOffersUsername} from "../../features/offers/offersSlice";
 
 const UserProfileComponent = () => {
     const dispatch = useDispatch();
@@ -47,13 +48,19 @@ const UserProfileComponent = () => {
     const [aboutMe, setAboutMe] = useState("");
     const user = firebase.auth.currentUser;
     const userBeforeChange = useSelector(selectUser);
+    const [username, setUsername] = useState("");
+    const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
+    const userId = firebase.auth.currentUser?.uid;
+
     console.log(userBeforeChange);
     useEffect(() => {
         firebase.usersCollection.doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 //@ts-ignore
                 setEmail(user?.email);
-                setAboutMe(doc.data()?.aboutMe)
+                setAboutMe(doc.data()?.aboutMe);
+                setUsername(doc.data()?.username);
+                setUsernameBeforeChange(doc.data()?.username);
             })
     }, [user])
 
@@ -69,6 +76,10 @@ const UserProfileComponent = () => {
             };
             reader.readAsDataURL(event.target.files[0]);
         }
+    }
+
+    const handleUsernameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setUsername(event.target.value);
     }
 
     const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -124,7 +135,8 @@ const UserProfileComponent = () => {
                             await db.collection("users").doc(auth.currentUser?.uid).update({
                                 email: email
                             })
-                            history.push("pagrindinis");
+                            await dispatch(updateOffers({mail: email}))
+                            await history.push("pagrindinis");
                         })
                 }).catch((error) => {
                     console.log(error.message);
@@ -180,6 +192,37 @@ const UserProfileComponent = () => {
         }
     }
 
+    const changeUsername = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        if (username === "") {
+            dispatch(sendError("Naudotojo vardo laukas negali būti tuščias"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+
+        } else {
+
+            await db.collection("users").get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        if(doc.data()?.username === username) {
+                            dispatch(sendError("Naudotojas tokiu vardu jau egzistuoja"));
+                            setTimeout(() => {
+                                dispatch(sendError(""))
+                            }, 2000);
+                            return
+                        }
+                    })
+                })
+
+            await db.collection("users").doc(auth.currentUser?.uid).update({
+                username: username
+            })
+            await dispatch(fetchUserAsync({uid: userId}));
+            await dispatch(updateOffersUsername({username: username, usernameBeforeChange: usernameBeforeChange}));
+        }
+    }
+
     return <div>
         <UserNavBarComponent profileImage={image}/>
         <Container fluid>
@@ -193,10 +236,16 @@ const UserProfileComponent = () => {
                             <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
                         </Form.Group>
                         <Form.Group>
+                            <Form.Label>Pakeisti vartotojo vardą</Form.Label>
+                            <Form.Control type="text" value={username} onChange={handleUsernameChange} />
+                        </Form.Group>
+                        <div className="text-center">
+                            <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeUsername(e)}>Atnaujinti</Button>
+                        </div>
+                        <Form.Group>
                             <Form.Label>Pakeisti el. pašto adresą</Form.Label>
                             <Form.Control type="email" value={email} onChange={handleEmailChange}/>
                         </Form.Group>
-
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={(e) => changeEmail(e)}>Atnaujinti</Button>
                         </div>

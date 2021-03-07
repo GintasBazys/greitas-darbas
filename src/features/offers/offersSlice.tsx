@@ -23,7 +23,7 @@ export const addOffer = (info: {
     location: string,
     price: string,
     isRemote: boolean,
-    userRating: number}) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+    userRating: number}) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -35,7 +35,8 @@ export const addOffer = (info: {
         price: info.price,
         isRemote: info.isRemote,
         userRating: info.userRating,
-        createdOn: new Date().toISOString()
+        createdOn: new Date().toISOString(),
+        status: "new"
     }).then(r => {
 
     }).catch((error) => {
@@ -43,6 +44,29 @@ export const addOffer = (info: {
     })
 
 }
+
+export const updateOffers = (info: {mail: string}) => async (dispatch: any) => {
+    await firebase.offersCollection.where("userMail", "==", info.mail).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.offersCollection.doc(doc.id).update({
+                    userMail: info.mail
+                })
+            })
+        })
+}
+
+export const updateOffersUsername = (info: {username: string, usernameBeforeChange: string}) => async (dispatch: any) => {
+    await firebase.offersCollection.where("username", "==", info.usernameBeforeChange).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.offersCollection.doc(doc.id).update({
+                    username: info.username
+                })
+            })
+        })
+}
+
 export const {setOffers} = offersSlice.actions;
 
 export default offersSlice.reducer;
