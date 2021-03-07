@@ -25,7 +25,7 @@ const UserListComponent = ({users, setUsers}: props) => {
         getNext,
     } = usePagination(
         db
-            .collection("users"), {
+            .collection("users").orderBy("username"), {
             limit: 15
         }
     );

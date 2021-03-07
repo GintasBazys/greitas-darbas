@@ -13,6 +13,9 @@ import {auth, db} from "../../firebase";
 import history from "../../history";
 import {addOffer} from "../../features/offers/offersSlice";
 import NotificationComponent from "../main_page/NotificationComponent";
+import {usePagination} from "use-pagination-firestore";
+import LoadingComponent from "../LoadingComponent";
+import OffersUpdateModalComponent from "./OffersUpdateModalComponet";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -22,6 +25,7 @@ const UserWorkOfferManagementComponent = () => {
     const userMail = useSelector(selectUserEmail);
     const error = useSelector(selectError);
 
+    console.log(username)
     const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -29,6 +33,8 @@ const UserWorkOfferManagementComponent = () => {
     const [price, setPrice] = useState("");
     const [isRemote, setIsRemote] = useState(false);
     const [userRating, setUserRating] = useState(0);
+    const [showOffers, setShowOffers] = useState(false);
+    const [title, setTitle] = useState("");
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
@@ -54,10 +60,14 @@ const UserWorkOfferManagementComponent = () => {
         setPrice(event.target.value)
     }
 
+    const handleTitleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTitle(event.target.value)
+    }
+
     const submitOffer = async () => {
         //todo istestuoti laukus kad nepraleistu netinkamo formato
 
-        if(description !== "" && phoneNumber !== "" && location !== "" && price !== "") {
+        if(description !== "" && phoneNumber !== "" && location !== "" && price !== "" && title !== "") {
             await dispatch(addOffer({
                 user: auth.currentUser?.uid,
                 userMail: userMail,
@@ -68,7 +78,8 @@ const UserWorkOfferManagementComponent = () => {
                 location: location,
                 price: price,
                 isRemote: isRemote,
-                userRating: userRating
+                userRating: userRating,
+                title: title
             }))
 
             await history.go(0);
@@ -81,6 +92,28 @@ const UserWorkOfferManagementComponent = () => {
         }
     }
 
+    const {
+        items,
+        isLoading,
+        isStart,
+        isEnd,
+        getPrev,
+        getNext,
+    } = usePagination(
+        db
+            .collection("offers").orderBy("createdOn", "desc").where("username", "==", username), {
+            limit: 10
+        }
+    );
+
+    const [modalShow, setModalShow] = useState(false);
+
+    const updateOffer = (item: any) => {
+        setModalShow(!modalShow)
+    }
+    const deleteOffer = (item: any) => {
+        //TODO padaryti kad title butu unikalus, sutvarkyti pagination
+    }
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -93,6 +126,10 @@ const UserWorkOfferManagementComponent = () => {
                             <Form.Group>
                                 <Form.Label>Veikla (pakeitimui susisiekti su klientų aptarnavimo specialistu)</Form.Label>
                                 <Form.Control disabled={true} type="email" value={activityType}/>
+                            </Form.Group>
+                            <Form.Group controlId="title">
+                                <Form.Label>Pavadinimas</Form.Label>
+                                <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="textarea">
                                 <Form.Label>Aprašymas</Form.Label>
@@ -118,6 +155,37 @@ const UserWorkOfferManagementComponent = () => {
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={() => submitOffer()}>Paskelbti</Button>
                         </div>
+                        <div>
+                            <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={() => setShowOffers(true)}>Peržiūrėti savo skelbimus</Button>
+                            {
+                                showOffers ?
+                                    <div>
+                                        {
+                                             items.length === 0 ? <div></div> : isLoading? <LoadingComponent /> : items.map((item) => (
+                                                <div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {item.title}
+                                                        <Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => updateOffer(item)}>Atnaujinti informaciją</Button>
+                                                        <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button>
+                                                    </div>
+
+                                                    <OffersUpdateModalComponent show={modalShow} onHide={() => updateOffer(item)} />
+                                                </div>
+                                            ))
+                                        }
+                                        {
+                                            items.length === 0 ? <div>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                                                <div className="center-element" style={{marginTop: "2rem"}}>
+                                                <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
+                                                <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
+                                                </div>
+                                        }
+                                    </div>
+
+                                 : <div></div>
+                            }
+                        </div>
+
                     </Col>
                     <Col md={2}></Col>
                 </Row>

@@ -9,14 +9,13 @@ import userControlImage from "../../assets/admin_user_control.svg";
 import adminUserLink from "../../assets/admin_user_link.svg";
 import {Link} from "react-router-dom";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
-import EmployeeListComponent from "./EmplyeeListComponent";
 import UserListComponent from "./UserListComponent";
 
 const AdministratorUserManagementComponent = () => {
 
     const image = useSelector(selectWorkerImage);
 
-    const {
+    let {
         items,
         isLoading,
         isStart,
@@ -25,10 +24,12 @@ const AdministratorUserManagementComponent = () => {
         getNext,
     } = usePagination(
         db
-            .collection("users").where("status", "==", "nepatvirtintas"), {
+            .collection("users").orderBy("username").where("status", "==", "nepatvirtintas"), {
             limit: 10
         }
     );
+
+    console.log(items)
 
     const confirmStatus = (item: any) =>{
         const response = window.confirm("Patvirtinti?");
@@ -102,7 +103,6 @@ const AdministratorUserManagementComponent = () => {
         setUsersList(!usersList);
     }
 
-
     return (
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
@@ -123,7 +123,7 @@ const AdministratorUserManagementComponent = () => {
                     <Col md={7}>
 
                         {
-                            isLoading ? <LoadingComponent /> : items.map(item => {
+                             isLoading ? <LoadingComponent /> : items.length === 0 ? <div></div> : items.map(item => {
                                 return (
                                     <div className="center-element" style={{marginTop: "2rem"}}>
                                         <div style={{borderStyle: "solid", borderRadius: "1rem"}}>

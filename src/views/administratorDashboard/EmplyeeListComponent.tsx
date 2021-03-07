@@ -27,7 +27,7 @@ const EmployeeListComponent = ({employees, setEmployees}: props) => {
         getNext,
     } = usePagination(
         db
-            .collection("workers"), {
+            .collection("workers").orderBy("status"), {
             limit: 15
         }
     );

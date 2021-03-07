@@ -23,7 +23,8 @@ export const addOffer = (info: {
     location: string,
     price: string,
     isRemote: boolean,
-    userRating: number}) => async (dispatch: any) => {
+    userRating: number,
+    title: string}) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -36,7 +37,8 @@ export const addOffer = (info: {
         isRemote: info.isRemote,
         userRating: info.userRating,
         createdOn: new Date().toISOString(),
-        status: "new"
+        status: "new",
+        title: info.title
     }).then(r => {
 
     }).catch((error) => {
