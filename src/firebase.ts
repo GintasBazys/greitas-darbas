@@ -12,7 +12,7 @@ const firebaseConfig = {
     appId: "1:553487319598:web:993e61d844b94d2e8c55bf",
     measurementId: "G-0R0FTM9HX2"
 };
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
 
@@ -26,6 +26,8 @@ const usersCollection = db.collection("users");
 const workerCollection = db.collection("workers");
 const requestCollection = db.collection("requests");
 const offersCollection = db.collection("offers");
+const statisticsCollection = db.collection("statistics");
+const messagesCollection = db.collection("messages");
 
 export {
     db,
@@ -37,5 +39,7 @@ export {
     emailProvider,
     workerCollection,
     requestCollection,
-    offersCollection
+    offersCollection,
+    statisticsCollection,
+    messagesCollection
 };

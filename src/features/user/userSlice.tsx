@@ -55,7 +55,8 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             email: info.email,
             status: "naujas",
             aboutMe: "Įveskite informacijos apie save...",
-            image: defaultAvatar
+            image: defaultAvatar,
+            portfolioImages: []
         })
             .then(() => {
                 console.log("Document successfully written!");
@@ -135,6 +136,12 @@ export const fetchUpdateUserStatusToReview = (p: {user: any, documentURLS: Array
         documentURLS: p.documentURLS,
         activityType: p.activityType,
         EVRK: p.EVRK
+    })
+}
+
+export const fetchUpdateUserWorkPicturesToReview = (p: {user: any, portfolioImages: Array<any>}) => async () => {
+    await db.collection("users").doc(p.user.uid).update({
+        portfolioImages: p.portfolioImages
     })
 }
 

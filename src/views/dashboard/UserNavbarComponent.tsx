@@ -13,15 +13,17 @@ const UserNavBarComponent = ({profileImage}) => {
     return (
         <div>
             <Navbar bg="dark" expand="lg" className=" py-0 sticky-top dashboard-nav-width" variant="dark">
-                <Navbar.Brand><Link to="/pradzia" className="admin-navbar-brand">Pradžia</Link></Navbar.Brand>
+                <Navbar.Brand><Link to="/pagrindinis" className="admin-navbar-brand">Pradžia</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
 
                     <Link to="/pasiulymai" className="admin-navbar-link">Darbo pasiūlymų peržiūra </Link>
+                    <Link to="/paieska" className="admin-navbar-link">Darbuotojų paieška </Link>
                     <Link to="/paslauga" className="admin-navbar-link">Siūlomų paslaugų peržiūra </Link>
+                    <Link to="/siulymas" className="admin-navbar-link">Siūlomos paslaugos valdymas</Link>
                     <Link to="/mokejimai" className="admin-navbar-link">Mokėjimų peržiūra </Link>
+                    <Link to="/zinutes" className="admin-navbar-link">Žinučių peržiūra </Link>
                     <Link to="/atsiliepimai" className="admin-navbar-link">Atsiliepimų peržiūra</Link>
-                    <Link to="/profilis" className="admin-navbar-link">Profilio peržiūra </Link>
 
                     <NavDropdown
                         title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
@@ -29,7 +31,7 @@ const UserNavBarComponent = ({profileImage}) => {
                         </div>
                         }
                         id="basic-nav-dropdown">
-                        <Link to="/administracija/profilis" className="dropdown-menu-item">Profilis</Link>
+                        <Link to="/profilis" className="dropdown-menu-item">Profilis</Link>
                         <Button variant="link" type="submit" className="dropdown-menu-item" onClick={() => dispatch(logout())}>
                             Atsijungti
                         </Button>
