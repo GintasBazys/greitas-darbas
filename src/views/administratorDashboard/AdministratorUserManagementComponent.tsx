@@ -126,10 +126,11 @@ const AdministratorUserManagementComponent = () => {
                             isLoading ? <LoadingComponent /> : items.map(item => {
                                 return (
                                     <div className="center-element" style={{marginTop: "2rem"}}>
-                                        <div style={{borderStyle: "dotted solid"}}>
+                                        <div style={{borderStyle: "solid", borderRadius: "1rem"}}>
                                             <div style={{overflow: "overlay"}}>
 
                                                 <p>{item.username} - {item.email}</p>
+                                                <p>Veikla: {item.activityType}, EVRK: {item.EVRK}</p>
                                                 {
                                                     item.documentURLS.map((imageUrl: string, index: number) => {
                                                         return <a href={imageUrl} download target="_blank"><img  key={index} src={imageUrl} width="100px" height="100px" style={{marginLeft: "2rem"}}/></a>

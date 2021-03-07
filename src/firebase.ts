@@ -24,6 +24,8 @@ const emailProvider = firebase.auth.EmailAuthProvider;
 
 const usersCollection = db.collection("users");
 const workerCollection = db.collection("workers");
+const requestCollection = db.collection("requests");
+const offersCollection = db.collection("offers");
 
 export {
     db,
@@ -34,5 +36,6 @@ export {
     secondaryApp,
     emailProvider,
     workerCollection,
-    firebaseConfig
+    requestCollection,
+    offersCollection
 };

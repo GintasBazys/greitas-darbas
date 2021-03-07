@@ -7,7 +7,6 @@ import login from "../../assets/login.svg";
 import FooterComponent from "./FooterComponent";
 import history from "../../history";
 import {selectWorkerError, changeWorkerRemember} from "../../features/worker/workerSlice";
-import {withRouter } from 'react-router-dom';
 
 const WorkerLoginPageComponent = (props: any) => {
     const dispatch = useDispatch();
@@ -27,9 +26,9 @@ const WorkerLoginPageComponent = (props: any) => {
                         <Col md={6} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
                             <img src={login} style={{width: "calc(100vh - 96px)", marginTop: "100px", height: "auto", maxWidth: "100%"}} alt="login picture"/>
                         </Col>
-                        <NotificationComponent message={errorMessage} />
                         <Col md={6} className="login-form">
                             <Form onSubmit={props.handleSubmit} style={{width: "75%"}}>
+                                <NotificationComponent message={errorMessage} />
                                 <Form.Group controlId="email">
                                     <Form.Label>El. pašto adresas</Form.Label>
                                     <Form.Control type="email" placeholder="Įveskite el. pašto adresą" value={props.email} autoComplete="on"
@@ -59,4 +58,4 @@ const WorkerLoginPageComponent = (props: any) => {
     )
 }
 
-export default withRouter(WorkerLoginPageComponent);
+export default WorkerLoginPageComponent;

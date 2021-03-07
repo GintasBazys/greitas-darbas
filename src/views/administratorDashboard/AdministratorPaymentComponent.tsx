@@ -6,6 +6,7 @@ import axios from "axios";
 import PaymentPaginationComponent from "./PaymentPaginationComponent";
 import Payments from "./Payments";
 import Stripe from "../../Stripe";
+import LoadingComponent from "../LoadingComponent";
 
 const AdministratorPaymentComponent = () => {
 
@@ -48,11 +49,14 @@ const AdministratorPaymentComponent = () => {
     return (
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
-            <div className="center">
-                <Payments items={currentItems} loading={loading} />
-                {/*@ts-ignore*/}
-                <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
-            </div>
+            {
+                payments.length > 0 ? <div className="center">
+                    <Payments items={currentItems} loading={loading} />
+                    {/*@ts-ignore*/}
+                    <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
+                </div> : <LoadingComponent />
+            }
+
         </div>
     )
 }

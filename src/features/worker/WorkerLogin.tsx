@@ -2,7 +2,6 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {loginWorkerAsync, selectCheckedWorker, selectWorkerError, sendWorkerError,} from "./workerSlice";
 import WorkerLoginPageComponent from "../../views/main_page/WorkerLoginPageComponent";
-import LoginPageComponent from "../../views/main_page/LoginPageComponent";
 
 const WorkerLogin = () => {
 
@@ -32,10 +31,17 @@ const WorkerLogin = () => {
     const handleSubmit = (event: { preventDefault: () => void; }) => {
 
         event.preventDefault();
-        dispatch(loginWorkerAsync({email: email, password: password, checkedRemember: checkedUser}))
-        setEmail("");
-        setPassword("");
 
+        if(email === "" && password === "") {
+            dispatch(sendWorkerError("Negali būti tuščių laukų"));
+            setTimeout(() => {
+                dispatch(sendWorkerError(""))
+            }, 5000)
+        } else {
+            dispatch(loginWorkerAsync({email: email, password: password, checkedRemember: checkedUser}))
+            setEmail("");
+            setPassword("");
+        }
     }
 
     return (

@@ -128,11 +128,13 @@ export const fetchPictureAsync = (image: string) => async (dispatch: (arg0: { pa
 
 }
 
-export const fetchUpdateUserStatusToReview = (p: {user: any, documentURLS: Array<any>}) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const fetchUpdateUserStatusToReview = (p: {user: any, documentURLS: Array<any>, activityType: string, EVRK: string}) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
     await db.collection("users").doc(p.user.uid).update({
         status: "nepatvirtintas",
-        documentURLS: p.documentURLS
+        documentURLS: p.documentURLS,
+        activityType: p.activityType,
+        EVRK: p.EVRK
     })
 }
 

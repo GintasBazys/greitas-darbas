@@ -30,17 +30,25 @@ const Login = () => {
 
     const handleSubmit = (event: { preventDefault: () => void; }) => {
 
+        if(email === "" && password === "") {
+            dispatch(sendError("Negali būti tuščių laukų"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 5000)
+        } else
+
         db.collection("users").where("email", "==", email).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     console.log(doc.data());
                     if(doc.data()?.status !== "administratorius" || doc.data()?.status !== "darbuotojas") {
+                        dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
+                    } else {
                         dispatch(sendError("Netinkami paskyros duomenys"));
                         setTimeout(() => {
                             dispatch(sendError(""));
                         }, 5000)
-                    } else {
-                        dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
+
                     }
                 })
             }).catch((error) => {
