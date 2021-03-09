@@ -26,39 +26,35 @@ const config = {
 
 let client = null;
 
-const createClient = async (customer) => {
-    client = await stripe.customers.create({
-        email: customer,
-    })
-}
-
 app.post("/stripe/mokejimas", cors(), async (req, res) => {
 
     let { amount, id, customer } = req.body;
 
         try {
-             await axios.get(`https://api.stripe.com/v1/customers?email=dfds`, config)
+             await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
                 .then((res) => {
 
                     if(res.data.data.length === 0) {
                         console.log("nera userio")
 
-                            const test = async () => {
-                                const createdClient = await createClient(customer);
-                                console.log(createdClient)
-                            }
+                        const createClient = async () => {
+                            client = await stripe.customers.create({
+                                email: customer,
+                            })
+                        }
+                        createClient().then(() => {
+                            const payment = stripe.paymentIntents.create({
+                                amount: amount,
+                                currency: "EUR",
+                                description: "Greitas Darbas Ltd",
+                                payment_method: id,
+                                confirm: true,
+                                customer: client.email
 
-                            test()
+                            });
+                        })
 
-                            // const payment = stripe.paymentIntents.create({
-                            //     amount: amount,
-                            //     currency: "EUR",
-                            //     description: "Greitas Darbas Ltd",
-                            //     payment_method: id,
-                            //     confirm: true,
-                            //     customer: client[0].id
-                            //
-                            // });
+
 
                         } else {
                                     console.log(res.data.data[0].id)
