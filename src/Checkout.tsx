@@ -4,11 +4,12 @@ import {Button, Form} from "react-bootstrap";
 import axios from "axios";
 import {selectWorkerEmail} from "./features/worker/workerSlice";
 import {useSelector} from "react-redux";
+import {selectUserEmail} from "./features/user/userSlice";
 
 const Checkout = () => {
     const stripe = useStripe();
     const elements = useElements();
-    const userMail = useSelector(selectWorkerEmail);
+    const userMail = useSelector(selectUserEmail);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();

@@ -45,11 +45,27 @@ const UserWorkOfferManagementComponent = () => {
     }, [])
 
     const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setDescription(event.target.value)
+        if(event.target.value.length >= 101) {
+            dispatch(sendError("Ne daugiau 500 simboliu"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+        }else{
+            setDescription(event.target.value)
+        }
+
     }
 
     const handlePhoneNumberChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setPhoneNumber(event.target.value)
+        if(isNaN(Number(event.target.value))) {
+            dispatch(sendError("Iveskite tik skaičius"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+        }else{
+            setPhoneNumber(event.target.value)
+        }
+
     }
 
     const handleLocationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -136,7 +152,7 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Control as="textarea" rows={3} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
-                                <Form.Label>Telefono nr.</Form.Label>
+                                <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
                                 <Form.Control type="tel" value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
                             <Form.Group controlId="location">
@@ -174,7 +190,7 @@ const UserWorkOfferManagementComponent = () => {
                                             ))
                                         }
                                         {
-                                            items.length === 0 ? <div>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                                            items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
                                                 <div className="center-element" style={{marginTop: "2rem"}}>
                                                 <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                                                 <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>

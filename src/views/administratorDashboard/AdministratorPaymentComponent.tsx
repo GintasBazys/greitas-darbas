@@ -16,10 +16,11 @@ const AdministratorPaymentComponent = () => {
 
     const config = {
         headers: { Authorization: `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}` },
+
     };
 
     const renderPayments = () => {
-            axios.get("https://api.stripe.com/v1/payment_intents", config)
+            axios.get("https://api.stripe.com/v1/payment_intents/", config)
                 .then((res) => {
                     const allPayments = res.data.data;
                     setPayments(allPayments)
