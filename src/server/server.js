@@ -1,4 +1,3 @@
-// @ts-ignore
 const express = require("express");
 const app = express();
 require("dotenv").config();
@@ -20,13 +19,14 @@ admin.initializeApp({
 });
 
 const config = {
-    headers: { Authorization: `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}` },
+    headers: { Authorization: `Bearer ${process.env.REACT_APP_STRIPE_SECRET_KEY}`, "Access-Control-Allow-Origin": "*"
+        },
 
 };
 
 let client = null;
 
-app.post("/stripe/mokejimas", cors(), async (req, res) => {
+app.post("/stripe/mokejimas", cors(), async (req, resp) => {
 
     let { amount, id, customer } = req.body;
 
@@ -49,9 +49,10 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                                 description: "Greitas Darbas Ltd",
                                 payment_method: id,
                                 confirm: true,
-                                customer: client.email
+                                customer: client.id
 
                             });
+                            resp.redirect("http://localhost:3000/pagrindinis");
                         })
 
 
@@ -68,6 +69,7 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                                         customer: res.data.data[0].id
 
                                     });
+                                    resp.redirect("http://localhost:3000/pagrindinis");
                     }
 
                 }).catch(error => {

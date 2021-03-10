@@ -9,7 +9,6 @@ import {auth, db} from "./firebase";
 import history from "./history";
 import LoadingComponent from "./views/LoadingComponent";
 import {fetchProfilePicture, fetchUserAsync} from "./features/user/userSlice";
-import firebase from "firebase";
 import {fetchWorkerAsync, fetchWorkerProfilePicture} from "./features/worker/workerSlice";
 
 auth.onAuthStateChanged( async user => {

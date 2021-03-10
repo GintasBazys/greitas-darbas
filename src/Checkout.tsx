@@ -5,6 +5,7 @@ import axios from "axios";
 import {selectWorkerEmail} from "./features/worker/workerSlice";
 import {useSelector} from "react-redux";
 import {selectUserEmail} from "./features/user/userSlice";
+import history from "./history";
 
 const Checkout = () => {
     const stripe = useStripe();
@@ -27,16 +28,17 @@ const Checkout = () => {
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
-                        amount: 100,
+                        amount: 100,//TODO props
                         id: id,
                         customer: userMail
                     }
                 );
 
                 if (response.data.success) {
+                    history.go(0);
                 }
             } catch (error) {
-                console.log(error);
+                history.go(0)
             }
         } else {
             console.log(error.message);

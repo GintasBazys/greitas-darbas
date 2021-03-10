@@ -38,11 +38,14 @@ export const userSlice = createSlice( {
         },
         fetchPicture: (state, action) => {
             state.userProfile.image = action.payload;
+        },
+        fetchEmail: (state, action) => {
+            state.userProfile.email = action.payload
         }
     }
 })
 
-export const {signIn, sendError, changeRemember, fetchUser, setEmptyProfile, fetchPicture} = userSlice.actions;
+export const {signIn, sendError, changeRemember, fetchUser, setEmptyProfile, fetchPicture, fetchEmail} = userSlice.actions;
 
 export const signUpAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: any; type: string; }) => void) => {
 

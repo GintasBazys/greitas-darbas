@@ -20,7 +20,7 @@ const UserPaymentComponent = () => {
     };
 
     const renderPayments = () => {
-        axios.get("https://api.stripe.com/v1/payment_intents", config)
+        axios.get("https://api.stripe.com/v1/payment_intents?limit=100&customer=cus_J5MpPew9wOl3De", config)
             .then((res) => {
                 const allPayments = res.data.data;
                 setPayments(allPayments)
@@ -37,7 +37,7 @@ const UserPaymentComponent = () => {
 
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -49,16 +49,12 @@ const UserPaymentComponent = () => {
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
-            {
 
-                    payments.length > 0 ? <div className="center">
-                        <Payments items={currentItems} loading={loading} />
-                        {/*@ts-ignore*/}
-                        <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
-                    </div> : <LoadingComponent />
-
-            }
-            <Stripe />
+            <div className="center">
+                <Payments items={currentItems} loading={loading} />
+                {/*@ts-ignore*/}
+                <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
+            </div>
         </div>
     )
 }
