@@ -19,14 +19,29 @@ const UserPaymentComponent = () => {
 
     };
 
-    const renderPayments = () => {
-        axios.get("https://api.stripe.com/v1/payment_intents?limit=100&customer=cus_J5MpPew9wOl3De", config)
+    const renderPayments = async () => {
+
+        let lastPayment = "";
+        //TODO checkPayment, axios get customers id by email
+        await axios.get("https://api.stripe.com/v1/payment_intents?limit=10&customer=cus_J5MpPew9wOl3De", config)
             .then((res) => {
                 const allPayments = res.data.data;
                 setPayments(allPayments)
+                // @ts-ignore
+                lastPayment = allPayments[9].id
+                console.log(lastPayment);
             }).catch((error) => {
 
-        })
+            })
+        await axios.get(`https://api.stripe.com/v1/payment_intents?customer=cus_J5MpPew9wOl3De&limit=10&starting_after=${lastPayment}`, config)
+            .then((resp) => {
+                console.log(resp)
+                // @ts-ignore
+                setPayments(payments => [...payments, ...resp.data.data])
+                // @ts-ignore
+                console.log(payments)
+            })
+
     }
 
     useEffect(() => {
