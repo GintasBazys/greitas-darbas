@@ -47,6 +47,32 @@ export const addOffer = (info: {
 
 }
 
+export const updateOffer = (info: {
+    activityType: string,
+    description: string,
+    phoneNumber: string,
+    location: string,
+    price: string,
+    isRemote: boolean,
+    title: string}) => async (dispatch: any) => {
+    await firebase.offersCollection.where("title", "==", info.title).limit(1).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.offersCollection.doc(doc.id).update({
+                    activityType: info.activityType,
+                    description: info.description,
+                    phoneNumber: info.phoneNumber,
+                    location: info.location,
+                    price: info.price,
+                    isRemote: info.isRemote,
+                    status: "updated",
+                    title: info.title
+                })
+            })
+        })
+}
+
+
 export const updateOffers = (info: {mail: string}) => async (dispatch: any) => {
     await firebase.offersCollection.where("userMail", "==", info.mail).get()
         .then((querySnapshot) => {

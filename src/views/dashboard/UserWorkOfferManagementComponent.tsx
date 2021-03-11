@@ -77,6 +77,7 @@ const UserWorkOfferManagementComponent = () => {
     }
 
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        //TODO pavadinimas unikalus
         setTitle(event.target.value)
     }
 
@@ -163,6 +164,14 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label>Kaina</Form.Label>
                                 <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
+                            <Form.Group controlId="time">
+                                <Form.Label>Trukmė</Form.Label>
+                                <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={price} onChange={handlePriceChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="availability">
+                                <Form.Label>Pasiekiamumas</Form.Label>
+                                <Form.Control type="text" placeholder="Pasiekiamumas savaitės dienomis" value={price} onChange={handlePriceChange}/>
+                            </Form.Group>
                             <Form.Group controlId="checkbox">
                                 <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}
                                             onChange={() => setIsRemote(!isRemote)}/>
@@ -185,7 +194,7 @@ const UserWorkOfferManagementComponent = () => {
                                                         <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button>
                                                     </div>
 
-                                                    <OffersUpdateModalComponent show={modalShow} onHide={() => updateOffer(item)} />
+                                                    <OffersUpdateModalComponent show={modalShow} item={item} onHide={() => updateOffer(item)} />
                                                 </div>
                                             ))
                                         }
