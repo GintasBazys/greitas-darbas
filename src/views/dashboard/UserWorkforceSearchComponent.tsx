@@ -21,7 +21,7 @@ const UserWorkforceSearchComponent = () => {
                                 <li><Link to="/paieska/siulymai">Ieškomų darbuotojų peržiūra</Link></li>
                                 <li><Link to="/paieka/kurimas">Ieškoti darbuotojų</Link></li>
                             </ul>
-                            <Link to="/profilis"><Image style={{marginTop: "2rem"}} fluid src={image} alt="profilio nuotrauka"/></Link>
+                            <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
                         </div>
                     </Col>
                     <Col md={8}>

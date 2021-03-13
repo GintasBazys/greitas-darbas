@@ -8,7 +8,7 @@ import {
     sendError
 } from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
-import {Button, Col, Container, Form, Row} from "react-bootstrap";
+import {Button, Col, Container, Form, Row, Image} from "react-bootstrap";
 import {auth, db} from "../../firebase";
 import history from "../../history";
 import {addOffer} from "../../features/offers/offersSlice";
@@ -18,6 +18,7 @@ import LoadingComponent from "../LoadingComponent";
 import OffersUpdateModalComponent from "./OffersUpdateModalComponent";
 import {locations} from "./locations";
 import {days} from "./days";
+import {Link} from "react-router-dom";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -158,15 +159,25 @@ const UserWorkOfferManagementComponent = () => {
         setModalShow(!modalShow)
     }
     const deleteOffer = (item: any) => {
-        //TODO padaryti kad title butu unikalus, sutvarkyti pagination
-
+        const response = window.confirm("Patvirtinti?");
+        if(response) {
+            db.collection("offers").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        db.collection("offers").doc(doc.id).delete()
+                    })
+                    //db.collection("users").doc()
+                })
+        }
     }
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
             <Container fluid>
                 <Row>
-                    <Col md={2}></Col>
+                    <Col md={2}>
+                        <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
+                    </Col>
                     <Col md={8}>
                         <NotificationComponent message={error} />
                         <Form>

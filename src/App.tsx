@@ -20,6 +20,7 @@ import UserWorkOfferManagementComponent from "./views/dashboard/UserWorkOfferMan
 import UserOffersViewComponent from "./views/dashboard/UserOffersViewComponent";
 import UserPaymentComponent from "./views/dashboard/UserPaymentComponent";
 import UserWorkforceSearchComponent from "./views/dashboard/UserWorkforceSearchComponent";
+import UserUnconfirmedProfileComponent from "./views/dashboard/UserUnconfirmedProfileComponent";
 
 function App() {
   return <Router history={history}>
@@ -28,6 +29,7 @@ function App() {
       <Route exact path="/prisijungti" component={Login} />
       <Route path="/darbuotojas/prisijungimas" component={WorkerLogin} />
       <PrivateRoute exact path="/pradzia" component={DashboardComponent} />
+      <PrivateRoute exact path="/pradzia/profilis" component={UserUnconfirmedProfileComponent} />
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />

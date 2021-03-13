@@ -31,16 +31,6 @@ const UserPaymentComponent = () => {
             .then((res) => {
                 console.log(res.data.data[0].id);
                 setUserID(res.data.data[0].id);
-
-                // axios.get(`https://api.stripe.com/v1/payment_intents?customer=${userID}&limit=10&starting_after=${lastPayment}`, config)
-                //     .then((resp) => {
-                //         //console.log(resp)
-                //         // @ts-ignore
-                //         setPayments(payments => [...payments, ...resp.data.data])
-                //         // @ts-ignore
-                //         //console.log(payments)
-                //     })
-
             })
 
         await axios.get(`https://api.stripe.com/v1/payment_intents?limit=10&customer=${userID}`, config)
@@ -53,6 +43,16 @@ const UserPaymentComponent = () => {
             }).catch((error) => {
 
         })
+
+        await axios.get(`https://api.stripe.com/v1/payment_intents?customer=${userID}&limit=10&starting_after=${lastPayment}`, config)
+            .then((resp) => {
+                //console.log(resp)
+                // @ts-ignore
+                setPayments(payments => [...payments, ...resp.data.data])
+                // @ts-ignore
+                //console.log(payments)
+            })
+
 
 
     }

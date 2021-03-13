@@ -88,7 +88,7 @@ const DashboardComponent = () => {
                 <Row>
                     <Col md={3}>
                         <div className="center">
-                            <Link to="/profilis"><h1>Peržiūrėti profilį</h1></Link>
+                            <Link to="/pradzia/profilis"><h1>Peržiūrėti profilį</h1></Link>
                             <Image src={image} alt="profilis" />
                         </div>
 
@@ -101,13 +101,14 @@ const DashboardComponent = () => {
                         <NotificationComponent message={error} />
                         <Form>
                             <Form.Group controlId="activityType">
-                                <Form.Label>Veiklos rūšis</Form.Label>
+                                <Form.Label>Veiklos rūšis*</Form.Label>
                                 <Form.Control type="text" value={activity} autoComplete="on" autoFocus placeholder="Įveskite veiklos rūšį" onChange={handleActivityChange}/>
                             </Form.Group>
                             <Form.Group controlId="EVRK">
-                                <Form.Label>EVRK</Form.Label>
+                                <Form.Label>EVRK*</Form.Label>
                                 <Form.Control type="text" value={EVRK} autoComplete="on" autoFocus placeholder="Įveskite EVRK" onChange={handleEVRKChange}/>
                             </Form.Group>
+                            *Šios informacijos pateikti nėra privaloma
                         </Form>
                         <h1>Pateikite ne daugiau nei dvi dokumento nuotraukas.</h1>
                         <FilePond
