@@ -21,7 +21,7 @@ const UserNavBarComponent = ({profileImage}) => {
                     <Link to="/paieska" className="admin-navbar-link">Darbuotojų paieška </Link>
                     <Link to="/paslauga" className="admin-navbar-link">Siūlomų paslaugų peržiūra </Link>
                     <Link to="/vykdymas" className="admin-navbar-link">Paslaugų vykdymas </Link>
-                    <Link to="/siulymas" className="admin-navbar-link">Siūlomos paslaugos valdymas</Link>
+                    <Link to="/siulymas" className="admin-navbar-link">Siūlomų paslaugų valdymas</Link>
                     <Link to="/mokejimai" className="admin-navbar-link">Mokėjimų peržiūra </Link>
                     <Link to="/zinutes" className="admin-navbar-link">Žinučių peržiūra </Link>
                     <Link to="/atsiliepimai" className="admin-navbar-link">Atsiliepimų peržiūra</Link>

@@ -15,7 +15,9 @@ import {addOffer} from "../../features/offers/offersSlice";
 import NotificationComponent from "../main_page/NotificationComponent";
 import {usePagination} from "use-pagination-firestore";
 import LoadingComponent from "../LoadingComponent";
-import OffersUpdateModalComponent from "./OffersUpdateModalComponet";
+import OffersUpdateModalComponent from "./OffersUpdateModalComponent";
+import {locations} from "./locations";
+import {days} from "./days";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -25,7 +27,6 @@ const UserWorkOfferManagementComponent = () => {
     const userMail = useSelector(selectUserEmail);
     const error = useSelector(selectError);
 
-    console.log(username)
     const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -35,6 +36,8 @@ const UserWorkOfferManagementComponent = () => {
     const [userRating, setUserRating] = useState(0);
     const [showOffers, setShowOffers] = useState(false);
     const [title, setTitle] = useState("");
+    const [time, setTime] = useState("");
+    const [availability, setAvailability] = useState([]);
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
@@ -68,7 +71,7 @@ const UserWorkOfferManagementComponent = () => {
 
     }
 
-    const handleLocationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleLocationChange = (event: any) => {
         setLocation(event.target.value)
     }
 
@@ -81,10 +84,34 @@ const UserWorkOfferManagementComponent = () => {
         setTitle(event.target.value)
     }
 
+    const handleTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTime(event.target.value)
+    }
+
+    const handleAvailabilityChange = (event: any) => {
+        // @ts-ignore
+        let value = Array.from(event.target.selectedOptions, option => option.value);
+        // @ts-ignore
+        setAvailability(value)
+        console.log(value)
+    }
+
     const submitOffer = async () => {
         //todo istestuoti laukus kad nepraleistu netinkamo formato
 
-        if(description !== "" && phoneNumber !== "" && location !== "" && price !== "" && title !== "") {
+        if(title != "") {
+            db.collection("offers").where("title", "==", title).limit(1).get()
+                .then(() => {
+                    dispatch(sendError("Skelbimas tokiu pavadinimu jau egzistuoja"))
+                    setTimeout(() => {
+                        dispatch(sendError(""))
+                    }, 2000);
+                }).catch((error) => {
+
+            })
+        }
+
+        if(description !== "" && phoneNumber !== "" && price !== "" && title !== "") {
             await dispatch(addOffer({
                 user: auth.currentUser?.uid,
                 userMail: userMail,
@@ -96,7 +123,9 @@ const UserWorkOfferManagementComponent = () => {
                 price: price,
                 isRemote: isRemote,
                 userRating: userRating,
-                title: title
+                title: title,
+                time: time,
+                availability: availability
             }))
 
             await history.go(0);
@@ -130,6 +159,7 @@ const UserWorkOfferManagementComponent = () => {
     }
     const deleteOffer = (item: any) => {
         //TODO padaryti kad title butu unikalus, sutvarkyti pagination
+
     }
     return (
         <div>
@@ -156,9 +186,11 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
                                 <Form.Control type="tel" value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
-                            <Form.Group controlId="location">
-                                <Form.Label>Vietovė</Form.Label>
-                                <Form.Control type="text" placeholder="Įveskite esamą darbo vietos adresą" value={location} onChange={handleLocationChange}/>
+                            <Form.Group controlId="Select1">
+                                <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
+                                <select name="location" value={location} onChange={handleLocationChange} required>
+                                    {locations.map((item: React.ReactNode) => <option>{item}</option>)}
+                                </select>
                             </Form.Group>
                             <Form.Group controlId="price">
                                 <Form.Label>Kaina</Form.Label>
@@ -166,11 +198,13 @@ const UserWorkOfferManagementComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="time">
                                 <Form.Label>Trukmė</Form.Label>
-                                <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={price} onChange={handlePriceChange}/>
+                                <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={time} onChange={handleTimeChange}/>
                             </Form.Group>
-                            <Form.Group controlId="availability">
-                                <Form.Label>Pasiekiamumas</Form.Label>
-                                <Form.Control type="text" placeholder="Pasiekiamumas savaitės dienomis" value={price} onChange={handlePriceChange}/>
+                            <Form.Group controlId="Select2">
+                                <label htmlFor="availability" style={{marginRight: "1rem"}}>Vietovė:</label>
+                                <select multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
+                                    {days.map((item: React.ReactNode) => <option>{item}</option>)}
+                                </select>
                             </Form.Group>
                             <Form.Group controlId="checkbox">
                                 <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}

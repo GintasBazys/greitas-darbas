@@ -52,7 +52,6 @@ const UserProfileComponent = () => {
     const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
     const userId = firebase.auth.currentUser?.uid;
 
-    console.log(userBeforeChange);
     useEffect(() => {
         firebase.usersCollection.doc(auth.currentUser?.uid).get()
             .then((doc) => {

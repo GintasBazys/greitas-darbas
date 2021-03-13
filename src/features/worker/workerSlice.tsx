@@ -133,7 +133,6 @@ export const signUpWorkerAsync  = (info: { username: string; email: string; pass
         info.email,
         info.password
     ).then((user) => {
-        console.log(user.user?.uid);
         firebase.workerCollection.doc(user?.user?.uid).set({
             username: info.username,
             email: info.email,

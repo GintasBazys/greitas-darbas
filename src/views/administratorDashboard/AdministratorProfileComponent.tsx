@@ -23,7 +23,6 @@ const AdministratorProfileComponent = () => {
     const [aboutMe, setAboutMe] = useState("");
     const user = firebase.auth.currentUser;
     const userBeforeChange = useSelector(selectWorker);
-    console.log(userBeforeChange);
     useEffect(() => {
         db.collection("workers").doc(auth.currentUser?.uid).get()
             .then((doc) => {

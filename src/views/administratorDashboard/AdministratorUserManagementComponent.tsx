@@ -118,7 +118,7 @@ const AdministratorUserManagementComponent = () => {
                             <li><Link to="/administracija/pasiulymai">Darbo pasiūlymų peržiūra </Link></li>
                             <li><Link to="/administracija/mokejimai">Mokėjimų peržiūra </Link></li>
                         </ul>
-                        <Image style={{marginTop: "2rem"}} fluid src={adminUserLink} alt="vartotojo valdymo nuotrauka po nuorodomis"></Image>
+                        <Image style={{marginTop: "2rem"}} fluid src={adminUserLink} alt="naudotojo valdymo nuotrauka po nuorodomis"></Image>
                     </Col>
                     <Col md={7}>
 

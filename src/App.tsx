@@ -19,6 +19,7 @@ import UserProfileComponent from "./views/dashboard/UserProfileComponent";
 import UserWorkOfferManagementComponent from "./views/dashboard/UserWorkOfferManagementComponent";
 import UserOffersViewComponent from "./views/dashboard/UserOffersViewComponent";
 import UserPaymentComponent from "./views/dashboard/UserPaymentComponent";
+import UserWorkforceSearchComponent from "./views/dashboard/UserWorkforceSearchComponent";
 
 function App() {
   return <Router history={history}>
@@ -38,6 +39,7 @@ function App() {
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />
       <PrivateRoute exact path="/paslauga" component={UserOffersViewComponent} />
       <PrivateRoute exact path="/mokejimai" component={UserPaymentComponent} />
+      <PrivateRoute exact path="/paieska" component={UserWorkforceSearchComponent} />
     </Switch>
   </Router>
 }

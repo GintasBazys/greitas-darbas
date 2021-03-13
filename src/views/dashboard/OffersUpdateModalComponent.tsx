@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {auth, db} from "../../firebase";
+import {db} from "../../firebase";
 import {selectError, sendError} from "../../features/user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
-import NotificationComponent from "../main_page/NotificationComponent";
-import {addOffer, updateOffer} from "../../features/offers/offersSlice";
+import {updateOffer} from "../../features/offers/offersSlice";
 import history from "../../history";
+import ModalNotificationComponent from "../main_page/ModalNotificationComponent";
+import {locations} from "./locations";
+import {days} from "./days";
 
 interface Props {
     show: boolean,
@@ -22,6 +24,9 @@ const OffersUpdateModalComponent = (props: Props) => {
     const [price, setPrice] = useState("");
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
+    const previousTitle = props.item.title;
+    const [time, setTime] = useState("");
+    const [availability, setAvailability] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -35,6 +40,8 @@ const OffersUpdateModalComponent = (props: Props) => {
                     setLocation(doc.data()?.location);
                     setPrice(doc.data()?.price)
                     setTitle(doc.data()?.title);
+                    setTime(doc.data()?.time);
+                    setAvailability(doc.data()?.availability)
                 })
             })
     }, [])
@@ -63,7 +70,7 @@ const OffersUpdateModalComponent = (props: Props) => {
 
     }
 
-    const handleLocationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleLocationChange = (event: any) => {
         setLocation(event.target.value)
     }
 
@@ -75,12 +82,25 @@ const OffersUpdateModalComponent = (props: Props) => {
         setTitle(event.target.value)
     }
 
+    const handleTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setTime(event.target.value)
+    }
+
+    const handleAvailabilityChange = (event: any) => {
+        // @ts-ignore
+        let value = Array.from(event.target.selectedOptions, option => option.value);
+        // @ts-ignore
+        setAvailability(value)
+        console.log(value)
+    }
+
     const errorMessage = useSelector(selectError);
 
-    const handleSubmit = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const handleSubmit = async (event: { preventDefault: () => void; }) => {
         //todo istestuoti laukus kad nepraleistu netinkamo formato
             event.preventDefault();
         if(description !== "" && phoneNumber !== "" && location !== "" && price !== "" && title !== "") {
+
             await dispatch(updateOffer({
                 activityType: activityType,
                 description: description,
@@ -88,10 +108,12 @@ const OffersUpdateModalComponent = (props: Props) => {
                 location: location,
                 price: price,
                 isRemote: isRemote,
-                title: title
+                title: title,
+                time: time,
+                availability: availability,
+                previousTitle: previousTitle
             }))
-
-            await history.go(0);
+            props.onHide();
         }
         else {
             dispatch(sendError("Nepalikite tuščių laukų"))
@@ -117,9 +139,8 @@ const OffersUpdateModalComponent = (props: Props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <NotificationComponent message={errorMessage} />
+                <ModalNotificationComponent message={errorMessage} />
                 <Form>
-
                 <Form.Group controlId="title">
                     <Form.Label>Pavadinimas</Form.Label>
                     <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
@@ -132,22 +153,26 @@ const OffersUpdateModalComponent = (props: Props) => {
                     <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
                     <Form.Control type="tel" value={phoneNumber} onChange={handlePhoneNumberChange}/>
                 </Form.Group>
-                <Form.Group controlId="location">
-                    <Form.Label>Vietovė</Form.Label>
-                    <Form.Control type="text" placeholder="Įveskite esamą darbo vietos adresą" value={location} onChange={handleLocationChange}/>
-                </Form.Group>
-                <Form.Group controlId="price">
-                    <Form.Label>Kaina</Form.Label>
-                    <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
-                </Form.Group>
-                <Form.Group controlId="time">
-                    <Form.Label>Trukmė</Form.Label>
-                    <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={price} onChange={handlePriceChange}/>
-                </Form.Group>
-                <Form.Group controlId="availability">
-                    <Form.Label>Pasiekiamumas</Form.Label>
-                    <Form.Control type="text" placeholder="Pasiekiamumas savaitės dienomis" value={price} onChange={handlePriceChange}/>
-                </Form.Group>
+                    <Form.Group controlId="Select3">
+                        <label htmlFor="location2" style={{marginRight: "1rem"}}>Vietovė:</label>
+                        <select name="location2" value={location} onChange={handleLocationChange} required>
+                            {locations.map((item: React.ReactNode) => <option>{item}</option>)}
+                        </select>
+                    </Form.Group>
+                    <Form.Group controlId="price">
+                        <Form.Label>Kaina</Form.Label>
+                        <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="time">
+                        <Form.Label>Trukmė</Form.Label>
+                        <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={time} onChange={handleTimeChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="Select4">
+                        <label htmlFor="availability2" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
+                        <select multiple={true} name="availability2" value={availability.map(availability => availability)} onChange={handleAvailabilityChange} required>
+                            {days.map((item: React.ReactNode) => <option>{item}</option>)}
+                        </select>
+                    </Form.Group>
                 <Form.Group controlId="checkbox">
                     <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}
                                 onChange={() => setIsRemote(!isRemote)}/>

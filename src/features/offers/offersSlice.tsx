@@ -1,5 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import * as firebase from "../../firebase"
+import {Simulate} from "react-dom/test-utils";
+import history from "../../history";
 
 export const offersSlice = createSlice( {
     name: "offers",
@@ -24,6 +26,8 @@ export const addOffer = (info: {
     price: string,
     isRemote: boolean,
     userRating: number,
+    time: string,
+    availability: any,
     title: string}) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
@@ -38,7 +42,9 @@ export const addOffer = (info: {
         userRating: info.userRating,
         createdOn: new Date().toISOString(),
         status: "new",
-        title: info.title
+        title: info.title,
+        availability: info.availability,
+        time: info.time
     }).then(r => {
 
     }).catch((error) => {
@@ -47,15 +53,8 @@ export const addOffer = (info: {
 
 }
 
-export const updateOffer = (info: {
-    activityType: string,
-    description: string,
-    phoneNumber: string,
-    location: string,
-    price: string,
-    isRemote: boolean,
-    title: string}) => async (dispatch: any) => {
-    await firebase.offersCollection.where("title", "==", info.title).limit(1).get()
+export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; time: string; availability: any[]; activityType: string; title: string; previousTitle: string }) => async (dispatch: any) => {
+    await firebase.offersCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 firebase.offersCollection.doc(doc.id).update({
@@ -66,9 +65,13 @@ export const updateOffer = (info: {
                     price: info.price,
                     isRemote: info.isRemote,
                     status: "updated",
-                    title: info.title
+                    title: info.title,
+                    availability: info.availability,
+                    time: info.time
                 })
             })
+        }).catch((error) => {
+            console.log(error.message)
         })
 }
 

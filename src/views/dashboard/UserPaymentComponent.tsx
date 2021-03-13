@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Stripe from "../../Stripe";
 import {useSelector} from "react-redux";
-import {selectImage} from "../../features/user/userSlice";
+import {selectImage, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import axios from "axios";
 import Payments from "../administratorDashboard/Payments";
@@ -11,6 +11,7 @@ import LoadingComponent from "../LoadingComponent";
 const UserPaymentComponent = () => {
 
     const image = useSelector(selectImage)
+    const email = useSelector(selectUserEmail);
 
     const [payments, setPayments] = useState([]);
 
@@ -19,28 +20,40 @@ const UserPaymentComponent = () => {
 
     };
 
+    const [userID, setUserID] = useState("cus_J5MpPew9wOl3De");
+
     const renderPayments = async () => {
 
         let lastPayment = "";
         //TODO checkPayment, axios get customers id by email
-        await axios.get("https://api.stripe.com/v1/payment_intents?limit=10&customer=cus_J5MpPew9wOl3De", config)
+
+        await axios.get(`https://api.stripe.com/v1/customers?email=${email}`,config)
+            .then((res) => {
+                console.log(res.data.data[0].id);
+                setUserID(res.data.data[0].id);
+
+                // axios.get(`https://api.stripe.com/v1/payment_intents?customer=${userID}&limit=10&starting_after=${lastPayment}`, config)
+                //     .then((resp) => {
+                //         //console.log(resp)
+                //         // @ts-ignore
+                //         setPayments(payments => [...payments, ...resp.data.data])
+                //         // @ts-ignore
+                //         //console.log(payments)
+                //     })
+
+            })
+
+        await axios.get(`https://api.stripe.com/v1/payment_intents?limit=10&customer=${userID}`, config)
             .then((res) => {
                 const allPayments = res.data.data;
                 setPayments(allPayments)
                 // @ts-ignore
                 lastPayment = allPayments[9].id
-                console.log(lastPayment);
+                //console.log(lastPayment);
             }).catch((error) => {
 
-            })
-        await axios.get(`https://api.stripe.com/v1/payment_intents?customer=cus_J5MpPew9wOl3De&limit=10&starting_after=${lastPayment}`, config)
-            .then((resp) => {
-                console.log(resp)
-                // @ts-ignore
-                setPayments(payments => [...payments, ...resp.data.data])
-                // @ts-ignore
-                console.log(payments)
-            })
+        })
+
 
     }
 
