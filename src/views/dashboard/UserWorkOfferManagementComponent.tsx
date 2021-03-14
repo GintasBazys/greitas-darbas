@@ -19,6 +19,7 @@ import OffersUpdateModalComponent from "./OffersUpdateModalComponent";
 import {locations} from "./locations";
 import {days} from "./days";
 import {Link} from "react-router-dom";
+import axios from "axios";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -170,12 +171,26 @@ const UserWorkOfferManagementComponent = () => {
                 })
         }
     }
+
+    const createConnectedAccount = () => {
+        const confirm = window.confirm("Patvirtinti mokėjimo paskyros sukūrimą? Būsite nukreiptas į partnerių puslapį");
+        if(confirm) {
+            axios.post("http://localhost:8080/stripe/connected")
+                .then((resp) => {
+                    console.log(resp.data);
+                    window.location.href=`${resp.data}`
+                })
+        }
+
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
             <Container fluid>
                 <Row>
                     <Col md={2}>
+                        <Button variant="outline-dark" style={{marginTop: "5rem"}} onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
                         <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
                     </Col>
                     <Col md={8}>
