@@ -230,7 +230,7 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label>Pavadinimas</Form.Label>
                                 <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
-                            <Form.Group controlId="textarea">
+                            <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
                                 <Form.Control as="textarea" rows={3} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
@@ -248,9 +248,9 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label>Kaina</Form.Label>
                                 <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
-                            <Form.Group controlId="Select2">
-                                <label htmlFor="availability" style={{marginRight: "1rem"}}>Vietovė:</label>
-                                <select multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
+                            <Form.Group controlId="Select2" style={{display: "flex", flexDirection: "column"}}>
+                                <label htmlFor="availability" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
+                                <select style={{width: "15%"}} multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
                                     {days.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>
