@@ -35,7 +35,7 @@ const UserOffersViewComponent = () => {
                     items.map((item) => {
                         return (
                             <div>
-                                {item.title} - Paskelbta: {moment(item.createdOn).fromNow()}
+                                {item.title} - Paskelbta: {moment(item.createdOn).fromNow()} <Button variant="outline-dark">Rezervuoti</Button>
                             </div>
                         )
                     })

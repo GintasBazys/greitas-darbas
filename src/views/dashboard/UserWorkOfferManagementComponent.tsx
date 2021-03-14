@@ -38,14 +38,15 @@ const UserWorkOfferManagementComponent = () => {
     const [userRating, setUserRating] = useState(0);
     const [showOffers, setShowOffers] = useState(false);
     const [title, setTitle] = useState("");
-    const [time, setTime] = useState("");
     const [availability, setAvailability] = useState([]);
+    const [EVRK, setERVK] = useState("")
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 setActivityType(doc.data()?.activityType);
                 setUserRating(doc.data()?.rating);
+                setERVK(doc.data()?.EVRK);
             })
     }, [])
 
@@ -86,10 +87,6 @@ const UserWorkOfferManagementComponent = () => {
         setTitle(event.target.value)
     }
 
-    const handleTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setTime(event.target.value)
-    }
-
     const handleAvailabilityChange = (event: any) => {
         // @ts-ignore
         let value = Array.from(event.target.selectedOptions, option => option.value);
@@ -126,7 +123,6 @@ const UserWorkOfferManagementComponent = () => {
                 isRemote: isRemote,
                 userRating: userRating,
                 title: title,
-                time: time,
                 availability: availability
             }))
 
@@ -197,8 +193,12 @@ const UserWorkOfferManagementComponent = () => {
                         <NotificationComponent message={error} />
                         <Form>
                             <Form.Group>
-                                <Form.Label>Veikla (pakeitimui susisiekti su klientų aptarnavimo specialistu)</Form.Label>
-                                <Form.Control disabled={true} type="email" value={activityType}/>
+                                <Form.Label>Veikla</Form.Label>
+                                <Form.Control type="text" value={activityType}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>EVRK (pakeitimui susisiekti su klientų aptarnavimo specialistu)</Form.Label>
+                                <Form.Control disabled={true} type="text" value={EVRK}/>
                             </Form.Group>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
@@ -221,10 +221,6 @@ const UserWorkOfferManagementComponent = () => {
                             <Form.Group controlId="price">
                                 <Form.Label>Kaina</Form.Label>
                                 <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
-                            </Form.Group>
-                            <Form.Group controlId="time">
-                                <Form.Label>Trukmė</Form.Label>
-                                <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={time} onChange={handleTimeChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select2">
                                 <label htmlFor="availability" style={{marginRight: "1rem"}}>Vietovė:</label>

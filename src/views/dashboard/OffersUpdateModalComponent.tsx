@@ -25,7 +25,6 @@ const OffersUpdateModalComponent = (props: Props) => {
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
     const previousTitle = props.item.title;
-    const [time, setTime] = useState("");
     const [availability, setAvailability] = useState([]);
 
     const dispatch = useDispatch();
@@ -40,7 +39,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                     setLocation(doc.data()?.location);
                     setPrice(doc.data()?.price)
                     setTitle(doc.data()?.title);
-                    setTime(doc.data()?.time);
                     setAvailability(doc.data()?.availability)
                 })
             })
@@ -82,10 +80,6 @@ const OffersUpdateModalComponent = (props: Props) => {
         setTitle(event.target.value)
     }
 
-    const handleTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setTime(event.target.value)
-    }
-
     const handleAvailabilityChange = (event: any) => {
         // @ts-ignore
         let value = Array.from(event.target.selectedOptions, option => option.value);
@@ -109,7 +103,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                 price: price,
                 isRemote: isRemote,
                 title: title,
-                time: time,
                 availability: availability,
                 previousTitle: previousTitle
             }))
@@ -162,10 +155,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                     <Form.Group controlId="price">
                         <Form.Label>Kaina</Form.Label>
                         <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="time">
-                        <Form.Label>Trukmė</Form.Label>
-                        <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={time} onChange={handleTimeChange}/>
                     </Form.Group>
                     <Form.Group controlId="Select4">
                         <label htmlFor="availability2" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>

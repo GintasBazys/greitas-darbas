@@ -26,7 +26,6 @@ export const addOffer = (info: {
     price: string,
     isRemote: boolean,
     userRating: number,
-    time: string,
     availability: any,
     title: string}) => async (dispatch: any) => {
     await firebase.offersCollection.add({
@@ -44,7 +43,6 @@ export const addOffer = (info: {
         status: "naujas",
         title: info.title,
         availability: info.availability,
-        time: info.time,
         paymentId: "",
         paymentStatus: "neatliktas",
         currentClient: ""
@@ -56,7 +54,7 @@ export const addOffer = (info: {
 
 }
 
-export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; time: string; availability: any[]; activityType: string; title: string; previousTitle: string }) => async (dispatch: any) => {
+export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; availability: any[]; activityType: string; title: string; previousTitle: string }) => async (dispatch: any) => {
     await firebase.offersCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -70,7 +68,6 @@ export const updateOffer = (info: { phoneNumber: string; price: string; isRemote
                     status: "atnaujintas",
                     title: info.title,
                     availability: info.availability,
-                    time: info.time
                 })
             })
         }).catch((error) => {
