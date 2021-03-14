@@ -28,6 +28,7 @@ const requestCollection = db.collection("requests");
 const offersCollection = db.collection("offers");
 const statisticsCollection = db.collection("statistics");
 const messagesCollection = db.collection("messages");
+const reviewCollection = db.collection("reviews");
 
 export {
     db,
@@ -41,5 +42,6 @@ export {
     requestCollection,
     offersCollection,
     statisticsCollection,
-    messagesCollection
+    messagesCollection,
+    reviewCollection
 };

@@ -25,6 +25,10 @@ const UserWorkforceSearchComponent = () => {
                         </div>
                     </Col>
                     <Col md={8}>
+                        <div className="center">
+                            <h1>Šiuo metu ieškoma darbuotojų: 0</h1>
+                            <h1>Šiuo metu ieškote darbuotojų: taip/ne</h1>
+                        </div>
                     </Col>
                     <Col md={2}></Col>
                 </Row>

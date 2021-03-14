@@ -41,10 +41,13 @@ export const addOffer = (info: {
         isRemote: info.isRemote,
         userRating: info.userRating,
         createdOn: new Date().toISOString(),
-        status: "new",
+        status: "naujas",
         title: info.title,
         availability: info.availability,
-        time: info.time
+        time: info.time,
+        paymentId: "",
+        paymentStatus: "neatliktas",
+        currentClient: ""
     }).then(r => {
 
     }).catch((error) => {
@@ -64,7 +67,7 @@ export const updateOffer = (info: { phoneNumber: string; price: string; isRemote
                     location: info.location,
                     price: info.price,
                     isRemote: info.isRemote,
-                    status: "updated",
+                    status: "atnaujintas",
                     title: info.title,
                     availability: info.availability,
                     time: info.time
