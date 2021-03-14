@@ -39,7 +39,8 @@ const UserWorkOfferManagementComponent = () => {
     const [showOffers, setShowOffers] = useState(false);
     const [title, setTitle] = useState("");
     const [availability, setAvailability] = useState([]);
-    const [EVRK, setERVK] = useState("")
+    const [EVRK, setERVK] = useState("");
+    const [connectedId, setConnectedId] = useState(false);
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
@@ -47,6 +48,9 @@ const UserWorkOfferManagementComponent = () => {
                 setActivityType(doc.data()?.activityType);
                 setUserRating(doc.data()?.rating);
                 setERVK(doc.data()?.EVRK);
+                if(doc.data()?.connectedAccount != "") {
+                    setConnectedId(true);
+                }
             })
     }, [])
 
@@ -171,10 +175,15 @@ const UserWorkOfferManagementComponent = () => {
     const createConnectedAccount = () => {
         const confirm = window.confirm("Patvirtinti mokėjimo paskyros sukūrimą? Būsite nukreiptas į partnerių puslapį");
         if(confirm) {
-            axios.post("http://localhost:8080/stripe/connected")
-                .then((resp) => {
+            axios.post("http://localhost:8080/stripe/connected", {
+                customer: userMail
+            })
+                .then(async (resp) => {
                     console.log(resp.data);
-                    window.location.href=`${resp.data}`
+                    await db.collection("users").doc(auth.currentUser?.uid).update({
+                        connectedAccount: resp.data.id
+                    })
+                    window.location.href=`${resp.data.link}`;
                 })
         }
 
@@ -186,7 +195,24 @@ const UserWorkOfferManagementComponent = () => {
             <Container fluid>
                 <Row>
                     <Col md={2}>
-                        <Button variant="outline-dark" style={{marginTop: "5rem"}} onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
+                        <div style={{marginTop: "5rem"}}>
+                            {
+                                connectedId ?
+                                    <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
+                                        <p>Mokėjimo paskyra jau sukurta</p>
+                                    </div> :
+
+                                    <div>
+                                        <Button disabled={connectedId} variant="outline-dark"  onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
+                                        <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
+                                        <p>Paskyrą kurkite būtinai su el. paštu, kurį naudojote registracijos metu</p>
+                                        </div>
+                                    </div>
+                            }
+
+
+                        </div>
+
                         <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
                     </Col>
                     <Col md={8}>

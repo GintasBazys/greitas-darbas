@@ -113,8 +113,12 @@ app.post("/firebase/naudotojai", cors(), async (req, res) => {
 
 
 app.post("/stripe/connected", cors(), async (req, res) => {
+
+    let {customer } = req.body;
+
     const account = await stripe.accounts.create({
         type: "express",
+        email: customer
     });
     console.log(account)
     const accountLinks = await stripe.accountLinks.create({
@@ -123,9 +127,23 @@ app.post("/stripe/connected", cors(), async (req, res) => {
         return_url: 'http://localhost:3000/pagrindinis',
         type: 'account_onboarding',
     });
+
+    await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
+        .then((res) => {
+
+            if (res.data.data.length === 0) {
+                console.log("nera userio")
+
+                 stripe.customers.create({
+                        email: customer,
+                    })
+                }
+            })
+
     console.log(accountLinks);
     res.setHeader("Access-Control-Allow-Origin", "*")
-    res.send(accountLinks.url)
+    //res.send(accountLinks.url);
+    res.send({id: account.id, link: accountLinks.url})
 })
 
 app.listen(process.env.PORT || 8080, () => {
