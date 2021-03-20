@@ -56,7 +56,7 @@ const Login = () => {
         })
 
         event.preventDefault();
-        //dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
+        dispatch(loginAsync({email: email, password: password, checkedRemember: checkedUser}))
         setEmail("");
         setPassword("");
 

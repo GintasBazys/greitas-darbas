@@ -20,6 +20,12 @@ import {locations} from "./locations";
 import {days} from "./days";
 import {Link} from "react-router-dom";
 import axios from "axios";
+import {FilePond} from "react-filepond";
+import * as Pond from "filepond";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -41,6 +47,8 @@ const UserWorkOfferManagementComponent = () => {
     const [availability, setAvailability] = useState([]);
     const [EVRK, setERVK] = useState("");
     const [connectedId, setConnectedId] = useState(false);
+    const [files, setFiles] = useState([]);
+    Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
@@ -259,6 +267,31 @@ const UserWorkOfferManagementComponent = () => {
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                         </Form>
+
+                        <div>
+                            <p>Pridėti paslaugos nuotraukų (bendras nuotraukų kiekis negali viršyti 4)</p>
+                            <FilePond
+                                allowImagePreview={true}
+                                files={files}
+                                // @ts-ignore
+                                onupdatefiles={setFiles}
+                                allowMultiple={true}
+                                maxFiles={4}
+                                allowReorder={true}
+                                allowFileTypeValidation={true}
+                                acceptedFileTypes={["image/*"]}
+                                name="paslauga"
+                                fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
+                                labelFileTypeNotAllowed="Negalimas failo tipas"
+                                credits={false}
+                                labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
+                                allowFileSizeValidation={true}
+                                maxTotalFileSize="100MB"
+                                labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
+                                labelMaxTotalFileSize="Didziausias galimas failu dydis 100MB"
+                            />
+                        </div>
+
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={() => submitOffer()}>Paskelbti</Button>
                         </div>

@@ -65,7 +65,6 @@ export const updateOffer = (info: { phoneNumber: string; price: string; isRemote
                     location: info.location,
                     price: info.price,
                     isRemote: info.isRemote,
-                    status: "atnaujintas",
                     title: info.title,
                     availability: info.availability,
                 })

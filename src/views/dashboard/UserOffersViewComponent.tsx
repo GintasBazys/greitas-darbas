@@ -11,6 +11,8 @@ import moment from "moment/min/moment-with-locales";
 const UserOffersViewComponent = () => {
 
     const image = useSelector(selectImage);
+    //.where("status", "==", "naujas").where("status", "==", "atnaujintas")
+
 
     let {
         items,
@@ -20,8 +22,7 @@ const UserOffersViewComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db
-            .collection("offers").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas").where("status", "==", "atnaujintas"), {
+        db.collection("offers").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
             limit: 20
         }
     );
