@@ -23,6 +23,8 @@ import UserWorkforceSearchComponent from "./views/dashboard/UserWorkforceSearchC
 import UserUnconfirmedProfileComponent from "./views/dashboard/UserUnconfirmedProfileComponent";
 import UserOffersInProgressComponent from "./views/dashboard/UserOffersInProgressComponent";
 import UserMessagesComponent from "./views/dashboard/UserMessagesComponent";
+import AdministratorOfferViewComponent from "./views/administratorDashboard/AdministratorOfferViewComponent";
+import UserViewProfileComponent from "./views/administratorDashboard/UserViewProfileComponent";
 
 function App() {
   return <Router history={history}>
@@ -35,9 +37,11 @@ function App() {
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
+      <PrivateRoute exact path="/administracija/pasiulymai" component={AdministratorOfferViewComponent} />
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
+      <PrivateRoute exact path="/administracija/naudotojas" component={UserViewProfileComponent} />
       <PrivateRoute exact path="/pagrindinis" component={MainUserComponent} />
       <PrivateRoute exact path="/profilis" component={UserProfileComponent} />
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />

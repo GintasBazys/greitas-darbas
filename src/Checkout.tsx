@@ -12,6 +12,15 @@ const Checkout = () => {
     const elements = useElements();
     const userMail = useSelector(selectUserEmail);
 
+    // await stripe.paymentIntents.create({
+    //     payment_method_types: ['card'],
+    //     amount: 1000,
+    //     currency: 'usd',
+    //     application_fee_amount: 200
+    // }, {
+    //     stripe_account: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
+    // });
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         // @ts-ignore
