@@ -9,7 +9,7 @@ import {
 } from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {Button, Col, Container, Form, Row, Image} from "react-bootstrap";
-import {auth, db} from "../../firebase";
+import {auth, db, storageRef} from "../../firebase";
 import history from "../../history";
 import {addOffer} from "../../features/offers/offersSlice";
 import NotificationComponent from "../main_page/NotificationComponent";
@@ -26,6 +26,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateSize from "filepond-plugin-file-validate-size";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
+import Stripe from "../../Stripe";
 
 const UserWorkOfferManagementComponent = () => {
 
@@ -123,6 +124,18 @@ const UserWorkOfferManagementComponent = () => {
         }
 
         if(description !== "" && phoneNumber !== "" && price !== "" && title !== "") {
+
+            let urlsFromFirebaseStorage: Array<string> = [];
+            let urls = files.map(async (file: any) => {
+                await storageRef.child(`/${username}/pasiulymai/${title}/${file.file.name}`).put(file.file);
+                const url = await storageRef.child(`/${username}/pasiulymai/${title}/${file.file.name}`).getDownloadURL();
+                return urlsFromFirebaseStorage.push(url);
+                //console.log(urlsFromFirebaseStorage);
+            });
+            await Promise.all(urls).then((results) => {
+                //console.log(urls);
+            })
+
             await dispatch(addOffer({
                 user: auth.currentUser?.uid,
                 userMail: userMail,
@@ -135,7 +148,8 @@ const UserWorkOfferManagementComponent = () => {
                 isRemote: isRemote,
                 userRating: userRating,
                 title: title,
-                availability: availability
+                availability: availability,
+                offerImages: urlsFromFirebaseStorage
             }))
 
             await history.go(0);
@@ -170,13 +184,28 @@ const UserWorkOfferManagementComponent = () => {
     const deleteOffer = (item: any) => {
         const response = window.confirm("Patvirtinti?");
         if(response) {
+            let titleForImages = "";
             db.collection("offers").where("title", "==", item.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
+                        titleForImages = doc.data()?.title;
                         db.collection("offers").doc(doc.id).delete()
+                        const imagesRef = storageRef.child(`/${username}/pasiulymai/${titleForImages}/`);
+
+                        imagesRef.listAll().then((result) => {
+                            result.items.forEach((file) => {
+                                file.delete()
+                                    .then(() => {
+
+                                    }).catch((error) => {
+                                    console.log(error.message);
+                                });
+                            })
+                        })
+                        //db.collection("users").doc()
                     })
-                    //db.collection("users").doc()
                 })
+            //history.go(0);
         }
     }
 
@@ -221,10 +250,11 @@ const UserWorkOfferManagementComponent = () => {
 
                         </div>
 
-                        <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
+                        <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link><Stripe />
                     </Col>
                     <Col md={8}>
                         <NotificationComponent message={error} />
+
                         <Form>
                             <Form.Group>
                                 <Form.Label>Veikla</Form.Label>

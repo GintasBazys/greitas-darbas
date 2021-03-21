@@ -9,9 +9,11 @@ const PUBLISHABLE_KEY = "pk_test_51IEDvEJIin4U4oiG7nA5nG8q8vNXkWor5XCqicDRYxsu9t
 const stripe = loadStripe(PUBLISHABLE_KEY);
 
 const Stripe = () => {
-    return <Elements stripe={stripe}>
+    return (
+        <Elements stripe={stripe}>
         <Checkout />
         </Elements>
+    )
 }
 
 export default Stripe;

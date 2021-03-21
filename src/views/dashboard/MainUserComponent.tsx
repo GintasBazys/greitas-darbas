@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
+import Stripe from "../../Stripe";
 
 const MainUserComponent = () => {
 
@@ -16,7 +17,9 @@ const MainUserComponent = () => {
                 <h1>Atlikta mokėjimų:</h1>
                 <h1>Neperskaityta žinučių:</h1>
             </div>
-
+            <div style={{width: "20%"}}>
+                <Stripe />
+            </div>
         </div>
     )
 }
