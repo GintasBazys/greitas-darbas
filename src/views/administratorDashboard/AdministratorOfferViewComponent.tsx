@@ -45,7 +45,7 @@ const AdministratorOfferViewComponent = () => {
                         return (
                             <React.Fragment>
                                 {/*@ts-ignore*/}
-                                {item.title} - Paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/administracija/naudotojas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span> <Button variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti visą informaciją</Button> <Button variant="outline-danger">Panaikinti pasiūlymą</Button>
+                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span> <Button variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti visą informaciją</Button> <Button variant="outline-danger">Panaikinti pasiūlymą</Button>
                                 <AdministratorOfferModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
                             </React.Fragment>
 

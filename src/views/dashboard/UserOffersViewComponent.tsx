@@ -4,9 +4,11 @@ import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
-import {Button} from "react-bootstrap";
+import {Button, Image} from "react-bootstrap";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
+import {Link} from "react-router-dom";
+import star from "../../assets/star.svg";
 
 const UserOffersViewComponent = () => {
 
@@ -36,7 +38,8 @@ const UserOffersViewComponent = () => {
                     items.map((item) => {
                         return (
                             <div>
-                                {item.title} - Paskelbta: {moment(item.createdOn).fromNow()} <Button variant="outline-dark">Rezervuoti</Button>
+                                {/*@ts-ignore*/}
+                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>  <Button variant="outline-dark">Rezervuoti</Button>
                             </div>
                         )
                     })

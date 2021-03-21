@@ -258,7 +258,7 @@ const UserWorkOfferManagementComponent = () => {
                         <Form>
                             <Form.Group>
                                 <Form.Label>Veikla</Form.Label>
-                                <Form.Control type="text" value={activityType}/>
+                                <Form.Control type="text" disabled={!connectedId} value={activityType}/>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>EVRK (pakeitimui susisiekti su klientų aptarnavimo specialistu)</Form.Label>
@@ -266,34 +266,34 @@ const UserWorkOfferManagementComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
-                                <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
-                                <Form.Control as="textarea" rows={3} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
+                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
-                                <Form.Control type="tel" value={phoneNumber} onChange={handlePhoneNumberChange}/>
+                                <Form.Control type="tel" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
                                 <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
-                                <select name="location" value={location} onChange={handleLocationChange} required>
+                                <select name="location" disabled={!connectedId} value={location} onChange={handleLocationChange} required>
                                     {locations.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>
                             <Form.Group controlId="price">
                                 <Form.Label>Kaina</Form.Label>
-                                <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select2" style={{display: "flex", flexDirection: "column"}}>
                                 <label htmlFor="availability" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
-                                <select style={{width: "15%"}} multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
+                                <select style={{width: "15%"}} disabled={!connectedId} multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
                                     {days.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>
                             <Form.Group controlId="checkbox">
-                                <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}
+                                <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                         </Form>

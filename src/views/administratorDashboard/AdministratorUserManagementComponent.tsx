@@ -123,7 +123,7 @@ const AdministratorUserManagementComponent = () => {
                     <Col md={7}>
 
                         {
-                             isLoading ? <LoadingComponent /> : items.length === 0 ? <div></div> : items.map(item => {
+                              items.length === 0 ? <div></div> : items.map(item => {
                                 return (
                                     <div className="center-element" style={{marginTop: "2rem"}}>
                                         <div style={{borderStyle: "solid", borderRadius: "1rem"}}>

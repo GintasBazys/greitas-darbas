@@ -25,6 +25,7 @@ import UserOffersInProgressComponent from "./views/dashboard/UserOffersInProgres
 import UserMessagesComponent from "./views/dashboard/UserMessagesComponent";
 import AdministratorOfferViewComponent from "./views/administratorDashboard/AdministratorOfferViewComponent";
 import UserViewProfileComponent from "./views/administratorDashboard/UserViewProfileComponent";
+import AdministratorUserMessages from "./views/administratorDashboard/AdministratorUserMessages";
 
 function App() {
   return <Router history={history}>
@@ -41,7 +42,8 @@ function App() {
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
-      <PrivateRoute exact path="/administracija/naudotojas" component={UserViewProfileComponent} />
+      <PrivateRoute exact path="/naudotojas/kitas" component={UserViewProfileComponent} />
+      <PrivateRoute exact path="/administracija/zinutes" component={AdministratorUserMessages} />
       <PrivateRoute exact path="/pagrindinis" component={MainUserComponent} />
       <PrivateRoute exact path="/profilis" component={UserProfileComponent} />
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />
