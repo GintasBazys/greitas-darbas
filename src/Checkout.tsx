@@ -1,25 +1,22 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import {Button, Form} from "react-bootstrap";
 import axios from "axios";
-import {selectWorkerEmail} from "./features/worker/workerSlice";
-import {useSelector} from "react-redux";
-import {selectUserEmail} from "./features/user/userSlice";
 import history from "./history";
+import {db} from "./firebase";
 
-const Checkout = () => {
+interface Props {
+    email: string,
+    price: number,
+    reservedUserEmail: string,
+    connectedId: any
+}
+
+const Checkout = (props: Props) => {
     const stripe = useStripe();
     const elements = useElements();
-    const userMail = useSelector(selectUserEmail);
+    const [connectedId, setConnectedId] = useState("");
 
-    // await stripe.paymentIntents.create({
-    //     payment_method_types: ['card'],
-    //     amount: 1000,
-    //     currency: 'usd',
-    //     application_fee_amount: 200
-    // }, {
-    //     stripe_account: '{{CONNECTED_STRIPE_ACCOUNT_ID}}',
-    // });
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -33,20 +30,23 @@ const Checkout = () => {
         if (!error) {
             try {
                 // @ts-ignore
-                const {id} = paymentMethod;//TODO instead of id use username
+                const {id} = paymentMethod;
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
-                        amount: 100,//TODO props
+                        amount: props.price * 100,
                         id: id,
-                        customer: userMail
+                        customer: props.reservedUserEmail,
+                        connectedAccount: props.connectedId
                     }
                 );
 
                 if (response.data.success) {
+                    console.log(response.data.success);
                     history.go(0);
                 }
             } catch (error) {
+                console.log(error.message);
                 history.go(0)
             }
         } else {
@@ -55,7 +55,7 @@ const Checkout = () => {
     }
     return <Form>
         <CardElement />
-        <Button onClick={handleSubmit}>Moketi</Button>
+        <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={handleSubmit}>Moketi</Button>
     </Form>
 }
 

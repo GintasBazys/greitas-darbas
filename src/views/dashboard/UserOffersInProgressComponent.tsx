@@ -10,6 +10,7 @@ import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";
+import PaymentModalComponent from "./PaymentModalComponent";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -42,9 +43,14 @@ const UserOffersInProgressComponent = () => {
     //     })
 
     const [modalShow, setModalShow] = useState(false);
+    const [paymentModalShow, setPaymentModalShow] = useState(false);
 
     const handleModalShow = () => {
-        setModalShow(!modalShow)
+        setModalShow(!modalShow);
+    }
+
+    const handlePaymentModalShow = () => {
+        setPaymentModalShow(!paymentModalShow);
     }
 
     return (
@@ -69,7 +75,8 @@ const UserOffersInProgressComponent = () => {
                                             </div> : item.status === "patvirtintasTeikejo" && item.reservedUser === auth.currentUser?.uid ?
                                             <div>
                                                 <p>Patvirtinkite rezervaciją ir atlikite mokėjimą</p>
-                                                <Button style={{marginRight: "2rem"}} variant="outline-dark">Peržiūrėti</Button>
+                                                <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handlePaymentModalShow()}>Peržiūrėti</Button>
+                                                <PaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
                                                 <Button variant="outline-danger">Atšaukti rezervaciją</Button>
                                             </div> : <div className="alert alert-warning" role="alert">Laukite kol bus atliktas mokėjimas{console.log(auth.currentUser?.uid)}</div>
                                     }

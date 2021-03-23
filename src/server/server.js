@@ -28,7 +28,7 @@ let client = null;
 
 app.post("/stripe/mokejimas", cors(), async (req, resp) => {
 
-    let { amount, id, customer } = req.body;
+    let { amount, id, customer, connectedAccount } = req.body;
 
         try {
              await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
@@ -43,16 +43,32 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                             })
                         }
                         createClient().then(() => {
-                            const payment = stripe.paymentIntents.create({
+                             stripe.paymentIntents.create({
                                 amount: amount,
-                                currency: "EUR",
-                                description: "Greitas Darbas Ltd",
-                                payment_method: id,
-                                confirm: true,
-                                customer: client.id
+                                 currency: "EUR",
+                                 description: "Greitas Darbas Ltd",
+                                 payment_method: id,
+                                 confirm: true,
+                                 customer: client.id,
+                                 transfer_data: {
+                                     destination: connectedAccount
+                                 }
+                            }, {
+                                stripeAccount: connectedAccount,
+                            }).catch((error)=> {
+                                console.log(error.message)
+                             })
 
-                            });
-                            resp.redirect("http://localhost:3000/pagrindinis");
+                            // const payment = stripe.paymentIntents.create({
+                            //     amount: amount,
+                            //     currency: "EUR",
+                            //     description: "Greitas Darbas Ltd",
+                            //     payment_method: id,
+                            //     confirm: true,
+                            //     customer: client.id
+                            //
+                            // });
+                            // resp.redirect("http://localhost:3000/pagrindinis");
                         })
 
 
@@ -66,10 +82,17 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                                         description: "Greitas Darbas Ltd",
                                         payment_method: id,
                                         confirm: true,
-                                        customer: res.data.data[0].id
-
-                                    });
-                                    resp.redirect("http://localhost:3000/pagrindinis");
+                                        customer: res.data.data[0].id,
+                                        transfer_data: {
+                                            destination: connectedAccount
+                                        }
+                                    }).catch((error) => {
+                                        console.log(error);
+                                    })
+                        resp.json({
+                            message: "Sekmingas mokejimas",
+                            success: true,
+                        });
                     }
 
                 }).catch(error => {
@@ -123,6 +146,10 @@ app.post("/stripe/connected", cors(), async (req, res) => {
     console.log(account)
     const accountLinks = await stripe.accountLinks.create({
         account: `${account.id}`,
+            currently_due: [],
+            errors: [],
+            past_due: [],
+            pending_verification: [],
         refresh_url: 'http://localhost:3000/pagrindinis',
         return_url: 'http://localhost:3000/pagrindinis',
         type: 'account_onboarding',

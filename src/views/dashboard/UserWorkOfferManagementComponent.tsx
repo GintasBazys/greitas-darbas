@@ -250,7 +250,7 @@ const UserWorkOfferManagementComponent = () => {
 
                         </div>
 
-                        <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link><Stripe />
+                        <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
                     </Col>
                     <Col md={8}>
                         <NotificationComponent message={error} />
