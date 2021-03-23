@@ -1,7 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
 import * as firebase from "../../firebase"
-import {Simulate} from "react-dom/test-utils";
-import history from "../../history";
 
 export const offersSlice = createSlice( {
     name: "offers",
