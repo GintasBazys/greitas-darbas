@@ -5,6 +5,7 @@ import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
 import {Button} from "react-bootstrap";
+import {Link} from "react-router-dom";
 
 const AdministratorUserMessages = () => {
     const image = useSelector(selectWorkerImage);
@@ -25,11 +26,10 @@ const AdministratorUserMessages = () => {
         }
     );
 
-    let lastMessage = "";
-
     return (
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
+            <Link style={{marginRight: "3rem", marginTop: "4rem"}} to="/administracija/zinutes/gauta">Gautos žinutės</Link>
             {
                 // @ts-ignore
                  items.map((item) => (
@@ -37,7 +37,7 @@ const AdministratorUserMessages = () => {
                          <div style={{ display: "flex", justifyContent: "center"}}>
                              <div style={{marginTop: "2rem", width: "50%", borderStyle: "solid", borderRadius: "1rem"}}>
                              <div style={{display: "flex", alignItems: "center", flexDirection: "column"}}>
-                                 <p>Paskutine žinutė iš {item.username} - {item.messages[0]}</p>
+                                 <p>Paskutine žinutė išsiųsta naudotojui {item.username} - {item.messages[0]}</p>
                                  <p>Paskutinės 5 žinutės:</p>
                                  {
                                      item.messages.map((message: any) => {
@@ -47,7 +47,6 @@ const AdministratorUserMessages = () => {
                              </div>
                                  <div style={{ display: "flex", justifyContent: "center"}}>
                                      <Button style={{marginRight: "2rem"}} variant="outline-dark">Peržiūrėti visas žinutes</Button>
-                                     <Button variant="outline-dark">Siųsti atsakymą</Button>
                                  </div>
                             </div>
                          </div>
