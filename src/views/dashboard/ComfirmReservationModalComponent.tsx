@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {db} from "../../firebase";
+import {auth, db} from "../../firebase";
 import history from "../../history";
 import DatePicker from "react-datepicker";
 import TimePicker from "react-time-picker";
@@ -46,7 +46,8 @@ const ComfirmReservationModalComponent = (props: Props) => {
                 status: "patvirtintasTeikejo",
                 reservedTimeDay: reservedTimeDay,
                 reservedTimeHour: reservedTimeHour,
-                timeForOffer: timeForOffer
+                timeForOffer: timeForOffer,
+                reservedUser: auth.currentUser?.uid
             })
             await props.onHide();
             await history.go(1);

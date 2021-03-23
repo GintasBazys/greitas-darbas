@@ -49,7 +49,8 @@ const UserOffersViewComponent = () => {
                     })
                 })
             await db.collection("offers").doc(docId).update({
-                status: "reservuotas"
+                status: "reservuotas",
+                reservedUser: auth.currentUser?.uid
             })
             await history.go(0);
         }
