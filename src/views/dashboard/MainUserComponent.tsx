@@ -17,9 +17,9 @@ const MainUserComponent = () => {
                 <h1>Atlikta mokėjimų:</h1>
                 <h1>Neperskaityta žinučių:</h1>
             </div>
-            <div style={{width: "20%"}}>
-                <Stripe />
-            </div>
+            {/*<div style={{width: "20%"}}>*/}
+            {/*    <Stripe />*/}
+            {/*</div>*/}
         </div>
     )
 }

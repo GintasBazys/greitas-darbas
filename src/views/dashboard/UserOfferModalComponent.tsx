@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import {db} from "../../firebase";
+import {auth, db} from "../../firebase";
 import {Button, Form, Image, Modal} from "react-bootstrap";
 import {locations} from "./locations";
 import {days} from "./days";
@@ -44,7 +44,8 @@ const UserOfferModalComponent = (props: Props) => {
 
     const reserveOffer = async (event: React.MouseEvent<HTMLElement>) => {
         await db.collection("offers").doc(docId).update({
-            status: "reservuotas"
+            status: "reservuotas",
+            reservedUser: auth.currentUser?.uid
         })
         history.go(0);
     }
@@ -86,7 +87,7 @@ const UserOfferModalComponent = (props: Props) => {
                     </Form.Group>
                     <Form.Group controlId="price">
                         <Form.Label>Valandinė kaina</Form.Label>
-                        <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} disabled={true}/>
+                        <Form.Control type="number" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} disabled={true}/>
                     </Form.Group>
                     <Form.Group controlId="Select4">
                         <label htmlFor="availability2" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>

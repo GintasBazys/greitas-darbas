@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
@@ -9,6 +9,7 @@ import {Button, Image} from "react-bootstrap";
 import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
+import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -21,10 +22,30 @@ const UserOffersInProgressComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("offers").orderBy("status").where("status", "!=", "naujas"), {
+        db.collection("offers").where("status", "!=", "naujas"), {
             limit: 20
         }
     );
+
+    // let query = db.collection("offers")
+    // // @ts-ignore
+    // query = query.where("status", "!=", "naujas")
+    // // @ts-ignore
+    // query = query.where("userMail", "==", "bazys.gintas@gmail.comm")
+    // // @ts-ignore
+    // query = query.orderBy("status")
+    // query.get()
+    //     .then((querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             console.log(doc.id)
+    //         })
+    //     })
+
+    const [modalShow, setModalShow] = useState(false);
+
+    const handleModalShow = () => {
+        setModalShow(!modalShow)
+    }
 
     return (
         <div>
@@ -34,11 +55,25 @@ const UserOffersInProgressComponent = () => {
                     items.map((item) => {
                         return (
                             <div>
-                                {/*@ts-ignore*/}
-                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus}- <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
-                                {
-                                    item.status === "reservuotas" ? <div className="alert alert-warning" role="alert">Laukite patvirtinimo, prieš atlikdami mokėjimą</div> : <div></div>
-                                }
+                                <div>
+                                    {/*@ts-ignore*/}
+                                    {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus}- <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
+                                    {
+                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo, prieš atlikdami mokėjimą</p><Button variant="outline-danger">Atmesti rezervaciją</Button></div> :
+                                            item.status !== "patvirtintasTeikejo" && item.status !== "rezervuotas" && item.reservedUser !== auth.currentUser?.uid ?
+                                            <div>
+                                                <p>Patvirkinkite paslaugos teikimą</p>
+                                                <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Patvirtinti prašymą</Button>
+                                                <Button variant="outline-danger">Atmesti rezervaciją</Button>
+                                                <ComfirmReservationModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
+                                            </div> :
+                                            <div>
+                                                <p>Patvirtinkite rezervaciją ir atlikite mokėjimą</p>
+                                                <Button style={{marginRight: "2rem"}} variant="outline-dark">Peržiūrėti</Button>
+                                                <Button variant="outline-danger">Atšaukti rezervaciją</Button>
+                                            </div>
+                                    }
+                                </div>
                             </div>
                         )
                     })
