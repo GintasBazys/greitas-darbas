@@ -283,7 +283,7 @@ const UserWorkOfferManagementComponent = () => {
                                 </select>
                             </Form.Group>
                             <Form.Group controlId="price">
-                                <Form.Label>Kaina</Form.Label>
+                                <Form.Label>Valandinė kaina</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select2" style={{display: "flex", flexDirection: "column"}}>

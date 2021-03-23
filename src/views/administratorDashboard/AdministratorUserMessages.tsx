@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {selectWorkerImage} from "../../features/worker/workerSlice";
+import {selectWorkerEmail, selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
@@ -10,7 +10,7 @@ import {Link} from "react-router-dom";
 const AdministratorUserMessages = () => {
     const image = useSelector(selectWorkerImage);
 
-    const worker = auth.currentUser?.uid;
+    const worker = auth.currentUser?.uid
 
     let {
         items,

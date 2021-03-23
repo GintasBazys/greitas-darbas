@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {selectWorkerImage} from "../../features/worker/workerSlice";
+import {selectWorkerEmail, selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {auth, db} from "../../firebase";
 import {usePagination} from "use-pagination-firestore";
@@ -11,7 +11,7 @@ const AdministratorReceivedMessagesComponent = () => {
 
     const image = useSelector(selectWorkerImage);
 
-    const worker = auth.currentUser?.uid;
+    const worker = useSelector(selectWorkerEmail);
 
     let {
         items,
@@ -22,7 +22,7 @@ const AdministratorReceivedMessagesComponent = () => {
         getNext,
     } = usePagination(
         //@ts-ignore
-        db.collection("messages").where("sender", "!=", worker), {
+        db.collection("messages").where("email", "==", worker), {
             limit: 10
         }
     );

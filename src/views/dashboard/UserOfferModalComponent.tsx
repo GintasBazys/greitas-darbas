@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {db} from "../../firebase";
-import {Button, Form, Modal, Image} from "react-bootstrap";
-import {locations} from "../dashboard/locations";
-import {days} from "../dashboard/days";
+import {Button, Form, Image, Modal} from "react-bootstrap";
+import {locations} from "./locations";
+import {days} from "./days";
+import history from "../../history";
 
 interface Props {
     show: boolean,
@@ -11,8 +12,7 @@ interface Props {
     item: any
 }
 
-const AdministratorOfferModalComponent = (props: Props) => {
-
+const UserOfferModalComponent = (props: Props) => {
     const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -22,6 +22,7 @@ const AdministratorOfferModalComponent = (props: Props) => {
     const [title, setTitle] = useState("");
     const previousTitle = props.item.title;
     const [availability, setAvailability] = useState([]);
+    const [docId, setDocId] = useState("");
 
     const dispatch = useDispatch();
 
@@ -36,9 +37,17 @@ const AdministratorOfferModalComponent = (props: Props) => {
                     setPrice(doc.data()?.price)
                     setTitle(doc.data()?.title);
                     setAvailability(doc.data()?.availability)
+                    setDocId(doc.id);
                 })
             })
     }, [])
+
+    const reserveOffer = async (event: React.MouseEvent<HTMLElement>) => {
+        await db.collection("offers").doc(docId).update({
+            status: "reservuotas"
+        })
+        history.go(0);
+    }
 
     return (
         <Modal
@@ -52,7 +61,7 @@ const AdministratorOfferModalComponent = (props: Props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Atnaujinti informaciją
+                    Peržiūrėti informaciją
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -95,7 +104,11 @@ const AdministratorOfferModalComponent = (props: Props) => {
                             })
                         }
                     </div>
-                    <Button variant="outline-dark">Parašyti žinutę</Button>
+                    <div className="center-element">
+                        <Button style={{marginRight: "2rem"}} variant="outline-dark">Parašyti žinutę</Button>
+                        <Button variant="outline-dark" onClick={(event) => reserveOffer(event)}>Rezervuoti</Button>
+                    </div>
+
                 </Form>
 
             </Modal.Body>
@@ -106,4 +119,4 @@ const AdministratorOfferModalComponent = (props: Props) => {
     )
 }
 
-export default AdministratorOfferModalComponent;
+export default UserOfferModalComponent;

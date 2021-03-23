@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
@@ -9,6 +9,8 @@ import {Button, Image} from "react-bootstrap";
 import moment from "moment/min/moment-with-locales";
 import {Link} from "react-router-dom";
 import star from "../../assets/star.svg";
+import UserOfferModalComponent from "./UserOfferModalComponent";
+import history from "../../history";
 
 const UserOffersViewComponent = () => {
 
@@ -29,6 +31,31 @@ const UserOffersViewComponent = () => {
         }
     );
 
+    const [modalShow, setModalShow] = useState(false);
+
+    const handleModalShow = () => {
+        setModalShow(!modalShow)
+    }
+
+    const reserveOffer = async (item: { title: string; }) => {
+
+        const confirm = window.confirm("Patvirtinti rezervaciją?");
+        if(confirm) {
+            let docId = ""
+            await db.collection("offers").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        docId = doc.id;
+                    })
+                })
+            await db.collection("offers").doc(docId).update({
+                status: "reservuotas"
+            })
+            await history.go(0);
+        }
+
+    }
+
     moment.locale("lt")
     return (
         <div>
@@ -39,7 +66,10 @@ const UserOffersViewComponent = () => {
                         return (
                             <div>
                                 {/*@ts-ignore*/}
-                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>  <Button variant="outline-dark">Rezervuoti</Button>
+                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
+                                <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button>
+                                <Button onClick={() => reserveOffer(item)} variant="outline-dark">Rezervuoti</Button>
+                                <UserOfferModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
                             </div>
                         )
                     })
