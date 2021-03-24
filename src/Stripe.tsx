@@ -12,13 +12,14 @@ interface Props {
     email: string,
     price: number,
     reservedUserEmail: string,
-    connectedId: any
+    connectedId: any,
+    title: string
 }
 
 const Stripe = (props: Props) => {
     return (
         <Elements stripe={stripe}>
-        <Checkout connectedId={props.connectedId} email={props.email} reservedUserEmail={props.reservedUserEmail} price={props.price}/>
+        <Checkout title={props.title} connectedId={props.connectedId} email={props.email} reservedUserEmail={props.reservedUserEmail} price={props.price}/>
         </Elements>
     )
 }

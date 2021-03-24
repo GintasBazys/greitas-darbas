@@ -58,17 +58,7 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                             }).catch((error)=> {
                                 console.log(error.message)
                              })
-
-                            // const payment = stripe.paymentIntents.create({
-                            //     amount: amount,
-                            //     currency: "EUR",
-                            //     description: "Greitas Darbas Ltd",
-                            //     payment_method: id,
-                            //     confirm: true,
-                            //     customer: client.id
-                            //
-                            // });
-                            // resp.redirect("http://localhost:3000/pagrindinis");
+                            
                         })
 
 
@@ -90,6 +80,7 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                                         console.log(error);
                                     })
                         resp.json({
+                            paymentId: id,
                             message: "Sekmingas mokejimas",
                             success: true,
                         });

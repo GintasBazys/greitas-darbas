@@ -9,14 +9,23 @@ interface Props {
     email: string,
     price: number,
     reservedUserEmail: string,
-    connectedId: any
+    connectedId: any,
+    title: string
 }
 
 const Checkout = (props: Props) => {
     const stripe = useStripe();
     const elements = useElements();
-    const [connectedId, setConnectedId] = useState("");
+    const [id, setId] = useState("");
 
+    useEffect(() => {
+        db.collection("offers").where("title", "==", props.title).limit(1).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    setId(doc.id);
+                })
+            })
+    })
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -43,7 +52,12 @@ const Checkout = (props: Props) => {
 
                 if (response.data.success) {
                     console.log(response.data.success);
-                    history.go(0);
+                    await db.collection("offers").doc(id).update({
+                        paymentStatus: "atliktasMokejimas",
+                        paymentId: response.data.paymentId
+                    })
+
+                    await history.go(0);
                 }
             } catch (error) {
                 console.log(error.message);

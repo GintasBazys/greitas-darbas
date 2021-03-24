@@ -29,6 +29,8 @@ import AdministratorUserMessages from "./views/administratorDashboard/Administra
 import AdministratorReceivedMessagesComponent
   from "./views/administratorDashboard/AdministratorReceivedMessagesComponent";
 import UserProfileViewComponent from "./views/dashboard/UserViewProfileComponent";
+import OfferPaidComponent from "./views/dashboard/OfferPaidComponent";
+import ServiceProviderOfferPaidComponent from "./views/dashboard/ServiceProviderOfferPaidComponent";
 
 function App() {
   return <Router history={history}>
@@ -57,6 +59,8 @@ function App() {
       <PrivateRoute exact path="/paieska" component={UserWorkforceSearchComponent} />
       <PrivateRoute exact path="/vykdymas" component={UserOffersInProgressComponent} />
       <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />
+      <PrivateRoute exact path="/vykdymas/progresas" component={OfferPaidComponent} />
+      <PrivateRoute exact path="/vykdymas/teikejas" component={ServiceProviderOfferPaidComponent} />
     </Switch>
   </Router>
 }
