@@ -5,10 +5,14 @@ export const offersSlice = createSlice( {
     name: "offers",
     initialState: {
         offers: Array(0),
+        reservedOffer: {}
     },
     reducers: {
         setOffers: (state, action) => {
             state.offers = action.payload;
+        },
+        setReservedOffer: (state, action) => {
+            state.reservedOffer = action.payload;
         }
     }
 })
@@ -84,6 +88,8 @@ export const updateOffersUsername = (info: {username: string, usernameBeforeChan
         })
 }
 
-export const {setOffers} = offersSlice.actions;
+export const {setOffers, setReservedOffer} = offersSlice.actions;
+
+export const selectReservedOffer = (state: { offers: { reservedOffer: any; }; }) => state.offers.reservedOffer;
 
 export default offersSlice.reducer;

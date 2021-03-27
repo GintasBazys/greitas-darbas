@@ -12,6 +12,8 @@ import moment from "moment/min/moment-with-locales";
 import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";
 import PaymentModalComponent from "./PaymentModalComponent";
 import history from "../../history";
+import store from "../../app/store";
+import {setReservedOffer} from "../../features/offers/offersSlice";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -68,7 +70,7 @@ const UserOffersInProgressComponent = () => {
                                     {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus} - <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                     {
                                         item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid  ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo, prieš atlikdami mokėjimą</p><Button variant="outline-danger">Atšaukti rezervaciją</Button></div> :
-                                            item.status !== "patvirtintasTeikejo" && item.status !== "mokejimasAtliktas" && item.reservedUser !== auth.currentUser?.uid && item.user === auth.currentUser?.uid  ?
+                                            item.status !== "patvirtintasTeikejo" && item.status !== "Mokėjimas atliktas" && item.reservedUser !== auth.currentUser?.uid && item.user === auth.currentUser?.uid  ?
                                             <div>
                                                 <p>Patvirkinkite paslaugos teikimą</p>
                                                 <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Patvirtinti prašymą</Button>
@@ -81,8 +83,8 @@ const UserOffersInProgressComponent = () => {
                                                 <PaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
                                                 <Button variant="outline-danger">Atšaukti rezervaciją</Button>
                                             {/*    @ts-ignore*/}
-                                            </div> : item.status === "mokejimasAtliktas" && item.reservedUser === auth.currentUser?.uid ? <div><Button variant="outline-dark" onClick={() => history.push("/vykdymas/progresas")}>Peržiūrėti progresą</Button></div>
-                                                    :  item.status === "mokejimasAtliktas" && item.reservedUser !== auth.currentUser?.uid && item.user === auth.currentUser?.uid ? <div><Button variant="outline-dark" onClick={() => history.push("/vykdymas/teikejas")}>Peržiūrėti progresą</Button></div>
+                                            </div> : item.status === "Mokėjimas atliktas" && item.reservedUser === auth.currentUser?.uid ? <div><Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/progresas")}}>Peržiūrėti progresą</Button></div>
+                                                    :  item.status === "Mokėjimas atliktas" && item.reservedUser !== auth.currentUser?.uid && item.user === auth.currentUser?.uid ? <div><Button variant="outline-dark" onClick={() => history.push("/vykdymas/teikejas")}>Peržiūrėti progresą</Button></div>
 
                                         : <div className="alert alert-warning" role="alert">Laukite kol bus atliktas mokėjimas{console.log(auth.currentUser?.uid)}</div>
                                     }

@@ -53,7 +53,7 @@ const Checkout = (props: Props) => {
                 if (response.data.success) {
                     console.log(response.data.success);
                     await db.collection("offers").doc(id).update({
-                        paymentStatus: "atliktasMokejimas",
+                        paymentStatus: "Mokėjimas atliktas",
                         paymentId: response.data.paymentId
                     })
 

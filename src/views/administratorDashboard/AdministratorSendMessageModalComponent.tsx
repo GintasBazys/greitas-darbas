@@ -3,7 +3,6 @@ import {Button, Form, Modal} from "react-bootstrap";
 import {useDispatch} from "react-redux";
 import {createMessage} from "../../features/messages/messagesSlice";
 import {auth} from "../../firebase";
-import history from "../../history";
 
 interface Props {
     show: boolean,

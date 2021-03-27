@@ -44,7 +44,7 @@ const ComfirmReservationModalComponent = (props: Props) => {
         if (confirm) {
             await db.collection("offers").doc(docId).update({
                 status: "patvirtintasTeikejo",
-                reservedTimeDay: reservedTimeDay,
+                reservedTimeDay: reservedTimeDay.toISOString(),
                 reservedTimeHour: reservedTimeHour,
                 timeForOffer: timeForOffer,
                 reservedUser: auth.currentUser?.uid

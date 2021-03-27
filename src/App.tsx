@@ -31,6 +31,7 @@ import AdministratorReceivedMessagesComponent
 import UserProfileViewComponent from "./views/dashboard/UserViewProfileComponent";
 import OfferPaidComponent from "./views/dashboard/OfferPaidComponent";
 import ServiceProviderOfferPaidComponent from "./views/dashboard/ServiceProviderOfferPaidComponent";
+import AdministratorStatisticsComponent from "./views/administratorDashboard/AdministratorStatisticsComponent";
 
 function App() {
   return <Router history={history}>
@@ -43,10 +44,11 @@ function App() {
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
-      <PrivateRoute exact path="/administracija/pasiulymai" component={AdministratorOfferViewComponent} />
+      <PrivateRoute exact path="/administracija/paslauga" component={AdministratorOfferViewComponent} />
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
+      <PrivateRoute exact path="/administracija/statstika" component={AdministratorStatisticsComponent} />
       <PrivateRoute exact path="/kitas" component={UserProfileViewComponent}/>
       <PrivateRoute exact path="/naudotojas/kitas" component={AdministratorUserViewProfileComponent} />
       <PrivateRoute exact path="/administracija/zinutes" component={AdministratorUserMessages} />

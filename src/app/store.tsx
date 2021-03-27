@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import userReducer from  "../features/user/userSlice";
 import workerReducer from "../features/worker/workerSlice";
 import offersSlice from "../features/offers/offersSlice";
@@ -11,4 +11,7 @@ export default configureStore({
     offers: offersSlice,
     messages: messagesSlice
   },
+  middleware: getDefaultMiddleware({
+      serializableCheck: false
+  })
 });
