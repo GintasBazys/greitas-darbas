@@ -9,6 +9,7 @@ import {db} from "../../firebase";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
 import OfferProgressModalComponent from "./OfferProgressModalComponent";
+import OfferReviewModalComponent from "./OfferReviewModalComponent";
 
 const OfferPaidComponent = () => {
 
@@ -36,6 +37,12 @@ const OfferPaidComponent = () => {
         setProgressModalShow(!progressModalShow)
     }
 
+    const [reviewModalShow, setReviewModalShow] = useState(false);
+
+    const handleReviewModalShow = () => {
+        setReviewModalShow(!reviewModalShow)
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -57,7 +64,8 @@ const OfferPaidComponent = () => {
                         <div className="center-element">
                             <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
                             <OfferProgressModalComponent title={reservedOffer.title} show={progressModalShow} onHide={() => handleProgressModalShow()} />
-                            <Button variant="outline-dark">Palikti atsiliepimą</Button>
+                            <Button onClick={() => handleReviewModalShow()} variant="outline-dark">Palikti atsiliepimą</Button>
+                            <OfferReviewModalComponent title={reservedOffer.title} show={reviewModalShow} onHide={() => handleReviewModalShow()} />
                         </div>
                         <div style={{marginTop: "2rem"}} className="center-element">
                             <Button variant="outline-danger">Atšaukti užsakymą</Button>
@@ -70,7 +78,7 @@ const OfferPaidComponent = () => {
                         <p className="center-element"><Link to={{pathname: "/kitas",  query:{user: reservedOffer.username}}}>{reservedOffer.username}</Link></p>
                         <div className="center-element">
                             <Button variant="outline-dark" onClick={() => handleMessageModalShow()}>Išsiųsti žinutę</Button>
-                            <UserSendMessageModalComponent user={reservedOffer.user} username={reservedOffer.username} email={reservedOffer.email} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
+                            <UserSendMessageModalComponent reservedUser={reservedOffer.reservedUser} user={reservedOffer.user} username={reservedOffer.username} email={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
                         </div>
 
                     </Col>

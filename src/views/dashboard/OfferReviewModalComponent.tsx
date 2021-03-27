@@ -1,21 +1,47 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
+import {auth, db, offerReview} from "../../firebase";
+import {useDispatch} from "react-redux";
 
 interface Props {
     show: boolean,
     onHide: () => void,
+    title: string,
 }
 
 const OfferReviewModalComponent = (props: Props) => {
 
     const [comment, setComment] = useState("");
 
+    const dispatch = useDispatch();
+
     const handleCommentChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setComment(event.target.value);
     }
 
-    const sendComment = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        event.preventDefault()
+    const sendComment = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        let comments: any[] = [];
+        const response = window.confirm("Išsiųsti žinutę?");
+
+        if (response) {
+            await db.collection("offers").where("title", "==", props.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        db.collection("offerReview").doc(doc.id).get()
+                            .then((document) => {
+                                comments = document.data()?.comments;
+                                db.collection("offerReview").doc(document.id).update({
+                                    comments: [comment, ...comments]
+                                })
+                            })
+                    })
+                })
+            props.onHide();
+        }
+
+
+
     }
 
     return (

@@ -57,7 +57,8 @@ const Checkout = (props: Props) => {
                         paymentId: response.data.paymentId
                     })
                     await db.collection("offerReview").doc(id).set({
-                        progressReview: 0
+                        progressReview: 0,
+                        comments: []
                     })
 
                     await history.go(0);

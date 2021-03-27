@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {useDispatch} from "react-redux";
-import {createMessage} from "../../features/messages/messagesSlice";
+import {useDispatch, useSelector} from "react-redux";
 import {auth} from "../../firebase";
+import * as firebase from "../../firebase";
+import {selectWorkerEmail} from "../../features/worker/workerSlice";
 
 interface Props {
     show: boolean,
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const AdministratorSendMessageModalComponent = (props: Props) => {
+
+    const workerEmail = useSelector(selectWorkerEmail);
 
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();
@@ -25,13 +28,26 @@ const AdministratorSendMessageModalComponent = (props: Props) => {
         event.preventDefault();
         const response = window.confirm("Išsiųsti žinutę?");
         if (response) {
-            await dispatch(createMessage({
-                email: props.email,
-                username: props.username,
-                user: props.user,
-                message: message,
-                sender: auth.currentUser?.uid
-            }))
+            let messages: any[] = [];
+            let sentMessages: any[] = [];
+
+            await firebase.usersCollection.doc(props.user).get()
+                .then((doc) => {
+                    messages = doc.data()?.receivedMessages
+                });
+
+            await firebase.usersCollection.doc(props.user).update({
+                receivedMessages: [`${message} - ${workerEmail}`, ...messages]
+            })
+
+            await firebase.usersCollection.doc(auth.currentUser?.uid).get()
+                .then((doc) => {
+                    sentMessages = doc.data()?.sentMessages
+                });
+
+            await firebase.usersCollection.doc(auth.currentUser?.uid).update({
+                sentMessages: [`${message} - ${props.email}`, ...sentMessages]
+            })
         }
     }
 

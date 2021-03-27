@@ -1,8 +1,9 @@
 import React, {useState} from "react";
-import {useDispatch} from "react-redux";
-import {createMessage} from "../../features/messages/messagesSlice";
+import {useDispatch, useSelector} from "react-redux";
 import {auth} from "../../firebase";
 import {Button, Form, Modal} from "react-bootstrap";
+import * as firebase from "../../firebase";
+import {selectUserEmail} from "../../features/user/userSlice";
 
 interface Props {
     show: boolean,
@@ -10,27 +11,56 @@ interface Props {
     user: string,
     username: string,
     email: string,
+    reservedUser: string
 }
 
 const UserSendMessageModalComponent = (props: Props) => {
     const [message, setMessage] = useState("");
-    const dispatch = useDispatch();
+
+    const userEmail = useSelector(selectUserEmail);
 
     const handleMessageChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setMessage(event.target.value)
     }
-
+    //console.log(props.user)
     const sendMessage = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
+
         const response = window.confirm("Išsiųsti žinutę?");
         if (response) {
-            await dispatch(createMessage({
-                email: props.email,
-                username: props.username,
-                user: props.user,
-                message: message,
-                sender: auth.currentUser?.uid
-            }))
+                let messages: any[] = [];
+                let sentMessages: any[] = [];
+
+                await firebase.usersCollection.doc(props.user).get()
+                    .then((doc) => {
+                        messages = doc.data()?.receivedMessages
+                    });
+
+                await firebase.usersCollection.doc(props.user).update({
+                    receivedMessages: [`${message} - ${userEmail}`, ...messages]
+                })
+
+                await firebase.usersCollection.doc(auth.currentUser?.uid).get()
+                    .then((doc) => {
+                        sentMessages = doc.data()?.sentMessages
+                    });
+
+                await firebase.usersCollection.doc(auth.currentUser?.uid).update({
+                    sentMessages: [`${message} - ${props.email}`, ...sentMessages]
+                })
+
+             // firebase.usersCollection.where("user", "==", props.user).limit(1).get()
+             //    .then((querySnapshot) => {
+             //        querySnapshot.forEach((doc) => {
+             //            console.log(doc.id)
+             //            let messages = doc.data()?.sentMessages;
+             //            firebase.usersCollection.doc(doc.id).update({
+             //                sentMessages: [message]
+             //            })
+             //
+             //        })
+             //    })
+            await props.onHide();
         }
     }
 
