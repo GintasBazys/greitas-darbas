@@ -17,14 +17,16 @@ export const offersSlice = createSlice( {
     }
 })
 
-export const addOffer = (info: { isRemote: boolean; description: string; availability: any[]; title: string; userRating: number; phoneNumber: string; price: string; userMail: string; offerImages: any[]; location: string; activityType: string; user: string | undefined; username: string }) => async (dispatch: any) => {
+export const addOffer = (info: {
+    activityType: any;
+    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; availability: any[]; title: string; user: string | undefined; userRating: number; username: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
         username: info.username,
-        activityType: info.activityType,
         description: info.description,
         phoneNumber: info.phoneNumber,
+        activityType: info.activityType,
         location: info.location,
         price: info.price,
         isRemote: info.isRemote,

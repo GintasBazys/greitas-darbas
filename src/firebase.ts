@@ -29,6 +29,7 @@ const offersCollection = db.collection("offers");
 const statisticsCollection = db.collection("statistics");
 const messagesCollection = db.collection("messages");
 const reviewCollection = db.collection("reviews");
+const offerReview = db.collection("offerReview");
 
 export {
     db,
@@ -43,5 +44,6 @@ export {
     offersCollection,
     statisticsCollection,
     messagesCollection,
-    reviewCollection
+    reviewCollection,
+    offerReview
 };

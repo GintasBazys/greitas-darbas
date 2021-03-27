@@ -35,7 +35,9 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                 .then((res) => {
 
                     if(res.data.data.length === 0) {
+                        console.log(id);
                         console.log("nera userio")
+                        console.log(id)
 
                         const createClient = async () => {
                             client = await stripe.customers.create({
@@ -48,17 +50,19 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                                  currency: "EUR",
                                  description: "Greitas Darbas Ltd",
                                  payment_method: id,
-                                 confirm: true,
                                  customer: client.id,
                                  transfer_data: {
                                      destination: connectedAccount
                                  }
-                            }, {
-                                stripeAccount: connectedAccount,
+
                             }).catch((error)=> {
                                 console.log(error.message)
                              })
-                            
+                            resp.json({
+                                paymentId: id,
+                                message: "Sekmingas mokejimas",
+                                success: true,
+                            });
                         })
 
 
@@ -71,7 +75,6 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                                         currency: "EUR",
                                         description: "Greitas Darbas Ltd",
                                         payment_method: id,
-                                        confirm: true,
                                         customer: res.data.data[0].id,
                                         transfer_data: {
                                             destination: connectedAccount

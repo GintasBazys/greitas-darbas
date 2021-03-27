@@ -39,29 +39,33 @@ const Checkout = (props: Props) => {
         if (!error) {
             try {
                 // @ts-ignore
-                const {id} = paymentMethod;
+                const {payId} = paymentMethod;
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
                         amount: props.price * 100,
-                        id: id,
+                        id: paymentMethod,
                         customer: props.reservedUserEmail,
                         connectedAccount: props.connectedId
                     }
                 );
-
+                console.log(response.data);
                 if (response.data.success) {
                     console.log(response.data.success);
                     await db.collection("offers").doc(id).update({
                         paymentStatus: "Mokėjimas atliktas",
                         paymentId: response.data.paymentId
                     })
+                    await db.collection("offerReview").doc(id).set({
+                        progressReview: 0
+                    })
 
                     await history.go(0);
                 }
             } catch (error) {
+
                 console.log(error.message);
-                history.go(0)
+                //history.go(0)
             }
         } else {
             console.log(error.message);

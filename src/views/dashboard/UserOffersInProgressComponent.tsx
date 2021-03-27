@@ -66,6 +66,7 @@ const UserOffersInProgressComponent = () => {
                         return (
                             <div>
                                 <div>
+                                    {/*TODO tvarkyti logika*/}
                                     {/*@ts-ignore*/}
                                     {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus} - <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                     {

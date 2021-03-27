@@ -8,7 +8,7 @@ import star from "../../assets/star.svg";
 import {db} from "../../firebase";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
-import AdministratorSendMessageModalComponent from "../administratorDashboard/AdministratorSendMessageModalComponent";
+import OfferProgressModalComponent from "./OfferProgressModalComponent";
 
 const OfferPaidComponent = () => {
 
@@ -30,6 +30,12 @@ const OfferPaidComponent = () => {
         setMessageModalShow(!messageModalShow)
     }
 
+    const [progressModalShow, setProgressModalShow] = useState(false);
+
+    const handleProgressModalShow = () => {
+        setProgressModalShow(!progressModalShow)
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -49,7 +55,8 @@ const OfferPaidComponent = () => {
 
                         <p className="center-element">Pradžia: {new Date(reservedOffer.reservedTimeDay).toISOString().substr(0, 10)} {reservedOffer.reservedTimeHour}</p>
                         <div className="center-element">
-                            <Button style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
+                            <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
+                            <OfferProgressModalComponent title={reservedOffer.title} show={progressModalShow} onHide={() => handleProgressModalShow()} />
                             <Button variant="outline-dark">Palikti atsiliepimą</Button>
                         </div>
                         <div style={{marginTop: "2rem"}} className="center-element">

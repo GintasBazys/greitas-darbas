@@ -111,19 +111,19 @@ const UserWorkOfferManagementComponent = () => {
     const submitOffer = async () => {
         //todo istestuoti laukus kad nepraleistu netinkamo formato
 
-        if(title != "") {
-            db.collection("offers").where("title", "==", title).limit(1).get()
-                .then(() => {
-                    dispatch(sendError("Skelbimas tokiu pavadinimu jau egzistuoja"))
-                    setTimeout(() => {
-                        dispatch(sendError(""))
-                    }, 2000);
-                }).catch((error) => {
+        // if(title != "") {
+        //     db.collection("offers").where("title", "==", title).limit(1).get()
+        //         .then(() => {
+        //             dispatch(sendError("Skelbimas tokiu pavadinimu jau egzistuoja"))
+        //             setTimeout(() => {
+        //                 dispatch(sendError(""))
+        //             }, 2000);
+        //         }).catch((error) => {
+        //
+        //     })
+        // }
 
-            })
-        }
-
-        if(description !== "" && phoneNumber !== "" && price !== "" && title !== "") {
+         if(description !== "" && phoneNumber !== "" && price !== "" && title !== "") {
 
             let urlsFromFirebaseStorage: Array<string> = [];
             let urls = files.map(async (file: any) => {
@@ -140,7 +140,6 @@ const UserWorkOfferManagementComponent = () => {
                 user: auth.currentUser?.uid,
                 userMail: userMail,
                 username: username,
-                activityType: activityType,
                 description: description,
                 phoneNumber: phoneNumber,
                 location: location,
@@ -149,7 +148,8 @@ const UserWorkOfferManagementComponent = () => {
                 userRating: userRating,
                 title: title,
                 availability: availability,
-                offerImages: urlsFromFirebaseStorage
+                offerImages: urlsFromFirebaseStorage,
+                activityType: activityType
             }))
 
             await history.go(0);
