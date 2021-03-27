@@ -18,7 +18,7 @@ const PaymentModalComponent = (props: Props) => {
     const [connectedId, setConnectedId] = useState("");
 
     useEffect(() => {
-        db.collection("users").where("email", "==", "bazys.gintas@gmail.comm").get()
+        db.collection("users").where("email", "==", props.item.userMail).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     setConnectedId(doc.data()?.connectedAccount)

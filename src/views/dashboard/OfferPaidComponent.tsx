@@ -73,7 +73,7 @@ const OfferPaidComponent = () => {
                     </Col>
                     <Col md={6}>
                         <h1 className="center-element">Paslaugos teikėjas</h1>
-                        <Image style={{display: "block", marginLeft: "auto", marginRight: "auto", height: "50%", width: "50%"}} className="center-element" fluid src={providerImage} alt="Paslaugos teikėjo nuotrauka" />
+                        <Image style={{display: "block", marginLeft: "auto", marginRight: "auto", height: "auto", width: "auto"}} className="center-element" fluid src={providerImage} alt="Paslaugos teikėjo nuotrauka" />
                         {/*@ts-ignore*/}
                         <p className="center-element"><Link to={{pathname: "/kitas",  query:{user: reservedOffer.username}}}>{reservedOffer.username}</Link></p>
                         <div className="center-element">

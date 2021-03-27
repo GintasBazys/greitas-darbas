@@ -16,7 +16,7 @@ interface Props {
 const Checkout = (props: Props) => {
     const stripe = useStripe();
     const elements = useElements();
-    const [id, setId] = useState("");
+    const [docId, setId] = useState("");
 
     useEffect(() => {
         db.collection("offers").where("title", "==", props.title).limit(1).get()
@@ -26,11 +26,12 @@ const Checkout = (props: Props) => {
                 })
             })
     })
+    console.log(props.reservedUserEmail);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         // @ts-ignore
-        const { error, paymentMethod } = await stripe.createPaymentMethod({
+        const {error, paymentMethod} = await stripe.createPaymentMethod({
             type: "card",
             // @ts-ignore
             card: elements.getElement(CardElement),
@@ -39,24 +40,25 @@ const Checkout = (props: Props) => {
         if (!error) {
             try {
                 // @ts-ignore
-                const {payId} = paymentMethod;
+                const {id} = paymentMethod;
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
                         amount: props.price * 100,
-                        id: paymentMethod,
+                        id: id,
                         customer: props.reservedUserEmail,
                         connectedAccount: props.connectedId
                     }
                 );
-                console.log(response.data);
+
                 if (response.data.success) {
                     console.log(response.data.success);
-                    await db.collection("offers").doc(id).update({
+                    await db.collection("offers").doc(docId).update({
                         paymentStatus: "Mokėjimas atliktas",
+                        status: "Mokėjimas atliktas",
                         paymentId: response.data.paymentId
                     })
-                    await db.collection("offerReview").doc(id).set({
+                    await db.collection("offerReview").doc(docId).set({
                         progressReview: 0,
                         comments: []
                     })
@@ -72,6 +74,7 @@ const Checkout = (props: Props) => {
             console.log(error.message);
         }
     }
+
     return <Form>
         <CardElement />
         <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={handleSubmit}>Moketi</Button>

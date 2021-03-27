@@ -66,9 +66,15 @@ const UserProfileViewComponent = () => {
                 </div>
                 <div style={{display: "flex", justifyContent: "center"}}>
                     {
-                        portfolioImages.map((portfolioImage) => {
-                            return <Image height="20%" width="20%" src={portfolioImage} fluid alt="darbu nuorauka" />
-                        })
+                        portfolioImages === undefined ? <div>Daugiau nuotraukų nėra</div> :
+                            portfolioImages.length <=9 ?
+                                <div>
+                                    {
+                                        portfolioImages.map((portfolioImage) => {
+                                            return <Image height="20%" width="20%" src={portfolioImage} fluid alt="darbu nuorauka" />
+                                        })
+                                    }
+                                </div> :<div></div>
                     }
                 </div>
                 <div style={{marginTop: "3rem", display: "flex", justifyContent: "center"}}>

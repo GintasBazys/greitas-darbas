@@ -26,20 +26,93 @@ const config = {
 
 let client = null;
 
-app.post("/stripe/mokejimas", cors(), async (req, resp) => {
+// app.post("/stripe/mokejimas", cors(), async (req, resp) => {
+//
+//     let { amount, id, customer, connectedAccount } = req.body;
+//         console.log(id);
+//         console.log(customer)
+//         try {
+//              await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
+//                 .then((res) => {
+//
+//                     if(res.data.data.length === 0) {
+//                         //console.log(id);
+//                         console.log("nera userio")
+//                         //console.log(id)
+//
+//                         const createClient = async () => {
+//                             client = await stripe.customers.create({
+//                                 email: customer,
+//                             })
+//                         }
+//                         createClient().then(() => {
+//                              stripe.paymentIntents.create({
+//                                 amount: amount,
+//                                  currency: "EUR",
+//                                  description: "Greitas Darbas Ltd",
+//                                  payment_method: id.id,
+//                                  //customer: customer.id,
+//                                  //requires_confirmation: false,
+//                                  transfer_data: {
+//                                      destination: connectedAccount
+//                                  }
+//
+//                             }).catch((error)=> {
+//                                 console.log(error.message)
+//                              })
+//                             resp.json({
+//                                 paymentId: id,
+//                                 message: "Sekmingas mokejimas",
+//                                 success: true,
+//                             });
+//                         })
+//
+//
+//
+//                         } else {
+//                                     console.log(res.data.data[0].id)
+//
+//                                     stripe.paymentIntents.create({
+//                                         amount: amount,
+//                                         currency: "EUR",
+//                                         description: "Greitas Darbas Ltd",
+//                                         payment_method: id.id,
+//                                         //customer: res.data.data[0].id,
+//                                         //requires_confirmation: false,
+//                                         // transfer_data: {
+//                                         //     destination: connectedAccount
+//                                         // }
+//                                     }).catch((error) => {
+//                                         console.log(error.message);
+//                                     })
+//                         resp.json({
+//                             paymentId: id,
+//                             message: "Sekmingas mokejimas",
+//                             success: true,
+//                         });
+//                     }
+//
+//                 }).catch(error => {
+//                     console.log(error.message)
+//                 })
+//         } catch (e) {
+//             console.log(e.message);
+//         }
+//
+// });
 
-    let { amount, id, customer, connectedAccount } = req.body;
-
-        try {
-             await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
-                .then((res) => {
-
-                    if(res.data.data.length === 0) {
-                        console.log(id);
+app.post("/stripe/mokejimas", cors(), async (req, res) => {
+    let { amount, id, customer, connectedAccount} = req.body;
+    console.log(customer)
+        await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
+                .then((resp) => {
+                    console.log(resp.data.data)
+                    if (resp.data.data.length === 0) {
+                        //console.log(id);
                         console.log("nera userio")
-                        console.log(id)
+                        //console.log(id)
 
-                        const createClient = async () => {
+                        let createClient = async () => {
                             client = await stripe.customers.create({
                                 email: customer,
                             })
@@ -50,7 +123,9 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                                  currency: "EUR",
                                  description: "Greitas Darbas Ltd",
                                  payment_method: id,
+                                 confirm:true,
                                  customer: client.id,
+                                 //requires_confirmation: false,
                                  transfer_data: {
                                      destination: connectedAccount
                                  }
@@ -58,45 +133,88 @@ app.post("/stripe/mokejimas", cors(), async (req, resp) => {
                             }).catch((error)=> {
                                 console.log(error.message)
                              })
-                            resp.json({
-                                paymentId: id,
-                                message: "Sekmingas mokejimas",
-                                success: true,
-                            });
                         })
 
-
-
-                        } else {
-                                    console.log(res.data.data[0].id)
-
-                                    const payment = stripe.paymentIntents.create({
-                                        amount: amount,
-                                        currency: "EUR",
-                                        description: "Greitas Darbas Ltd",
-                                        payment_method: id,
-                                        customer: res.data.data[0].id,
-                                        transfer_data: {
-                                            destination: connectedAccount
-                                        }
-                                    }).catch((error) => {
-                                        console.log(error);
-                                    })
-                        resp.json({
-                            paymentId: id,
-                            message: "Sekmingas mokejimas",
-                            success: true,
-                        });
                     }
 
-                }).catch(error => {
-                    console.log(error.message)
-                })
-        } catch (e) {
-            console.log(e.message);
-        }
+                    else {
+                        console.log(resp.data.data[0].id)
 
+                         stripe.paymentIntents.create({
+                            amount: amount,
+                            currency: "EUR",
+                            description: "Greitas Darbas Ltd",
+                            payment_method: id,
+                            customer: resp.data.data[0].id,
+                            confirm:true,
+                                        //requires_confirmation: false,
+                            transfer_data: {
+                                destination: connectedAccount
+                            }
+                        }).then((result) => {
+                            res.json({
+                                     paymentId: result.id,
+                                     message: "Sekmingas mokejimas",
+                                     success: true,
+                            })
+                         }).catch((error) => {
+                                        console.log(error.message);
+                        });
+
+                    }
+                    // resp.json({
+                    //     paymentId: id,
+                    //     message: "Sekmingas mokejimas",
+                    //     success: true,
+                    // });
+                })
+
+    // await stripe.paymentIntents.create({
+    //     amount: amount,
+    //     currency: "EUR",
+    //     description: "Greitas Darbas Ltd",
+    //     payment_method: id,
+    //     confirm: true,
+    //     //requires_confirmation: false,
+    //     transfer_data: {
+    //         destination: connectedAccount
+    //     }
+    // })
+
+
+    //     const payment = await stripe.paymentIntents.create({
+    //         amount: amount,
+    //         currency: "EUR",
+    //         description: "Greitas Darbas Ltd",
+    //         payment_method: id,
+    //         confirm: true,
+    //         customer: "cus_JC484Q9hhhbw9U"
+    //     });
+    //     res.json({
+    //         message: "Sekmingas mokejimas",
+    //         success: true,
+    //     });
+    // } catch (error) {
+    //     console.log(error);
+    //     res.json({
+    //         message: "Nesekmingas mokejimas",
+    //         success: false,
+    //     });
+    // }
 });
+
+// app.post("/stripe/mokejimas", cors(), async (req, resp) => {
+//
+//
+//
+//     await stripe.paymentIntents.create({
+//         payment_method_types: ['card'],
+//         amount: 1000,
+//         currency: 'eur',
+//     }).catch((error) => {
+//         console.log(error.message)
+//     });
+// })
 
 app.post("/firebase/darbuotojai", cors(), async (req, res) => {
     let {uid} = req.body;
