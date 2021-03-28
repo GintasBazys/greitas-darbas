@@ -50,7 +50,7 @@ const ComfirmReservationModalComponent = (props: Props) => {
                 reservedUser: auth.currentUser?.uid
             })
             await props.onHide();
-            await history.go(1);
+            //await history.go(0);
         }
 
     }

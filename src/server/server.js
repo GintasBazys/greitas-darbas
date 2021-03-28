@@ -162,59 +162,18 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                         });
 
                     }
-                    // resp.json({
-                    //     paymentId: id,
-                    //     message: "Sekmingas mokejimas",
-                    //     success: true,
-                    // });
+
                 })
-
-    // await stripe.paymentIntents.create({
-    //     amount: amount,
-    //     currency: "EUR",
-    //     description: "Greitas Darbas Ltd",
-    //     payment_method: id,
-    //     confirm: true,
-    //     //requires_confirmation: false,
-    //     transfer_data: {
-    //         destination: connectedAccount
-    //     }
-    // })
-
-
-    //     const payment = await stripe.paymentIntents.create({
-    //         amount: amount,
-    //         currency: "EUR",
-    //         description: "Greitas Darbas Ltd",
-    //         payment_method: id,
-    //         confirm: true,
-    //         customer: "cus_JC484Q9hhhbw9U"
-    //     });
-    //     res.json({
-    //         message: "Sekmingas mokejimas",
-    //         success: true,
-    //     });
-    // } catch (error) {
-    //     console.log(error);
-    //     res.json({
-    //         message: "Nesekmingas mokejimas",
-    //         success: false,
-    //     });
-    // }
 });
 
-// app.post("/stripe/mokejimas", cors(), async (req, resp) => {
-//
-//
-//
-//     await stripe.paymentIntents.create({
-//         payment_method_types: ['card'],
-//         amount: 1000,
-//         currency: 'eur',
-//     }).catch((error) => {
-//         console.log(error.message)
-//     });
-// })
+app.post("/stripe/grazinimas", cors(), async (req, res) => {
+    let {id} = req.body;
+    const refund = await stripe.refunds.create({
+        payment_intent: id,
+    }).catch((error) => {
+        console.log(error.message)
+    })
+})
 
 app.post("/firebase/darbuotojai", cors(), async (req, res) => {
     let {uid} = req.body;

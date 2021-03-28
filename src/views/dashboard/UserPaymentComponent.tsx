@@ -20,17 +20,16 @@ const UserPaymentComponent = () => {
 
     };
 
-    const [userID, setUserID] = useState("cus_J5MpPew9wOl3De");
+    const [userID, setUserID] = useState("");
 
     const renderPayments = async () => {
 
         let lastPayment = "";
-        //TODO checkPayment, axios get customers id by email
 
         await axios.get(`https://api.stripe.com/v1/customers?email=${email}`,config)
             .then((res) => {
-                console.log(res.data.data[0].id);
-                setUserID(res.data.data[0].id);
+                console.log(res.data.data[0]?.id);
+                setUserID(res.data.data[0]?.id);
             })
 
         await axios.get(`https://api.stripe.com/v1/payment_intents?limit=10&customer=${userID}`, config)

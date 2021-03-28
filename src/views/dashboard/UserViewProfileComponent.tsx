@@ -33,18 +33,14 @@ const UserProfileViewComponent = () => {
         setLoading(true);
 
         // @ts-ignore
-        firebase.usersCollection.where("username", "==", history.location.query.user).limit(1).get()
-            .then((querySnapshot) => {
-                //@ts-ignore
-                querySnapshot.forEach((doc) => {
+        firebase.usersCollection.doc(history.location.query.user).get()
+            .then((doc) => {
                     setEmail(doc.data()?.email);
                     setAboutMe(doc.data()?.aboutMe);
                     setUsername(doc.data()?.username);
                     setPortfolioImages(doc.data()?.portfolioImages);
                     setProfileImage(doc.data()?.image);
                     setUser(doc.id);
-                })
-
             })
         setLoading(false);
     }, [])

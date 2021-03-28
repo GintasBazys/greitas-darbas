@@ -66,7 +66,6 @@ const UserOffersInProgressComponent = () => {
                         return (
                             <div>
                                 <div>
-                                    {/*TODO tvarkyti logika*/}
                                     {/*@ts-ignore*/}
                                     {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus} - <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                     {/*{*/}
@@ -116,15 +115,15 @@ const UserOffersInProgressComponent = () => {
                                         item.status === "patvirtintasTeikejo" && item.user === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert">Laukite kol bus atliktas mokėjimas{console.log(auth.currentUser?.uid)}</div> : <div></div>
                                     }
                                     {
-                                        item.status === "Mokėjimas atliktas" && item.reservedUser === auth.currentUser?.uid ?
+                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.reservedUser === auth.currentUser?.uid ?
                                             <div>
                                                 <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
                                     }
                                     {
-                                        item.status === "Mokėjimas atliktas" && item.user === auth.currentUser?.uid ?
+                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.user === auth.currentUser?.uid ?
                                             <div>
-                                                <Button variant="outline-dark" onClick={() => history.push("/vykdymas/teikejas")}>Peržiūrėti progresą</Button>
+                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
                                     }
 
