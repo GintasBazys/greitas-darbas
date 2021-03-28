@@ -173,6 +173,9 @@ app.post("/stripe/grazinimas", cors(), async (req, res) => {
     }).catch((error) => {
         console.log(error.message)
     })
+    res.json({
+        success: true,
+    })
 })
 
 app.post("/firebase/darbuotojai", cors(), async (req, res) => {

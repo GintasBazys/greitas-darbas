@@ -19,11 +19,13 @@ const OfferPaidComponent = () => {
 
     const reservedOffer = useSelector(selectReservedOffer)
     const [providerImage, setProviderImage] = useState("");
+    const [docId, setDocId] = useState("");
 
     useEffect(() => {
         db.collection("users").doc(reservedOffer.user).get()
             .then((doc) => {
                 setProviderImage(doc.data()?.image);
+                setDocId(doc.id);
             })
     }, [])
 
@@ -46,18 +48,20 @@ const OfferPaidComponent = () => {
     }
 
     const confirmOfferCancel = async () => {
+        console.log(reservedOffer.title)
         const response = window.confirm("Patvirtinti?");
 
         if (response) {
             await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
                 .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        db.collection("offers").doc(doc.id).update({
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("offers").doc(doc.id).update({
                             status: "Atšauktas naudotojo"
                         })
+                        await history.go(0);
                     })
                 })
-            await history.go(0);
+
         }
     }
 
@@ -72,9 +76,42 @@ const OfferPaidComponent = () => {
                         id: reservedOffer.paymentId,
                     }
                 );
+               console.log(response.data.success);
                 if (response.data.success) {
-                    //TODO istrinti nereikalingus laukus is offer documento
-                    console.log(response.data.success);
+                    await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach(async (doc) => {
+                                await db.collection("offers").doc(doc.id).update({
+                                    status: "naujas",
+                                    reservedTimeDay: "",
+                                    reservedTimeHour: "",
+                                    reservedUser: "",
+                                    reservedUserEmail: "",
+                                    paymentId: "",
+                                    paymentStatus: "",
+                                    timeForOffer: ""
+                                })
+                                let progressRating = 0;
+
+                                await db.collection("offerReview").doc(doc.id).get()
+                                    .then((doc) => {
+                                         progressRating = doc.data()?.progressRating;
+                                    }).then(() => {
+                                        db.collection("offerReview").doc(doc.id).delete()
+                                    })
+                                await db.collection("users").doc(docId).get()
+                                    .then((doc) => {
+                                        let ratingCount: number = doc.data()?.ratingCount +1;
+                                        let rating: number = doc.data()?.rating;
+                                        db.collection("users").doc(docId).update({
+                                            rating: rating + progressRating / ratingCount,
+                                            ratingCount: ratingCount
+                                        })
+                                    })
+                                await history.go(0);
+                            })
+                        })
+                   //
                 }
 
             } catch (e) {
