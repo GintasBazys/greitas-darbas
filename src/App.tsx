@@ -32,6 +32,7 @@ import UserProfileViewComponent from "./views/dashboard/UserViewProfileComponent
 import OfferPaidComponent from "./views/dashboard/OfferPaidComponent";
 import ServiceProviderOfferPaidComponent from "./views/dashboard/ServiceProviderOfferPaidComponent";
 import AdministratorStatisticsComponent from "./views/administratorDashboard/AdministratorStatisticsComponent";
+import UserSearchWorkerFormComponent from "./views/dashboard/UserSearchWorkerFormComponent";
 
 function App() {
   return <Router history={history}>
@@ -59,6 +60,7 @@ function App() {
       <PrivateRoute exact path="/paslauga" component={UserOffersViewComponent} />
       <PrivateRoute exact path="/mokejimai" component={UserPaymentComponent} />
       <PrivateRoute exact path="/paieska" component={UserWorkforceSearchComponent} />
+      <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />
       <PrivateRoute exact path="/vykdymas" component={UserOffersInProgressComponent} />
       <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />
       <PrivateRoute exact path="/vykdymas/progresas" component={OfferPaidComponent} />

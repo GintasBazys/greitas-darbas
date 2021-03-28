@@ -15,7 +15,7 @@ const MainUserComponent = () => {
                 <h1>Siūlomų paslaugų:</h1>
                 <h1>Ieškomų darbuotojų:</h1>
                 <h1>Atlikta mokėjimų:</h1>
-                <h1>Neperskaityta žinučių:</h1>
+                <h1>Gautų žinučių:</h1>
             </div>
             {/*<div style={{width: "20%"}}>*/}
             {/*    <Stripe />*/}

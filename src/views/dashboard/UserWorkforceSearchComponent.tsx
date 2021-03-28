@@ -19,7 +19,7 @@ const UserWorkforceSearchComponent = () => {
                             <h1>Nuorodos:</h1>
                             <ul className="list-unstyled">
                                 <li><Link to="/paieska/siulymai">Ieškomų darbuotojų peržiūra</Link></li>
-                                <li><Link to="/paieka/kurimas">Ieškoti darbuotojų</Link></li>
+                                <li><Link to="/paieska/kurimas">Ieškoti darbuotojų</Link></li>
                             </ul>
                             <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
                         </div>

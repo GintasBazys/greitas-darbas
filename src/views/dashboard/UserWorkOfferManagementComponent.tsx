@@ -266,7 +266,7 @@ const UserWorkOfferManagementComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
