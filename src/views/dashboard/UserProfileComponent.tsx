@@ -154,7 +154,7 @@ const UserProfileComponent = () => {
         let urls = files.map(async (file: any) => {
             await storageRef.child(`/${userBeforeChange}/darbai/${file.file.name}`).put(file.file);
             const url = await storageRef.child(`/${userBeforeChange}/darbai/${file.file.name}`).getDownloadURL();
-            return urlsFromFirebaseStorage.push(url);
+            await urlsFromFirebaseStorage.push(url);
             //console.log(urlsFromFirebaseStorage);
         });
         await Promise.all(urls).then((results) => {
@@ -162,21 +162,21 @@ const UserProfileComponent = () => {
         })
         //@ts-ignore
         await dispatch(fetchUpdateUserWorkPicturesToReview({user: user, portfolioImages: urlsFromFirebaseStorage}));
-        history.go(0);
+        await history.go(0);
     }
 
-    const deleteWorkPictures = () => {
+    const deleteWorkPictures = async () => {
         const response = window.confirm("Ištrinti nuotraukas?");
 
-        if(response) {
-            firebase.usersCollection.doc(auth.currentUser?.uid).update({
+        if (response) {
+            await firebase.usersCollection.doc(auth.currentUser?.uid).update({
                 portfolioImages: []
             })
 
-            const imagesRef =  storageRef.child(`${userBeforeChange}/darbai/`);
+            const imagesRef = storageRef.child(`${userBeforeChange}/darbai/`);
 
-            imagesRef.listAll().then((result) => {
-                result.items.forEach((file) => {
+            await imagesRef.listAll().then((result) => {
+                 result.items.forEach((file) => {
                     file.delete()
                         .then(() => {
 
@@ -187,7 +187,7 @@ const UserProfileComponent = () => {
             }).catch((error) => {
                 console.log(error.message);
             });
-            history.go(0)
+            await history.go(0)
         }
     }
 
@@ -259,45 +259,70 @@ const UserProfileComponent = () => {
                         </div>
 
                         {
-                            portfolioImages.length <= 0 ? <div>Nėra įkelta jokių atliktų darbų nuotraukų</div> :
-                                <div>
-                                    {
-                                        loading ? <LoadingComponent /> :
-                                        portfolioImages.map((imageUrl: string, index: number) => {
-                                            return <a href={imageUrl} download target="_blank"><img  key={index} src={imageUrl} width="100px" height="100px" style={{marginLeft: "2rem"}}/></a>
-                                        })
-                                    }
-                                </div>
-                        }
+                            portfolioImages === undefined ? <div>Daugiau nuotraukų nėra. Pridėti?
+                                    <div>
+                                        <p>Pridėti aliktų darbų nuotraukų (bendras nuotraukų kiekis negali viršyti 10)</p>
+                                        <FilePond
+                                            allowImagePreview={true}
+                                            files={files}
+                                            // @ts-ignore
+                                            onupdatefiles={setFiles}
+                                            allowMultiple={true}
+                                            maxFiles={10}
+                                            allowReorder={true}
+                                            allowFileTypeValidation={true}
+                                            acceptedFileTypes={["image/*"]}
+                                            name="dokumentas"
+                                            fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
+                                            labelFileTypeNotAllowed="Negalimas failo tipas"
+                                            credits={false}
+                                            labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
+                                            allowFileSizeValidation={true}
+                                            maxTotalFileSize="100MB"
+                                            labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
+                                            labelMaxTotalFileSize="Didziausias galimas failu dydis 100MB"
+                                        />
+                                        <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => sendPortfolioPictures()}>Įkelti nuotraukas</Button>
+                                        <Button variant="outline-danger" onClick={() => deleteWorkPictures()}>Ištrinti nuotraukas</Button>
+                                    </div>
 
-                        {
-                            portfolioImages.length <=9 ?
-                                <div>
-                                    <p>Pridėti aliktų darbų nuotraukų (bendras nuotraukų kiekis negali viršyti 10)</p>
-                                    <FilePond
-                                        allowImagePreview={true}
-                                        files={files}
-                                        // @ts-ignore
-                                        onupdatefiles={setFiles}
-                                        allowMultiple={true}
-                                        maxFiles={10}
-                                        allowReorder={true}
-                                        allowFileTypeValidation={true}
-                                        acceptedFileTypes={["image/*"]}
-                                        name="dokumentas"
-                                        fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
-                                        labelFileTypeNotAllowed="Negalimas failo tipas"
-                                        credits={false}
-                                        labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
-                                        allowFileSizeValidation={true}
-                                        maxTotalFileSize="100MB"
-                                        labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
-                                        labelMaxTotalFileSize="Didziausias galimas failu dydis 100MB"
-                                    />
-                                    <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => sendPortfolioPictures()}>Įkelti nuotraukas</Button>
-                                    <Button variant="outline-danger" onClick={() => deleteWorkPictures()}>Ištrinti nuotraukas</Button>
-                                </div>
-                                : <div>Daugiau nuotraukų negalima pridėti</div>
+                            </div> :
+
+                                    portfolioImages.length <=9 ?
+                                        <div>
+                                            <p>Pridėti aliktų darbų nuotraukų (bendras nuotraukų kiekis negali viršyti 10)</p>
+                                            <FilePond
+                                                allowImagePreview={true}
+                                                files={files}
+                                                // @ts-ignore
+                                                onupdatefiles={setFiles}
+                                                allowMultiple={true}
+                                                maxFiles={10}
+                                                allowReorder={true}
+                                                allowFileTypeValidation={true}
+                                                acceptedFileTypes={["image/*"]}
+                                                name="dokumentas"
+                                                fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
+                                                labelFileTypeNotAllowed="Negalimas failo tipas"
+                                                credits={false}
+                                                labelIdle='Nutempkite failus arba<span class="filepond--label-action"> ieškokite įrenginyje</span>'
+                                                allowFileSizeValidation={true}
+                                                maxTotalFileSize="100MB"
+                                                labelMaxTotalFileSizeExceeded="Viršytas maksimalus bendras nuotraukų dydis"
+                                                labelMaxTotalFileSize="Didziausias galimas failu dydis 100MB"
+                                            />
+                                            <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => sendPortfolioPictures()}>Įkelti nuotraukas</Button>
+                                            <Button variant="outline-danger" onClick={() => deleteWorkPictures()}>Ištrinti nuotraukas</Button>
+                                            <div style={{marginTop: "2rem"}}>
+                                                {
+                                                    portfolioImages.map((imageUrl: string, index: number) => (
+                                                         <a href={imageUrl} download target="_blank"><Image width="200px" key={index} src={imageUrl} fluid style={{marginLeft: "2rem"}}/></a>
+                                                    ))
+                                                }
+                                            </div>
+                                        </div>
+                                        : <div>Daugiau nuotraukų negalima pridėti</div>
+
                         }
 
                     </Form>

@@ -18,6 +18,7 @@ const UserNavBarComponent = ({profileImage}) => {
                 <Navbar.Collapse className="justify-content-end">
 
                     <Link to="/paieska" className="admin-navbar-link">Darbuotojų paieška </Link>
+                    <Link to="/darbai" className="admin-navbar-link">Darbų vykdymas</Link>
                     <Link to="/paslauga" className="admin-navbar-link">Siūlomų paslaugų peržiūra </Link>
                     <Link to="/vykdymas" className="admin-navbar-link">Paslaugų vykdymas </Link>
                     <Link to="/siulymas" className="admin-navbar-link">Siūlomų paslaugų valdymas</Link>

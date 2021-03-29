@@ -7,15 +7,16 @@ import {auth, db} from "../../firebase";
 import {Link} from "react-router-dom";
 import {Button, Image} from "react-bootstrap";
 import star from "../../assets/star.svg";
-// @ts-ignore
-import moment from "moment/min/moment-with-locales";
 import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";
 import PaymentModalComponent from "./PaymentModalComponent";
-import history from "../../history";
 import store from "../../app/store";
-import {setReservedOffer} from "../../features/offers/offersSlice";
+import {setReservedRequest} from "../../features/requests/requestsSlice";
+import history from "../../history";
+// @ts-ignore
+import moment from "moment/min/moment-with-locales";
 
-const UserOffersInProgressComponent = () => {
+
+const UserRequestsInProgressComponent = () => {
     const image = useSelector(selectImage);
 
     let {
@@ -26,24 +27,10 @@ const UserOffersInProgressComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("offers").where("status", "!=", "naujas"), {
+        db.collection("requests").where("status", "!=", "naujas"), {
             limit: 20
         }
     );
-
-    // let query = db.collection("offers")
-    // // @ts-ignore
-    // query = query.where("status", "!=", "naujas")
-    // // @ts-ignore
-    // query = query.where("userMail", "==", "bazys.gintas@gmail.comm")
-    // // @ts-ignore
-    // query = query.orderBy("status")
-    // query.get()
-    //     .then((querySnapshot) => {
-    //         querySnapshot.forEach((doc) => {
-    //             console.log(doc.id)
-    //         })
-    //     })
 
     const [modalShow, setModalShow] = useState(false);
     const [paymentModalShow, setPaymentModalShow] = useState(false);
@@ -97,13 +84,13 @@ const UserOffersInProgressComponent = () => {
                                     {
                                         (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.reservedUser === auth.currentUser?.uid ?
                                             <div>
-                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
+                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
                                     }
                                     {
                                         (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.user === auth.currentUser?.uid ?
                                             <div>
-                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
+                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
                                     }
 
@@ -123,9 +110,8 @@ const UserOffersInProgressComponent = () => {
                 }
 
             </div>
-
         </div>
     )
 }
 
-export default UserOffersInProgressComponent;
+export default UserRequestsInProgressComponent;

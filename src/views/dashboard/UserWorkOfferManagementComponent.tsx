@@ -181,11 +181,11 @@ const UserWorkOfferManagementComponent = () => {
     const updateOffer = (item: any) => {
         setModalShow(!modalShow)
     }
-    const deleteOffer = (item: any) => {
+    const deleteOffer = async (item: any) => {
         const response = window.confirm("Patvirtinti?");
-        if(response) {
+        if (response) {
             let titleForImages = "";
-            db.collection("offers").where("title", "==", item.title).limit(1).get()
+            await db.collection("offers").where("title", "==", item.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         titleForImages = doc.data()?.title;
