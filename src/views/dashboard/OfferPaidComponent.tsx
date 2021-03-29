@@ -99,15 +99,19 @@ const OfferPaidComponent = () => {
                                     }).then(() => {
                                         db.collection("offerReview").doc(doc.id).delete()
                                     })
+                                let rating: number = 0;
                                 await db.collection("users").doc(docId).get()
                                     .then((doc) => {
                                         let ratingCount: number = doc.data()?.ratingCount +1;
-                                        let rating: number = doc.data()?.rating;
+                                        rating = doc.data()?.rating;
                                         db.collection("users").doc(docId).update({
                                             rating: rating + progressRating / ratingCount,
                                             ratingCount: ratingCount
                                         })
                                     })
+                                await db.collection("offerReview").doc(doc.id).update({
+                                    userRating: rating + progressRating
+                                })
                                 await history.go(0);
                             })
                         })
@@ -177,7 +181,7 @@ const OfferPaidComponent = () => {
                         <p className="center-element"><Link to={{pathname: "/kitas",  query:{user: reservedOffer.user}}}>{reservedOffer.username}</Link></p>
                         <div className="center-element">
                             <Button variant="outline-dark" onClick={() => handleMessageModalShow()}>Išsiųsti žinutę</Button>
-                            <UserSendMessageModalComponent reservedUser={reservedOffer.reservedUser} user={reservedOffer.user} username={reservedOffer.username} email={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
+                            <UserSendMessageModalComponent user={reservedOffer.user} sender={reservedOffer.reservedUserEmail} receiver={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
                         </div>
 
                     </Col>

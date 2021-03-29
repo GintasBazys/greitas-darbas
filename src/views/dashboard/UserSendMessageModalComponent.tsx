@@ -8,10 +8,9 @@ import {selectUserEmail} from "../../features/user/userSlice";
 interface Props {
     show: boolean,
     onHide: () => void,
-    user: string,
-    username: string,
-    email: string,
-    reservedUser: string
+    sender: string,
+    receiver: string,
+    user: string
 }
 
 const UserSendMessageModalComponent = (props: Props) => {
@@ -33,21 +32,22 @@ const UserSendMessageModalComponent = (props: Props) => {
 
                 await firebase.usersCollection.doc(props.user).get()
                     .then((doc) => {
-                        messages = doc.data()?.receivedMessages
+                        messages = doc.data()?.receivedMessages;
                     });
 
                 await firebase.usersCollection.doc(props.user).update({
-                    receivedMessages: [`${message} - ${userEmail}`, ...messages]
+                    receivedMessages: [{sender: props.sender, message: message}, ...messages]
                 })
 
                 await firebase.usersCollection.doc(auth.currentUser?.uid).get()
                     .then((doc) => {
-                        sentMessages = doc.data()?.sentMessages
+                        sentMessages = doc.data()?.sentMessages;
                     });
 
                 await firebase.usersCollection.doc(auth.currentUser?.uid).update({
-                    sentMessages: [`${message} - ${props.email}`, ...sentMessages]
+                    sentMessages: [{receiver: props.receiver, message: message}, ...sentMessages]
                 })
+
 
              // firebase.usersCollection.where("user", "==", props.user).limit(1).get()
              //    .then((querySnapshot) => {

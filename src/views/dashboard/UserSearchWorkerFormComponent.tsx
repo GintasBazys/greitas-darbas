@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import NotificationComponent from "../main_page/NotificationComponent";
 import {auth, db} from "../../firebase";
 import axios from "axios";
+import {locations} from "./locations";
 
 const UserSearchWorkerFormComponent = () => {
 
@@ -65,9 +66,7 @@ const UserSearchWorkerFormComponent = () => {
     const handleEstimatedTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setEstimatedTime(event.target.value)
     }
-    const handleRemoteChange = (event: { target: { value: React.SetStateAction<boolean>; }; }) => {
-        setIsRemote(event.target.value)
-    }
+
     const handleLocationChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setLocation(event.target.value)
     }
@@ -108,6 +107,36 @@ const UserSearchWorkerFormComponent = () => {
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="type">
+                                <Form.Label>Tipas</Form.Label>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos tipą" value={type} onChange={handleTypeChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="textarea" >
+                                <Form.Label>Aprašymas</Form.Label>
+                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="tel">
+                                <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
+                                <Form.Control type="tel" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="budget">
+                                <Form.Label>Biudžetas</Form.Label>
+                                <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite biudžeto sumą" value={budget} onChange={handleBudgetChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="time">
+                                <Form.Label>Numatomas laikas</Form.Label>
+                                <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite numatomą atlikimo laiką" value={estimatedTime} onChange={handleEstimatedTimeChange}/>
+                            </Form.Group>
+                            <Form.Group controlId="Select1">
+                                <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
+                                <select name="location" disabled={!connectedId} value={location} onChange={handleLocationChange} required>
+                                    {locations.map((item: React.ReactNode) => <option>{item}</option>)}
+                                </select>
+                            </Form.Group>
+                            <Form.Group controlId="checkbox">
+                                <Form.Check type="checkbox" label="Vykdymas nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}
+                                            onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                             <div className="center-element">
                                 <Button variant="outline-dark">Paskelbti</Button>

@@ -3,8 +3,9 @@ import {useSelector} from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as firebase from "../../firebase";
 import {Button, Container, Image, Row} from "react-bootstrap";
-import {selectImage} from "../../features/user/userSlice";
+import {selectImage, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
+import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
 
 const UserProfileViewComponent = () => {
 
@@ -19,10 +20,12 @@ const UserProfileViewComponent = () => {
 
     const [email, setEmail] = useState("");
     const [aboutMe, setAboutMe] = useState("");
+    const userEmail = useSelector(selectUserEmail);
     const [username, setUsername] = useState("");
     const [profileImage, setProfileImage] = useState("");
     const [modalShow, setModalShow] = useState(false);
     const [user, setUser] = useState("");
+
 
     const handleModalShow = () => {
         setModalShow(!modalShow)
@@ -44,6 +47,7 @@ const UserProfileViewComponent = () => {
             })
         setLoading(false);
     }, [])
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -55,7 +59,6 @@ const UserProfileViewComponent = () => {
 
                 </div>
                 <div style={{marginTop: "3rem", display: "flex", alignItems: "center", flexDirection: "column"}}>
-                    <p>{username}</p>
                     <p>{email}</p>
                     <p>{aboutMe}</p>
                     <p>Darbų nuotraukos:</p>
@@ -75,6 +78,7 @@ const UserProfileViewComponent = () => {
                 </div>
                 <div style={{marginTop: "3rem", display: "flex", justifyContent: "center"}}>
                     <Button variant="outline-dark" onClick={() => handleModalShow()}>Rašyti žinutę</Button>
+                    <UserSendMessageModalComponent user={user} sender={userEmail} receiver={email} show={modalShow} onHide={() => handleModalShow()} />
                     <Button style={{marginLeft: "3rem"}} variant="outline-dark">Susiekti el. paštu</Button>
                 </div>
             </Container>

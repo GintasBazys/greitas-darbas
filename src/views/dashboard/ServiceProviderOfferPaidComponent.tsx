@@ -90,7 +90,7 @@ const ServiceProviderOfferPaidComponent = () => {
                         <p className="center-element"><Link to={{pathname: "/kitas",  query:{user: reservedOffer.reservedUser}}}>{reservedOffer.reservedUserEmail}</Link></p>
                         <div className="center-element">
                             <Button variant="outline-dark" onClick={() => handleMessageModalShow()}>Išsiųsti žinutę</Button>
-                            <UserSendMessageModalComponent reservedUser={reservedOffer.reservedUser} user={reservedOffer.user} username={reservedOffer.username} email={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
+                            <UserSendMessageModalComponent user={reservedOffer.reservedUser} receiver={reservedOffer.reservedUserEmail} sender={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
                         </div>
                     </Col>
                 </Row>

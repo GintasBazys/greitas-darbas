@@ -26,8 +26,6 @@ import UserMessagesComponent from "./views/dashboard/UserMessagesComponent";
 import AdministratorOfferViewComponent from "./views/administratorDashboard/AdministratorOfferViewComponent";
 import AdministratorUserViewProfileComponent from "./views/administratorDashboard/AdministratorUserViewProfileComponent";
 import AdministratorUserMessages from "./views/administratorDashboard/AdministratorUserMessages";
-import AdministratorReceivedMessagesComponent
-  from "./views/administratorDashboard/AdministratorReceivedMessagesComponent";
 import UserProfileViewComponent from "./views/dashboard/UserViewProfileComponent";
 import OfferPaidComponent from "./views/dashboard/OfferPaidComponent";
 import ServiceProviderOfferPaidComponent from "./views/dashboard/ServiceProviderOfferPaidComponent";
@@ -53,7 +51,6 @@ function App() {
       <PrivateRoute exact path="/kitas" component={UserProfileViewComponent}/>
       <PrivateRoute exact path="/naudotojas/kitas" component={AdministratorUserViewProfileComponent} />
       <PrivateRoute exact path="/administracija/zinutes" component={AdministratorUserMessages} />
-      <PrivateRoute exact path="/administracija/zinutes/gauta" component={AdministratorReceivedMessagesComponent} />
       <PrivateRoute exact path="/pagrindinis" component={MainUserComponent} />
       <PrivateRoute exact path="/profilis" component={UserProfileComponent} />
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />
