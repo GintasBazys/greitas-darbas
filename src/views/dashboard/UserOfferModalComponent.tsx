@@ -44,7 +44,7 @@ const UserOfferModalComponent = (props: Props) => {
 
     const reserveOffer = async (event: React.MouseEvent<HTMLElement>) => {
         await db.collection("offers").doc(docId).update({
-            status: "reservuotas",
+            status: "rezervuotas",
             reservedUser: auth.currentUser?.uid
         })
         history.go(0);

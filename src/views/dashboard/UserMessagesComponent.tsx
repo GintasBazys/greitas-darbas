@@ -62,7 +62,7 @@ const UserMessagesComponent = () => {
                             </div>
                             <div>
                                 {
-                                    sentMessages.map((message: any) => (
+                                    sentMessages.slice(0,10).map((message: any) => (
                                             <h6 className="center-element">{message?.message} - {message?.receiver}</h6>
                                     ))
                                 }
@@ -87,19 +87,21 @@ const UserMessagesComponent = () => {
                                 {/*    })*/}
                                 {/*}*/}
                             </div>
-                            <div className="center-element">
-                                {/*{*/}
-                                {/*    receivedMessages.map((message: React.ReactNode) => (*/}
-                                {/*        <React.Fragment>*/}
-                                {/*            <h6>{message}</h6>*/}
-                                {/*            <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => sendMessage(message)}>Siųsti atsakymą</Button>*/}
-                                {/*        </React.Fragment>*/}
-                                {/*    ))*/}
-                                {/*}*/}
+                            <div>
+                                {
+                                    receivedMessages.slice(0, 10).map((message: any) => (
+                                        <React.Fragment>
+                                            <h6 className="center-element">{message?.message} - {message.sender}</h6>
+                                            <div className="center-element">
+                                                <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => sendMessage(message)}>Siųsti atsakymą</Button>
+                                            </div>
+                                        </React.Fragment>
+                                    ))
+                                }
 
                             </div>
-                                <div style={{display: "flex", justifyContent: "center"}}>
-                                <Button style={{marginRight: "2rem"}} variant="outline-dark">Peržiūrėti visas
+                                <div style={{display: "flex", marginTop: "2rem", justifyContent: "center"}}>
+                                <Button variant="outline-dark">Peržiūrėti visas
                                     žinutes</Button>
                                 </div>
                         </div>

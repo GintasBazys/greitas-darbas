@@ -48,18 +48,6 @@ const UserSendMessageModalComponent = (props: Props) => {
                     sentMessages: [{receiver: props.receiver, message: message}, ...sentMessages]
                 })
 
-
-             // firebase.usersCollection.where("user", "==", props.user).limit(1).get()
-             //    .then((querySnapshot) => {
-             //        querySnapshot.forEach((doc) => {
-             //            console.log(doc.id)
-             //            let messages = doc.data()?.sentMessages;
-             //            firebase.usersCollection.doc(doc.id).update({
-             //                sentMessages: [message]
-             //            })
-             //
-             //        })
-             //    })
             await props.onHide();
         }
     }

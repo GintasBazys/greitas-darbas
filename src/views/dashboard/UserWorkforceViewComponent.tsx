@@ -4,19 +4,16 @@ import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
+import history from "../../history";
+import {Link} from "react-router-dom";
 import {Button, Image} from "react-bootstrap";
+import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
-import {Link} from "react-router-dom";
-import star from "../../assets/star.svg";
-import UserOfferModalComponent from "./UserOfferModalComponent";
-import history from "../../history";
+import UserRequestModalComponent from "./UserRequestModalComponent";
 
-const UserOffersViewComponent = () => {
-
+const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);
-    //.where("status", "==", "naujas").where("status", "==", "atnaujintas")
-
 
     let {
         items,
@@ -26,8 +23,8 @@ const UserOffersViewComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("offers").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
-            limit: 20
+        db.collection("requests").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
+            limit: 1
         }
     );
 
@@ -37,18 +34,18 @@ const UserOffersViewComponent = () => {
         setModalShow(!modalShow)
     }
 
-    const reserveOffer = async (item: { title: string; }) => {
+    const reserveRequest = async (item: { title: string; }) => {
 
-        const confirm = window.confirm("Patvirtinti rezervaciją?");
+        const confirm = window.confirm("Patvirtinti?");
         if(confirm) {
             let docId = ""
-            await db.collection("offers").where("title", "==", item.title).limit(1).get()
+            await db.collection("requests").where("title", "==", item.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         docId = doc.id;
                     })
                 })
-            await db.collection("offers").doc(docId).update({
+            await db.collection("requests").doc(docId).update({
                 status: "rezervuotas",
                 reservedUser: auth.currentUser?.uid
             })
@@ -69,8 +66,8 @@ const UserOffersViewComponent = () => {
                                 {/*@ts-ignore*/}
                                 {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/kitas",  query:{user: item.user}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                 <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button>
-                                <Button onClick={() => reserveOffer(item)} variant="outline-dark">Rezervuoti</Button>
-                                <UserOfferModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
+                                <Button onClick={() => reserveRequest(item)} variant="outline-dark">Rezervuoti</Button>
+                                <UserRequestModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
                             </div>
                         )
                     })
@@ -90,4 +87,4 @@ const UserOffersViewComponent = () => {
     )
 }
 
-export default UserOffersViewComponent;
+export default UserWorkforceViewComponent

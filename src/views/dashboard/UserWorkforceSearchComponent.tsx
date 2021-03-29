@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import {Col, Container, Row, Image} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import workerSearch from "../../assets/worker_search.svg";
 
 const UserWorkforceSearchComponent = () => {
 
@@ -26,8 +27,7 @@ const UserWorkforceSearchComponent = () => {
                     </Col>
                     <Col md={8}>
                         <div className="center">
-                            <h1>Šiuo metu ieškoma darbuotojų: 0</h1>
-                            <h1>Šiuo metu ieškote darbuotojų: taip/ne</h1>
+                            <Image fluid src={workerSearch} alt="darbuotoju paieska" />
                         </div>
                     </Col>
                     <Col md={2}></Col>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {selectError, selectImage, selectUserEmail} from "../../features/user/userSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {selectError, selectImage, selectUser, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
@@ -8,27 +8,33 @@ import NotificationComponent from "../main_page/NotificationComponent";
 import {auth, db} from "../../firebase";
 import axios from "axios";
 import {locations} from "./locations";
+import {addRequest} from "../../features/requests/requestsSlice";
+import history from "../../history";
 
 const UserSearchWorkerFormComponent = () => {
 
     const image = useSelector(selectImage);
     const error = useSelector(selectError);
     const userMail = useSelector(selectUserEmail);
+    const dispatch = useDispatch();
 
     const [phoneNumber, setPhoneNumber] = useState("");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [budget, setBudget] = useState("");
-    const [estimatedTime, setEstimatedTime] = useState("");
+    const [budget, setBudget] = useState(0);
+    const [estimatedTime, setEstimatedTime] = useState(0);
     const [isRemote, setIsRemote] = useState(false);
     const [location, setLocation] = useState("");
     const [type, setType] = useState("");
+    const username = useSelector(selectUser);
+    const [userRating, setUserRating] = useState(0);
 
     const [connectedId, setConnectedId] = useState(false);
 
     useEffect( () => {
         db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
+                setUserRating(doc.data()?.rating);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
                 }
@@ -60,10 +66,10 @@ const UserSearchWorkerFormComponent = () => {
     const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setDescription(event.target.value)
     }
-    const handleBudgetChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleBudgetChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
         setBudget(event.target.value)
     }
-    const handleEstimatedTimeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    const handleEstimatedTimeChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
         setEstimatedTime(event.target.value)
     }
 
@@ -72,6 +78,25 @@ const UserSearchWorkerFormComponent = () => {
     }
     const handleTypeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setType(event.target.value)
+    }
+
+    const createOffer = async () => {
+        await dispatch(addRequest({
+            user: auth.currentUser?.uid,
+            username: username,
+            userMail: userMail,
+            title: title,
+            description: description,
+            phoneNumber: phoneNumber,
+            budget: budget,
+            estimatedTime: estimatedTime,
+            isRemote: isRemote,
+            location: location,
+            type: type,
+            userRating: userRating
+        }));
+        await history.go(0);
+
     }
 
     return (
@@ -122,10 +147,12 @@ const UserSearchWorkerFormComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="budget">
                                 <Form.Label>Biudžetas</Form.Label>
+                                {/*@ts-ignore*/}
                                 <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite biudžeto sumą" value={budget} onChange={handleBudgetChange}/>
                             </Form.Group>
                             <Form.Group controlId="time">
                                 <Form.Label>Numatomas laikas</Form.Label>
+                                {/*@ts-ignore*/}
                                 <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite numatomą atlikimo laiką" value={estimatedTime} onChange={handleEstimatedTimeChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
@@ -139,7 +166,7 @@ const UserSearchWorkerFormComponent = () => {
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                             <div className="center-element">
-                                <Button variant="outline-dark">Paskelbti</Button>
+                                <Button variant="outline-dark" onClick={createOffer}>Paskelbti</Button>
                             </div>
 
                         </Form>
