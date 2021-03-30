@@ -22,12 +22,7 @@ const AdministratorUserViewProfileComponent = () => {
     const [aboutMe, setAboutMe] = useState("");
     const [username, setUsername] = useState("");
     const [profileImage, setProfileImage] = useState("");
-    const [modalShow, setModalShow] = useState(false);
     const [user, setUser] = useState("");
-
-    const handleModalShow = () => {
-        setModalShow(!modalShow)
-    }
 
     useEffect(() => {
 
@@ -73,9 +68,7 @@ const AdministratorUserViewProfileComponent = () => {
                     }
                 </div>
                 <div style={{marginTop: "3rem", display: "flex", justifyContent: "center"}}>
-                    <Button variant="outline-dark" onClick={() => handleModalShow()}>Rašyti žinutę</Button>
                     <Button style={{marginLeft: "3rem"}} variant="outline-dark">Susiekti el. paštu</Button>
-                    <AdministratorSendMessageModalComponent user={user} username={username} email={email} show={modalShow} onHide={() => handleModalShow()} />
                 </div>
             </Container>
         </div>

@@ -28,25 +28,6 @@ const UserMessagesComponent = () => {
         const response = window.confirm("Išsiųsti žinutę?");
         if (response) {
             let messages: any[] = [];
-
-
-            // await firebase.usersCollection.doc(props.user).get()
-            //     .then((doc) => {
-            //         messages = doc.data()?.receivedMessages
-            //     });
-            //
-            // await firebase.usersCollection.doc(props.user).update({
-            //     receivedMessages: [`${message} - ${workerEmail}`, ...messages]
-            // })
-            //
-            // await firebase.usersCollection.doc(auth.currentUser?.uid).get()
-            //     .then((doc) => {
-            //         sentMessages = doc.data()?.sentMessages
-            //     });
-            //
-            // await firebase.usersCollection.doc(auth.currentUser?.uid).update({
-            //     sentMessages: [`${message} - ${props.email}`, ...sentMessages]
-            // })
         }
     }
 
