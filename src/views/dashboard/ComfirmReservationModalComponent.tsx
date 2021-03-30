@@ -47,7 +47,6 @@ const ComfirmReservationModalComponent = (props: Props) => {
                 reservedTimeDay: reservedTimeDay.toISOString(),
                 reservedTimeHour: reservedTimeHour,
                 timeForOffer: timeForOffer,
-                reservedUser: auth.currentUser?.uid
             })
             await props.onHide();
             //await history.go(0);

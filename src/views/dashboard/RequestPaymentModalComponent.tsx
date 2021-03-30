@@ -14,11 +14,9 @@ const RequestPaymentModalComponent = (props: Props) => {
     const [connectedId, setConnectedId] = useState("");
 
     useEffect(() => {
-        db.collection("users").where("email", "==", props.item.reservedUserEmail).get()//mokejimas bus pervestas i darbuotojo paskyra
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
+        db.collection("users").doc(props.item.reservedUser).get()//mokejimas bus pervestas i darbuotojo paskyra
+            .then((doc) => {
                     setConnectedId(doc.data()?.connectedAccount)
-                })
             }).catch((error) => {
             console.log(error.message)
         })

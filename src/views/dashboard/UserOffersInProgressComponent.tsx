@@ -26,7 +26,7 @@ const UserOffersInProgressComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("offers").where("status", "!=", "naujas"), {
+        db.collection("offers").orderBy("status").where("status", "!=", "naujas"), {
             limit: 20
         }
     );
@@ -56,6 +56,10 @@ const UserOffersInProgressComponent = () => {
         setPaymentModalShow(!paymentModalShow);
     }
 
+    const cancelReservationWithoutPay = () => {
+
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -69,7 +73,7 @@ const UserOffersInProgressComponent = () => {
                                     {/*@ts-ignore*/}
                                     {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus} - <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                     {
-                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo, prieš atlikdami mokėjimą</p><Button variant="outline-danger">Atšaukti rezervaciją</Button></div> : <div></div>
+                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo, prieš atlikdami mokėjimą</p><Button variant="outline-danger" onClick={cancelReservationWithoutPay}>Atšaukti rezervaciją</Button></div> : <div></div>
                                     }
                                     {
                                         item.status === "rezervuotas" && item.user === auth.currentUser?.uid ?
@@ -88,7 +92,7 @@ const UserOffersInProgressComponent = () => {
                                                 <p>Patvirtinkite rezervaciją ir atlikite mokėjimą</p>
                                                 <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handlePaymentModalShow()}>Peržiūrėti</Button>
                                                 <PaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
-                                                <Button variant="outline-danger">Atšaukti rezervaciją</Button>
+                                                <Button variant="outline-danger" onClick={cancelReservationWithoutPay}>Atšaukti rezervaciją</Button>
                                             </div> : <div></div>
                                     }
                                     {
@@ -105,6 +109,14 @@ const UserOffersInProgressComponent = () => {
                                             <div>
                                                 <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedOffer(item)), history.push("/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
+                                    }
+                                    {
+                                        item.paymentStatus === "Mokėjimas atliktas" && item.status === "Atšauktas teikėjo" && item.user === auth.currentUser?.uid ?
+                                            <div>Laukite kol klientas patvirtins pinigų gražinimą</div> : <div></div>
+                                    }
+                                    {
+                                        item.paymentStatus === "Mokėjimas atliktas" && item.status === "Atšauktas teikėjo" && item.reservedUser === auth.currentUser?.uid ?
+                                            <div>Patvirtinkite pinigų gražinimą</div> : <div></div>
                                     }
 
 

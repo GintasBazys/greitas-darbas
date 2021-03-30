@@ -12,6 +12,7 @@ import OfferProgressModalComponent from "./OfferProgressModalComponent";
 import OfferReviewModalComponent from "./OfferReviewModalComponent";
 import history from "../../history";
 import axios from "axios";
+import offerProgress from "../../assets/offer_progress.svg";
 
 const OfferPaidComponent = () => {
 
@@ -185,6 +186,12 @@ const OfferPaidComponent = () => {
                         </div>
 
                     </Col>
+                </Row>
+                <Row>
+                    <div className="center-element">
+                        <Image src={offerProgress} fluid />
+                    </div>
+
                 </Row>
             </Container>
         </div>

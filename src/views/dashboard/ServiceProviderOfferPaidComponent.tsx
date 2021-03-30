@@ -9,6 +9,8 @@ import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
 import star from "../../assets/star.svg";
 import history from "../../history";
+import ServiceProviderProgressModalComponent from "./ServiceProviderProgressModalComponent";
+import offerProgress from "../../assets/offer_progress.svg";
 
 const ServiceProviderOfferPaidComponent = () => {
 
@@ -31,19 +33,27 @@ const ServiceProviderOfferPaidComponent = () => {
     }
 
     const confirmOfferCancel = async () => {
+        console.log(reservedOffer.title)
         const response = window.confirm("Patvirtinti?");
 
         if (response) {
             await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
                 .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        db.collection("offers").doc(doc.id).update({
-                            status: "Atšaukimas patvirtintas"
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("offers").doc(doc.id).update({
+                            status: "Atšauktas teikėjo"
                         })
+                        await history.go(0);
                     })
                 })
-           await history.go(0);
+
         }
+    }
+
+    const [progressModalShow, setProgressModalShow] = useState(false);
+
+    const handleProgressModalShow = () => {
+        setProgressModalShow(!progressModalShow)
     }
 
     return (
@@ -73,9 +83,17 @@ const ServiceProviderOfferPaidComponent = () => {
                         }
                         {
                             reservedOffer.status === "Mokėjimas atliktas" ?
-                                <div className="center-element">
-                                    <p>Keisti vykdymo būseną</p>
-                                </div> : <div></div>
+                                <div>
+                                    <div className="center-element">
+                                        <Button variant="outline-dark" onClick={handleProgressModalShow}>Keisti vykdymo būseną</Button>
+                                        <ServiceProviderProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow()} title={reservedOffer.title} />
+
+                                    </div>
+                                    <div style={{marginTop: "2rem"}} className="center-element">
+                                        <Button onClick={confirmOfferCancel} variant="outline-danger">Atšaukti užsakymą</Button>
+                                    </div>
+                                </div>
+                                 : <div></div>
                         }
                     </Col>
                     <Col md={6}>
@@ -93,6 +111,12 @@ const ServiceProviderOfferPaidComponent = () => {
                             <UserSendMessageModalComponent user={reservedOffer.reservedUser} receiver={reservedOffer.reservedUserEmail} sender={reservedOffer.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
                         </div>
                     </Col>
+                </Row>
+                <Row>
+                    <div className="center-element">
+                        <Image src={offerProgress} fluid />
+                    </div>
+
                 </Row>
             </Container>
         </div>
