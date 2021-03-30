@@ -226,7 +226,16 @@ const UserProfileComponent = () => {
         <UserNavBarComponent profileImage={image}/>
         <Container fluid>
             <Row>
-                <Col md={2}></Col>
+                <Col md={2}>
+                    <div style={{marginTop: "2rem"}}>
+                        <p className="center-element">Darbų nuotraukos</p>
+                        {
+                            portfolioImages.map((imageUrl: string, index: number) => (
+                                <a  href={imageUrl} download target="_blank"><Image width="200px" key={index} src={imageUrl} fluid style={{marginLeft: "2rem", marginTop: "2rem"}}/></a>
+                            ))
+                        }
+                    </div>
+                </Col>
                 <Col md={8}>
 
                     <Form>
@@ -313,13 +322,6 @@ const UserProfileComponent = () => {
                                             />
                                             <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => sendPortfolioPictures()}>Įkelti nuotraukas</Button>
                                             <Button variant="outline-danger" onClick={() => deleteWorkPictures()}>Ištrinti nuotraukas</Button>
-                                            <div style={{marginTop: "2rem"}}>
-                                                {
-                                                    portfolioImages.map((imageUrl: string, index: number) => (
-                                                         <a href={imageUrl} download target="_blank"><Image width="200px" key={index} src={imageUrl} fluid style={{marginLeft: "2rem"}}/></a>
-                                                    ))
-                                                }
-                                            </div>
                                         </div>
                                         : <div>Daugiau nuotraukų negalima pridėti</div>
 

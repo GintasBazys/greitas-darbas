@@ -24,7 +24,7 @@ const UserWorkforceViewComponent = () => {
         getNext,
     } = usePagination(
         db.collection("requests").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
-            limit: 1
+            limit: 20
         }
     );
 

@@ -31,8 +31,8 @@ const MainUserComponent = () => {
             <div className="center">
                 <h1>Siūlomų paslaugų: {offers}</h1>
                 <h1>Ieškomų darbuotojų: {requests}</h1>
-                <h1>Atlikta mokėjimų:</h1>
-                <h1>Gautų žinučių:</h1>
+                <h1>Vykdoma darbų:</h1>
+                <h1>Vykdyma paslaugų:</h1>
             </div>
             {/*<div style={{width: "20%"}}>*/}
             {/*    <Stripe />*/}
