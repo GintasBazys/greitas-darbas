@@ -26,7 +26,7 @@ const UserRequestsInProgressComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("requests").where("status", "!=", "naujas"), {
+        db.collection("requests").where("status", "!=", "naujas").orderBy("status"), {
             limit: 20
         }
     );
@@ -42,6 +42,51 @@ const UserRequestsInProgressComponent = () => {
         setPaymentModalShow(!paymentModalShow);
     }
 
+    const cancelReservationWithoutPay = async (item: any) => {
+        const confirmation = window.confirm("Atšaukti rezervaciją")
+        if (confirmation) {
+
+            await db.collection("requests").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("requests").doc(doc.id).update({
+                            status: "Atšauktas nesumokėjus",
+                        })
+
+                        await history.go(0);
+                    })
+                })
+        }
+    }
+
+    const cancelReservationWithoutPayFromWorker = async (item: any) => {
+        const confirmation = window.confirm("Atšaukti rezervaciją");
+        if (confirmation) {
+
+            await db.collection("requests").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("requests").doc(doc.id).update({
+                            status: "Atšauktas darbuotojo nesumokėjus",
+                        })
+
+                        await history.go(0);
+                    })
+                })
+        }
+    }
+
+    const confirmCancel =  async (item: any) => {
+        await db.collection("requests").where("title", "==", item.title).limit(1).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(async (doc) => {
+                    await db.collection("requests").doc(doc.id).delete()
+
+                    await history.go(0);
+                })
+            })
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -55,15 +100,14 @@ const UserRequestsInProgressComponent = () => {
                                     {/*@ts-ignore*/}
                                     {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()}, mokėjimas: {item.paymentStatus} - <Link to={{pathname: "/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                     {
-                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo</p><Button variant="outline-danger">Atšaukti rezervaciją</Button></div> : <div></div>
+                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert"><p>Laukite patvirtinimo</p><Button variant="outline-danger" onClick={() => cancelReservationWithoutPay(item)}>Atšaukti rezervaciją</Button></div> : <div></div>
                                     }
                                     {
                                         item.status === "rezervuotas" && item.user === auth.currentUser?.uid ?
                                             <div>
-
                                                 <p>Patvirtinkite darbo pradžią ir atlikite mokėjimą</p>
                                                 <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handlePaymentModalShow()}>Patvirtinti darbo pasiūlymą</Button>
-                                                <Button variant="outline-danger">Atšaukti rezervaciją</Button>
+                                                <Button variant="outline-danger" onClick={() => cancelReservationWithoutPayFromWorker(item)}>Atšaukti rezervaciją</Button>
                                                 <RequestPaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
 
                                             </div> : <div></div>
@@ -82,6 +126,30 @@ const UserRequestsInProgressComponent = () => {
                                             <div>
                                                 <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
+                                    }
+                                    {
+                                        item.status === "Atšauktas nesumokėjus" && item.user === auth.currentUser?.uid ?
+                                            <div className="center-element alert alert-warning" role="alert">
+                                                <Button variant="outline-dark" onClick={() => confirmCancel(item)}>Patvirtinkite atšaukimą</Button>
+                                            </div>: <div></div>
+                                    }
+                                    {
+                                        item.status === "Atšauktas nesumokėjus" && item.reservedUser === auth.currentUser?.uid ?
+                                            <div className="center-element alert alert-warning" role="alert">
+                                                <p>Laukite kol užsakovas patvirtins atšaukimą</p>
+                                            </div>: <div></div>
+                                    }
+                                    {
+                                        item.status === "Atšauktas darbuotojo nesumokėjus" && item.user === auth.currentUser?.uid ?
+                                            <div className="center-element alert alert-warning" role="alert">
+                                                <p>Laukite kol darbuotojas patvirtins atšaukimą</p>
+                                            </div>: <div></div>
+                                    }
+                                    {
+                                        item.status === "Atšauktas darbuotojo nesumokėjus" && item.reservedUser === auth.currentUser?.uid ?
+                                            <div className="center-element alert alert-warning" role="alert">
+                                                <Button variant="outline-dark" onClick={() => confirmCancel(item)}>Patvirtinkite atšaukimą</Button>
+                                            </div>: <div></div>
                                     }
 
                                 </div>
