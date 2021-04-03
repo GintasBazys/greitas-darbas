@@ -22,7 +22,7 @@ const AdministratorDashboardNavbar = ({profileImage}) => {
                     <Link to="/administracija/paslauga" className="admin-navbar-link">Siūlomų paslaugų peržiūra </Link>
                     <Link to="/administracija/pasiulymai" className="admin-navbar-link">Siūlomų darbų peržiūra </Link>
                     <Link to="/administracija/mokejimai" className="admin-navbar-link">Mokėjimų peržiūra </Link>
-                    <Link to="/administracija/statstika" className="admin-navbar-link">Statistika </Link>
+                    <Link to="/administracija/ataskaitos" className="admin-navbar-link">Ataskaitų generavimas </Link>
 
                     <NavDropdown
                         title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>

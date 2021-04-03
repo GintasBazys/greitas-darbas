@@ -36,6 +36,12 @@ import AdministratorRequestsViewComponent from "./views/administratorDashboard/A
 import RequestPaidComponent from "./views/dashboard/RequestPaidComponent";
 import ServiceProviderRequestPaidComponent from "./views/dashboard/ServiceProviderRequestPaidComponent";
 import UserRequestsManagementComponent from "./views/dashboard/UserRequestsManagementComponent";
+import ClientManagerComponent from "./views/clientManagerDashboard/ClientManagerComponent";
+import ClientManagerRequestViewComponent from "./views/clientManagerDashboard/ClientManagerRequestViewComponent";
+import ClientManagerOfferViewComponent from "./views/clientManagerDashboard/ClientManagerOfferViewComponent";
+import ClientManagerProfileComponent from "./views/clientManagerDashboard/ClientManagerProfileComponent";
+import ClientManagerPaymentComponent from "./views/clientManagerDashboard/ClientManagerPaymentComponent";
+import ClientManagerStatisticsComponent from "./views/clientManagerDashboard/ClientManagerStatisticsComponent";
 
 function App() {
   return <Router history={history}>
@@ -52,7 +58,7 @@ function App() {
       <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
-      <PrivateRoute exact path="/administracija/statstika" component={AdministratorStatisticsComponent} />
+      <PrivateRoute exact path="/administracija/ataskaitos" component={AdministratorStatisticsComponent} />
       <PrivateRoute exact path="/administracija/pasiulymai" component={AdministratorRequestsViewComponent} />
       <PrivateRoute exact path="/kitas" component={UserProfileViewComponent}/>
       <PrivateRoute exact path="/naudotojas/kitas" component={AdministratorUserViewProfileComponent} />
@@ -72,6 +78,12 @@ function App() {
       <PrivateRoute exact path="/vykdymas/teikejas" component={ServiceProviderOfferPaidComponent} />
       <PrivateRoute exact path="/darbas/vykdymas/progresas" component={RequestPaidComponent} />
       <PrivateRoute exact path="/darbas/vykdymas/teikejas" component={ServiceProviderRequestPaidComponent} />
+      <PrivateRoute exact path="/darbuotojas/pagrindinis" component={ClientManagerComponent} />
+      <PrivateRoute exact path="/darbuotojas/pasiulymai" component={ClientManagerRequestViewComponent} />
+      <PrivateRoute exact path="/darbuotojas/paslauga" component={ClientManagerOfferViewComponent} />
+      <PrivateRoute exact path="/darbuotojas/profilis" component={ClientManagerProfileComponent} />
+      <PrivateRoute exact path="/darbuotojas/mokejimai" component={ClientManagerPaymentComponent} />
+      <PrivateRoute exact path="/darbuotojas/ataskaitos" component={ClientManagerStatisticsComponent} />
     </Switch>
   </Router>
 }

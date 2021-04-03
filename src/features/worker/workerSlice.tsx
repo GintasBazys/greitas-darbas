@@ -155,7 +155,7 @@ export const signUpWorkerAsync  = (info: { username: string; email: string; pass
 }
 
 export const selectCheckedWorker = (state: { worker: { workerProfile: {checkedWorkerRemember: boolean}; }; }) => state.worker.workerProfile.checkedWorkerRemember;
-export  const selectWorkerError = (state: { worker: { workerErrorMessage: string; }; }) => state.worker.workerErrorMessage;
+export  const selectWorkerError = (state: any) => state.worker.workerErrorMessage;
 export const selectWorkerImage = (state: { worker: { workerProfile: { image: string; }; }; }) => state.worker.workerProfile.image;
 export const selectWorker = (state: {worker: {workerProfile: {name: string};}; }) => state.worker.workerProfile.name;
 export const selectWorkerEmail = (state: {worker: {workerProfile: {email: string};}; }) => state.worker.workerProfile.email;

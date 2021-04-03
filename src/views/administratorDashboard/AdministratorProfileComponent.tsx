@@ -120,7 +120,7 @@ const AdministratorProfileComponent = () => {
 
                     <Form>
                         <Form.Group>
-                            <Image src={image} className="dashboard-profile-image" roundedCircle alt="profile picture" />
+                            <Image src={image} className="dashboard-profile-image" roundedCircle alt="profilio nuotrauka" />
                             <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
                         </Form.Group>
                         <Form.Group>

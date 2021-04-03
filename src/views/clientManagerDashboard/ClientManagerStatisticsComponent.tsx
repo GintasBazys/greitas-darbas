@@ -1,17 +1,16 @@
 import React from "react";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
-import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
-import {Button, Col, Container, Row, Image} from "react-bootstrap";
+import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import statistics from "../../assets/statistics.svg";
+import ClientManagerNavbarComponent from "./ClientManagerNavbarComponent";
 
-const AdministratorStatisticsComponent = () => {
-
+const ClientManagerStatisticsComponent = () => {
     const image = useSelector(selectWorkerImage);
 
     return (
         <div>
-            <AdministratorDashboardNavbar profileImage={image} />
+            <ClientManagerNavbarComponent profileImage={image} />
             <Container fluid>
                 <Row>
                     <Col md={3}>
@@ -50,5 +49,4 @@ const AdministratorStatisticsComponent = () => {
         </div>
     )
 }
-
-export default AdministratorStatisticsComponent;
+export default ClientManagerStatisticsComponent;

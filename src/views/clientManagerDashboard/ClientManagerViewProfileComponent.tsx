@@ -1,7 +1,8 @@
 import React from "react";
 
-const ClientManagerViewProfileComponent = () => {
+const ClientManagerProfileViewComponent = () => {
     return (
         <div></div>
     )
 }
+export default ClientManagerProfileViewComponent;
