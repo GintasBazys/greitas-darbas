@@ -12,7 +12,7 @@ export const requestsSlice = createSlice( {
             state.requests = action.payload;
         },
         setReservedRequest: (state, action) => {
-            state.requests = action.payload;
+            state.reservedRequest = action.payload;
         }
     }
 })
@@ -43,5 +43,7 @@ export const addRequest = (info: { estimatedTime: number; phoneNumber: string; i
         console.log(error.message)
     })
 }
+
+export const selectReservedRequest = (state: { requests: { reservedRequest: any; }; }) => state.requests.reservedRequest;
 
 export default requestsSlice.reducer;

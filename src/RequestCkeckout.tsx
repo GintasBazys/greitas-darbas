@@ -59,7 +59,7 @@ const RequestCheckout = (props: Props) => {
                         paymentId: response.data.paymentId
                     })
                     await db.collection("requestReview").doc(docId).set({
-                        progressReview: 0,
+                        progressRating: 5,
                         comments: []
                     })
 
