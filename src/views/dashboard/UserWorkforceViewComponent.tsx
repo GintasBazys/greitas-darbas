@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
-import {selectImage} from "../../features/user/userSlice";
+import {selectImage, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
@@ -34,6 +34,8 @@ const UserWorkforceViewComponent = () => {
         setModalShow(!modalShow)
     }
 
+    const userEmail = useSelector(selectUserEmail);
+
     const reserveRequest = async (item: { title: string; }) => {
 
         const confirm = window.confirm("Patvirtinti?");
@@ -47,7 +49,8 @@ const UserWorkforceViewComponent = () => {
                 })
             await db.collection("requests").doc(docId).update({
                 status: "rezervuotas",
-                reservedUser: auth.currentUser?.uid
+                reservedUser: auth.currentUser?.uid,
+                reservedUserEmail: userEmail
             })
             await history.go(0);
         }

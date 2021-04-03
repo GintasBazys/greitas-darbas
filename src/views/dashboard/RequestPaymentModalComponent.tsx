@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {db} from "../../firebase";
 import {Button, Form, Modal} from "react-bootstrap";
-import Stripe from "../../Stripe";
 import RequestStripe from "../../RequestStripe";
 
 interface Props {
@@ -43,7 +42,7 @@ const RequestPaymentModalComponent = (props: Props) => {
                         {props.item.title} - Mokėti {props.item.budget} eurų.
                     </div>
                     <div style={{marginTop: "2rem"}}>
-                        <RequestStripe title={props.item.title} connectedId={connectedId} email={props.item.email} reservedUserEmail={props.item.reservedUserEmail} budget={props.item.budget}/>
+                        <RequestStripe title={props.item.title} connectedId={connectedId} email={props.item.userMail} reservedUserEmail={props.item.reservedUserEmail} budget={props.item.budget}/>
                     </div>
 
                 </Form>

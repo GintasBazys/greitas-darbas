@@ -10,6 +10,9 @@ import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import RequestPaymentModalComponent from "./RequestPaymentModalComponent";
+import store from "../../app/store";
+import {setReservedRequest} from "../../features/requests/requestsSlice";
+import history from "../../history";
 
 
 const UserRequestsInProgressComponent = () => {
@@ -59,7 +62,7 @@ const UserRequestsInProgressComponent = () => {
                                             <div>
 
                                                 <p>Patvirtinkite darbo pradžią ir atlikite mokėjimą</p>
-                                                <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Patvirtinti darbo pasiūlymą</Button>
+                                                <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handlePaymentModalShow()}>Patvirtinti darbo pasiūlymą</Button>
                                                 <Button variant="outline-danger">Atšaukti rezervaciją</Button>
                                                 <RequestPaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
 
@@ -68,19 +71,18 @@ const UserRequestsInProgressComponent = () => {
                                     {
                                         item.status === "patvirtintasTeikejo" && item.user === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert">Laukite kol bus atliktas mokėjimas{console.log(auth.currentUser?.uid)}</div> : <div></div>
                                     }
-                                    {/*{*/}
-                                    {/*    (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.reservedUser === auth.currentUser?.uid ?*/}
-                                    {/*        <div>*/}
-                                    {/*            <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/vykdymas/progresas")}}>Peržiūrėti progresą</Button>*/}
-                                    {/*        </div> : <div></div>*/}
-                                    {/*}*/}
-                                    {/*{*/}
-                                    {/*    (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas") && item.user === auth.currentUser?.uid ?*/}
-                                    {/*        <div>*/}
-                                    {/*            <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>*/}
-                                    {/*        </div> : <div></div>*/}
-                                    {/*}*/}
-
+                                    {
+                                        item.status === "Mokėjimas atliktas" && item.reservedUser === auth.currentUser?.uid ?
+                                            <div>
+                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
+                                            </div> : <div></div>
+                                    }
+                                    {
+                                        item.status === "Mokėjimas atliktas" && item.user === auth.currentUser?.uid ?
+                                            <div>
+                                                <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
+                                            </div> : <div></div>
+                                    }
 
                                 </div>
                             </div>

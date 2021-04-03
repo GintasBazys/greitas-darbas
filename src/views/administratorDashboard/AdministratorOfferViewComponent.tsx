@@ -45,7 +45,7 @@ const AdministratorOfferViewComponent = () => {
                         return (
                             <div className="center-element" style={{marginTop: "2rem"}}>
                                 {/*@ts-ignore*/}
-                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span> <Button variant="outline-dark" style={{marginRight: "2rem", marginLeft: "2rem"}} onClick={() => handleModalShow()}>Peržiūrėti visą informaciją</Button> <Button variant="outline-danger">Panaikinti pasiūlymą</Button>
+                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link style={{marginRight: "5px"}} to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {Math.round(item.userRating)}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span> <Button variant="outline-dark" style={{marginRight: "2rem", marginLeft: "2rem"}} onClick={() => handleModalShow()}>Peržiūrėti visą informaciją</Button> <Button variant="outline-danger">Panaikinti pasiūlymą</Button>
                                 <AdministratorOfferModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
                             </div>
 

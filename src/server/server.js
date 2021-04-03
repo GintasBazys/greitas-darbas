@@ -166,6 +166,71 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                 })
 });
 
+app.post("/stripe/darbas/mokejimas", cors(), async (req, res) => {
+    let { amount, id, customer, connectedAccount} = req.body;
+    console.log(customer)
+    await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
+        .then((resp) => {
+            console.log(resp.data.data)
+            if (resp.data.data.length === 0) {
+                //console.log(id);
+                console.log("nera userio")
+                //console.log(id)
+
+                let createClient = async () => {
+                    client = await stripe.customers.create({
+                        email: customer,
+                    })
+                }
+                createClient().then(() => {
+                    stripe.paymentIntents.create({
+                        amount: amount,
+                        currency: "EUR",
+                        description: "Greitas Darbas Ltd",
+                        payment_method: id,
+                        confirm:true,
+                        customer: client.id,
+                        //requires_confirmation: false,
+
+                    }).then((result) => {
+                        res.json({
+                            paymentId: result.id,
+                            message: "Sekmingas mokejimas",
+                            success: true,
+                        })
+                    }).catch((error)=> {
+                        console.log(error.message)
+                    })
+
+                })
+            }
+
+            else {
+                console.log(resp.data.data[0].id)
+
+                stripe.paymentIntents.create({
+                    amount: amount,
+                    currency: "EUR",
+                    description: "Greitas Darbas Ltd",
+                    payment_method: id,
+                    customer: resp.data.data[0].id,
+                    confirm:true,
+                    //requires_confirmation: false,
+                }).then((result) => {
+                    res.json({
+                        paymentId: result.id,
+                        message: "Sekmingas mokejimas",
+                        success: true,
+                    })
+                }).catch((error) => {
+                    console.log(error.message);
+                });
+
+            }
+
+        })
+})
+
 app.post("/stripe/pervedimas", cors(), async (req, res) => {
     const {connectedAccount, amount, paymentId} = req.body;
 

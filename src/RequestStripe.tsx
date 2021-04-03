@@ -2,7 +2,7 @@ import React from "react";
 import {loadStripe} from "@stripe/stripe-js";
 import {Elements} from "@stripe/react-stripe-js";
 
-import Checkout from "./Checkout";
+import RequestCheckout from "./RequestCkeckout";
 
 const PUBLISHABLE_KEY = "pk_test_51IEDvEJIin4U4oiG7nA5nG8q8vNXkWor5XCqicDRYxsu9tEzigSyfSaN1ZNFI43LPTeFm0RrPKWtKjgSvRJxD7A100GiZiUULT";
 
@@ -19,7 +19,7 @@ interface Props {
 const RequestStripe = (props: Props) => {
     return (
         <Elements stripe={stripe}>
-            <RequestStripe title={props.title} connectedId={props.connectedId} email={props.email} reservedUserEmail={props.reservedUserEmail} budget={props.budget}/>
+            <RequestCheckout title={props.title} connectedId={props.connectedId} email={props.email} reservedUserEmail={props.reservedUserEmail} budget={props.budget}/>
         </Elements>
     )
 }

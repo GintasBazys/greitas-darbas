@@ -32,6 +32,9 @@ import AdministratorStatisticsComponent from "./views/administratorDashboard/Adm
 import UserSearchWorkerFormComponent from "./views/dashboard/UserSearchWorkerFormComponent";
 import UserWorkforceViewComponent from "./views/dashboard/UserWorkforceViewComponent";
 import UserRequestsInProgressComponent from "./views/dashboard/UserRequestsInProgressComponent";
+import AdministratorRequestsViewComponent from "./views/administratorDashboard/AdministratorRequestsViewComponent";
+import RequestPaidComponent from "./views/dashboard/RequestPaidComponent";
+import ServiceProviderRequestPaidComponent from "./views/dashboard/ServiceProviderRequestPaidComponent";
 
 function App() {
   return <Router history={history}>
@@ -49,6 +52,7 @@ function App() {
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
       <PrivateRoute exact path="/administracija/statstika" component={AdministratorStatisticsComponent} />
+      <PrivateRoute exact path="/administracija/pasiulymai" component={AdministratorRequestsViewComponent} />
       <PrivateRoute exact path="/kitas" component={UserProfileViewComponent}/>
       <PrivateRoute exact path="/naudotojas/kitas" component={AdministratorUserViewProfileComponent} />
       <PrivateRoute exact path="/pagrindinis" component={MainUserComponent} />
@@ -64,6 +68,8 @@ function App() {
       <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />
       <PrivateRoute exact path="/vykdymas/progresas" component={OfferPaidComponent} />
       <PrivateRoute exact path="/vykdymas/teikejas" component={ServiceProviderOfferPaidComponent} />
+      <PrivateRoute exact path="/darbas/vykdymas/progresas" component={RequestPaidComponent} />
+      <PrivateRoute exact path="/darbas/vykdymas/teikejas" component={ServiceProviderRequestPaidComponent} />
     </Switch>
   </Router>
 }

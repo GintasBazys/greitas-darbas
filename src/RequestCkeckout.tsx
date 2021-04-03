@@ -51,20 +51,20 @@ const RequestCheckout = (props: Props) => {
                     }
                 );
 
-                // if (response.data.success) {
-                //     console.log(response.data.success);
-                //     await db.collection("offers").doc(docId).update({
-                //         paymentStatus: "Mokėjimas atliktas",
-                //         status: "Mokėjimas atliktas",
-                //         paymentId: response.data.paymentId
-                //     })
-                //     await db.collection("offerReview").doc(docId).set({
-                //         progressReview: 0,
-                //         comments: []
-                //     })
-                //
-                //     await history.go(0);
-                // }
+                if (response.data.success) {
+                    console.log(response.data.success);
+                    await db.collection("requests").doc(docId).update({
+                        paymentStatus: "Mokėjimas atliktas",
+                        status: "Mokėjimas atliktas",
+                        paymentId: response.data.paymentId
+                    })
+                    await db.collection("requestReview").doc(docId).set({
+                        progressReview: 0,
+                        comments: []
+                    })
+
+                    await history.go(0);
+                }
             } catch (error) {
 
                 console.log(error.message);
