@@ -70,7 +70,7 @@ const ServiceProviderOfferPaidComponent = () => {
 
                         <p className="center-element">Statusas: {reservedOffer.status}</p>
 
-                        <p className="center-element">Naudotojo vertinimas: {reservedOffer.userRating}<Image fluid src={star} /></p>
+                        <p className="center-element">Naudotojo vertinimas: {Math.round(reservedOffer.userRating)}<Image fluid src={star} /></p>
                         <p className="center-element">Kaina: {reservedOffer.price *reservedOffer.timeForOffer} €</p>
 
                         <p className="center-element">Pradžia: {new Date(reservedOffer.reservedTimeDay).toISOString().substr(0, 10)} {reservedOffer.reservedTimeHour}</p>

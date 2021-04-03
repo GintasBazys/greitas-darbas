@@ -13,6 +13,7 @@ import OfferReviewModalComponent from "./OfferReviewModalComponent";
 import history from "../../history";
 import axios from "axios";
 import offerProgress from "../../assets/offer_progress.svg";
+import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 
 const OfferPaidComponent = () => {
 
@@ -126,6 +127,11 @@ const OfferPaidComponent = () => {
             }
         }
     }
+    const [completedModalShow, setCompletedModalShow] = useState(false);
+
+    const handleCompletedOfferModalComponent = () => {
+        setCompletedModalShow(!completedModalShow);
+    }
 
     const transferPayment = async (reservedOffer: any) => {
         const confirmation = window.confirm(`Patvirtinti įvykdymą`);
@@ -138,62 +144,7 @@ const OfferPaidComponent = () => {
             })
 
         if (confirmation) {
-            try {
-                const response = await axios.post(
-                    "http://localhost:8080/stripe/pervedimas",
-                    {
-                        connectedAccount: connectedAccount,
-                        amount: reservedOffer.price * 100,
-                        paymentId: reservedOffer.paymentId
-                    }
-                );
-                console.log(response.data.success);
-                if (response.data.success) {
-                    await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
-                        .then((querySnapshot) => {
-                            querySnapshot.forEach(async (doc) => {
-                                await db.collection("offers").doc(doc.id).update({
-                                    status: "naujas",
-                                    reservedTimeDay: "",
-                                    reservedTimeHour: "",
-                                    reservedUser: "",
-                                    reservedUserEmail: "",
-                                    paymentId: "",
-                                    paymentStatus: "",
-                                    timeForOffer: ""
-                                })
-                                let progressRating = 0;
-
-                                await db.collection("offerReview").doc(doc.id).get()
-                                    .then((doc) => {
-                                        progressRating = doc.data()?.progressRating;
-                                    }).then(() => {
-                                        db.collection("offerReview").doc(doc.id).delete()
-                                    })
-                                let rating: number = 0;
-                                await db.collection("users").doc(docId).get()
-                                    .then((doc) => {
-                                        let ratingCount: number = doc.data()?.ratingCount + 1;
-                                        rating = doc.data()?.rating;
-                                        db.collection("users").doc(docId).update({
-                                            rating: rating + progressRating / ratingCount,
-                                            ratingCount: ratingCount
-                                        }).then(() => {
-                                            db.collection("offers").doc(doc.id).update({
-                                                userRating: rating + progressRating / ratingCount,
-                                            })
-                                        })
-                                    })
-
-                                await history.go(0);
-                            })
-                        })
-                    //
-                }
-
-            } catch (e) {
-
-            }
+            handleCompletedOfferModalComponent();
         }
     }
 
@@ -211,7 +162,7 @@ const OfferPaidComponent = () => {
 
                         <p className="center-element">Statusas: {reservedOffer.status}</p>
 
-                        <p className="center-element">Naudotojo vertinimas: {reservedOffer.userRating}<Image fluid src={star} /></p>
+                        <p className="center-element">Naudotojo vertinimas: {Math.round(reservedOffer.userRating)}<Image fluid src={star} /></p>
                         <p className="center-element">Kaina: {reservedOffer.price *reservedOffer.timeForOffer} €</p>
 
                         <p className="center-element">Pradžia: {new Date(reservedOffer.reservedTimeDay).toISOString().substr(0, 10)} {reservedOffer.reservedTimeHour}</p>
@@ -244,6 +195,7 @@ const OfferPaidComponent = () => {
                             reservedOffer.status === "Atliktas" ?
                                 <div className="center-element">
                                     <Button variant="outline-dark" onClick={() =>transferPayment(reservedOffer)}>Patvirtinkite įvykdymą</Button>
+                                    <CompletedOfferModalComponent show={completedModalShow} reservedOffer={reservedOffer} onHide={() => handleCompletedOfferModalComponent()} />
                                 </div> :<div></div>
                         }
 
