@@ -13,6 +13,8 @@ import offerProgress from "../../assets/offer_progress.svg";
 import {selectReservedRequest} from "../../features/requests/requestsSlice";
 import RequestsProgressModalComponent from "./RequestsProgressModalComponent";
 import RequestsReviewModalComponent from "./RequestsReviewModalComponent";
+import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
+import CompletedRequestModalComponent from "./CompletedRequestModalComponent";
 
 const ServiceProviderRequestPaidComponent = () => {
     const image = useSelector(selectImage);
@@ -33,7 +35,7 @@ const ServiceProviderRequestPaidComponent = () => {
         setMessageModalShow(!messageModalShow)
     }
 
-    const confirmRequestCancel = async () => {
+    const cancelRequest = async () => {
         console.log(reservedRequest.title)
         const response = window.confirm("Patvirtinti?");
 
@@ -63,6 +65,20 @@ const ServiceProviderRequestPaidComponent = () => {
         setReviewModalShow(!reviewModalShow)
     }
 
+    const [completedModalShow, setCompletedModalShow] = useState(false);
+
+    const handleCompletedOfferModalComponent = () => {
+        setCompletedModalShow(!completedModalShow);
+    }
+
+    const transferPayment = async (reservedOffer: any) => {
+        const confirmation = window.confirm(`Patvirtinti įvykdymą`);
+
+        if (confirmation) {
+            handleCompletedOfferModalComponent();
+        }
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -89,15 +105,22 @@ const ServiceProviderRequestPaidComponent = () => {
                                         <Button onClick={() => handleReviewModalShow()} variant="outline-dark">Palikti atsiliepimą</Button>
                                         <RequestsReviewModalComponent title={reservedRequest.title} show={reviewModalShow} onHide={() => handleReviewModalShow()} />
                                     </div>
+                                    <div style={{marginTop: "2rem"}} className="center-element">
+                                        <Button variant="outline-danger">Atšaukti užsakymą</Button>
+                                    </div>
                                 </div>
                                 : <div></div>
                         }
+
                         {
                             reservedRequest.status === "Atliktas" ?
-                                <div>
-                                    <Button variant="outline-dark">Laukite patvirtinimo</Button>
-                                </div> :<div></div>
+                                <div className="center-element">
+                                    <Button variant="outline-dark" onClick={() => transferPayment(reservedRequest)}>Patvirtinkite įvykdymą</Button>
+                                    <CompletedRequestModalComponent show={completedModalShow} reservedRequest={reservedRequest} onHide={() => handleCompletedOfferModalComponent()} />
+                                </div> : <div></div>
                         }
+
+
                     </Col>
                     <Col md={6}>
                         <h1 className="center-element">Darbuotojas</h1>

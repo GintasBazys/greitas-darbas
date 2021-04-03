@@ -24,7 +24,6 @@ const UserNavBarComponent = ({profileImage}) => {
                     <Link to="/siulymas" className="admin-navbar-link">Siūlomų paslaugų valdymas</Link>
                     <Link to="/mokejimai" className="admin-navbar-link">Mokėjimų peržiūra </Link>
                     <Link to="/zinutes" className="admin-navbar-link">Žinučių peržiūra </Link>
-                    <Link to="/atsiliepimai" className="admin-navbar-link">Atsiliepimų peržiūra</Link>
 
                     <NavDropdown
                         title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>

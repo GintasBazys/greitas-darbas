@@ -251,6 +251,22 @@ app.post("/stripe/pervedimas", cors(), async (req, res) => {
     })
 });
 
+app.post("/stripe/darbas/pervedimas", cors(), async (req, res) => {
+    const {connectedAccount, amount} = req.body;
+
+    const transfer = await stripe.transfers.create({
+        amount: amount,
+        currency: "eur",
+        destination: connectedAccount,
+    }).then(() => {
+        res.json({
+            success: true,
+        })
+    }).catch((error) => {
+        console.log(error.message);
+    })
+});
+
 app.post("/stripe/grazinimas", cors(), async (req, res) => {
     let {id} = req.body;
     const refund = await stripe.refunds.create({

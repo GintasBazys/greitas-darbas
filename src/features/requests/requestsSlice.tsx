@@ -44,6 +44,24 @@ export const addRequest = (info: { estimatedTime: number; phoneNumber: string; i
     })
 }
 
+export const updateRequest = (info: { phoneNumber: string; budget: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
+    await firebase.requestCollection.where("title", "==", info.previousTitle).limit(1).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach(async (doc) => {
+               await firebase.requestCollection.doc(doc.id).update({
+                    description: info.description,
+                    phoneNumber: info.phoneNumber,
+                    location: info.location,
+                    budget: info.budget,
+                    isRemote: info.isRemote,
+                    title: info.title,
+                })
+            })
+        }).catch((error) => {
+            console.log(error.message)
+        })
+}
+
 export const selectReservedRequest = (state: { requests: { reservedRequest: any; }; }) => state.requests.reservedRequest;
 
 export default requestsSlice.reducer;

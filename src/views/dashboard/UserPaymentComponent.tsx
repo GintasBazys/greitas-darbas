@@ -58,8 +58,8 @@ const UserPaymentComponent = () => {
 
     useEffect(() => {
         setLoading(true);
-        renderPayments()
-        setLoading(false);
+        renderPayments().then(r => setLoading(false))
+        //setLoading(false);
     }, [])
 
     const [loading, setLoading] = useState(false);

@@ -35,6 +35,7 @@ import UserRequestsInProgressComponent from "./views/dashboard/UserRequestsInPro
 import AdministratorRequestsViewComponent from "./views/administratorDashboard/AdministratorRequestsViewComponent";
 import RequestPaidComponent from "./views/dashboard/RequestPaidComponent";
 import ServiceProviderRequestPaidComponent from "./views/dashboard/ServiceProviderRequestPaidComponent";
+import UserRequestsManagementComponent from "./views/dashboard/UserRequestsManagementComponent";
 
 function App() {
   return <Router history={history}>
@@ -63,6 +64,7 @@ function App() {
       <PrivateRoute exact path="/paieska" component={UserWorkforceSearchComponent} />
       <PrivateRoute exact path="/paieska/siulymai" component={UserWorkforceViewComponent} />
       <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />
+      <PrivateRoute exact path="/paieska/valdymas" component={UserRequestsManagementComponent} />
       <PrivateRoute exact path="/vykdymas" component={UserOffersInProgressComponent} />
       <PrivateRoute exact path="/darbai" component={UserRequestsInProgressComponent} />
       <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />

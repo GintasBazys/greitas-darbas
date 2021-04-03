@@ -136,13 +136,6 @@ const OfferPaidComponent = () => {
     const transferPayment = async (reservedOffer: any) => {
         const confirmation = window.confirm(`Patvirtinti įvykdymą`);
 
-        let connectedAccount = "";
-
-        await db.collection("users").doc(reservedOffer.user).get()
-            .then((doc) => {
-                connectedAccount = doc.data()?.connectedAccount
-            })
-
         if (confirmation) {
             handleCompletedOfferModalComponent();
         }

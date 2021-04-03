@@ -10,6 +10,7 @@ import offerProgress from "../../assets/offer_progress.svg";
 import {db} from "../../firebase";
 import {selectReservedRequest} from "../../features/requests/requestsSlice";
 import RequestsChangeProgressModalComponent from "./RequestsChangeProgressModalComponent";
+import history from "../../history";
 
 const RequestPaidComponent = () => {
     const image = useSelector(selectImage);
@@ -39,7 +40,23 @@ const RequestPaidComponent = () => {
         setProgressModalShow(!progressModalShow)
     }
 
-    //console.log(reservedRequest)
+    const cancelRequest = async () => {
+        console.log(reservedRequest.title)
+        const response = window.confirm("Patvirtinti?");
+
+        if (response) {
+            await db.collection("offers").where("title", "==", reservedRequest.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("offers").doc(doc.id).update({
+                            status: "Atšauktas darbuotojo"
+                        })
+                        await history.go(0);
+                    })
+                })
+
+        }
+    }
 
     return (
         <div>
@@ -65,33 +82,22 @@ const RequestPaidComponent = () => {
                                         <div className="center-element">
                                             <Button variant="outline-dark" onClick={handleProgressModalShow}>Keisti vykdymo būseną</Button>
                                             <RequestsChangeProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow()} title={reservedRequest.title} />
-
+                                            <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
                                         </div>
                                         <div style={{marginTop: "2rem"}} className="center-element">
                                             <Button variant="outline-danger">Atšaukti užsakymą</Button>
-                                            <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
                                         </div>
                                     </div>
                                 </div> : <div></div>
                         }
                         {
-                            reservedRequest.status === "Atšauktas naudotojo" ? <div className="alert alert-warning" role="alert">
-                                <p className="center-element">Laukite kol paslaugos teikėjas patvirtins atšaukimą</p>
-                            </div> : <div></div>
-                        }
-                        {
-                            reservedRequest.status === "Atšaukimas patvirtintas" ?
-                                <div className="center-element">
-                                    {/*<Button onClick={() => initiateRefund(reservedOffer)} variant="outline-dark">Gražinti mokėjimą</Button>*/}
-                                </div>: <div></div>
-                        }
-                        {
                             reservedRequest.status === "Atliktas" ?
-                                <div className="center-element">
-                                    {/*<Button variant="outline-dark" onClick={() =>transferPayment(reservedOffer)}>Patvirtinkite įvykdymą</Button>*/}
-                                    {/*<CompletedOfferModalComponent show={completedModalShow} reservedOffer={reservedOffer} onHide={() => handleCompletedOfferModalComponent()} />*/}
-                                </div> :<div></div>
+                                <div className="alert alert-warning center-element" role="alert">
+                                    <p>Laukite kol įvykdymas bus patvirtintas</p>
+                                </div> : <div></div>
                         }
+
+
 
                     </Col>
                     <Col md={6}>
