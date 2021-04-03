@@ -108,15 +108,87 @@ const OfferPaidComponent = () => {
                                         db.collection("users").doc(docId).update({
                                             rating: rating + progressRating / ratingCount,
                                             ratingCount: ratingCount
+                                        }).then(() => {
+                                             db.collection("offers").doc(doc.id).update({
+                                                userRating: rating + progressRating / ratingCount,
+                                            })
                                         })
                                     })
-                                await db.collection("offerReview").doc(doc.id).update({
-                                    userRating: rating + progressRating
-                                })
+
                                 await history.go(0);
                             })
                         })
                    //
+                }
+
+            } catch (e) {
+
+            }
+        }
+    }
+
+    const transferPayment = async (reservedOffer: any) => {
+        const confirmation = window.confirm(`Patvirtinti įvykdymą`);
+
+        let connectedAccount = "";
+
+        await db.collection("users").doc(reservedOffer.user).get()
+            .then((doc) => {
+                connectedAccount = doc.data()?.connectedAccount
+            })
+
+        if (confirmation) {
+            try {
+                const response = await axios.post(
+                    "http://localhost:8080/stripe/pervedimas",
+                    {
+                        connectedAccount: connectedAccount,
+                        amount: reservedOffer.price * 100,
+                        paymentId: reservedOffer.paymentId
+                    }
+                );
+                console.log(response.data.success);
+                if (response.data.success) {
+                    await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach(async (doc) => {
+                                await db.collection("offers").doc(doc.id).update({
+                                    status: "naujas",
+                                    reservedTimeDay: "",
+                                    reservedTimeHour: "",
+                                    reservedUser: "",
+                                    reservedUserEmail: "",
+                                    paymentId: "",
+                                    paymentStatus: "",
+                                    timeForOffer: ""
+                                })
+                                let progressRating = 0;
+
+                                await db.collection("offerReview").doc(doc.id).get()
+                                    .then((doc) => {
+                                        progressRating = doc.data()?.progressRating;
+                                    }).then(() => {
+                                        db.collection("offerReview").doc(doc.id).delete()
+                                    })
+                                let rating: number = 0;
+                                await db.collection("users").doc(docId).get()
+                                    .then((doc) => {
+                                        let ratingCount: number = doc.data()?.ratingCount + 1;
+                                        rating = doc.data()?.rating;
+                                        db.collection("users").doc(docId).update({
+                                            rating: rating + progressRating / ratingCount,
+                                            ratingCount: ratingCount
+                                        }).then(() => {
+                                            db.collection("offers").doc(doc.id).update({
+                                                userRating: rating + progressRating / ratingCount,
+                                            })
+                                        })
+                                    })
+
+                                await history.go(0);
+                            })
+                        })
+                    //
                 }
 
             } catch (e) {
@@ -167,6 +239,12 @@ const OfferPaidComponent = () => {
                                 <div className="center-element">
                                     <Button onClick={() => initiateRefund(reservedOffer)} variant="outline-dark">Gražinti mokėjimą</Button>
                                 </div>: <div></div>
+                        }
+                        {
+                            reservedOffer.status === "Atliktas" ?
+                                <div className="center-element">
+                                    <Button variant="outline-dark" onClick={() =>transferPayment(reservedOffer)}>Patvirtinkite įvykdymą</Button>
+                                </div> :<div></div>
                         }
 
                     </Col>

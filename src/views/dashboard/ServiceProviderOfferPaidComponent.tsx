@@ -91,9 +91,16 @@ const ServiceProviderOfferPaidComponent = () => {
                                     </div>
                                     <div style={{marginTop: "2rem"}} className="center-element">
                                         <Button onClick={confirmOfferCancel} variant="outline-danger">Atšaukti užsakymą</Button>
+                                        <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
                                     </div>
                                 </div>
                                  : <div></div>
+                        }
+                        {
+                                reservedOffer.status === "Atliktas" ?
+                                    <div>
+                                        <Button variant="outline-dark">Laukite patvirtinimo</Button>
+                                    </div> :<div></div>
                         }
                     </Col>
                     <Col md={6}>

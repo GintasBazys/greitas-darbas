@@ -69,7 +69,7 @@ const UserOffersViewComponent = () => {
                         return (
                             <div>
                                 {/*@ts-ignore*/}
-                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/kitas",  query:{user: item.user}}}>{item.username}</Link>  {item.userRating}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
+                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link to={{pathname: "/kitas",  query:{user: item.user}}}>{item.username}</Link>  {Math.round(item.userRating)}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span>
                                 <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button>
                                 <Button onClick={() => reserveOffer(item)} variant="outline-dark">Rezervuoti</Button>
                                 <UserOfferModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />

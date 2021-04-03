@@ -126,15 +126,18 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                                  confirm:true,
                                  customer: client.id,
                                  //requires_confirmation: false,
-                                 transfer_data: {
-                                     destination: connectedAccount
-                                 }
 
-                            }).catch((error)=> {
-                                console.log(error.message)
+                            }).then((result) => {
+                                 res.json({
+                                     paymentId: result.id,
+                                     message: "Sekmingas mokejimas",
+                                     success: true,
+                                 })
+                        }).catch((error)=> {
+                                 console.log(error.message)
                              })
-                        })
 
+                        })
                     }
 
                     else {
@@ -148,9 +151,6 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                             customer: resp.data.data[0].id,
                             confirm:true,
                                         //requires_confirmation: false,
-                            transfer_data: {
-                                destination: connectedAccount
-                            }
                         }).then((result) => {
                             res.json({
                                      paymentId: result.id,
@@ -166,6 +166,26 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                 })
 });
 
+app.post("/stripe/pervedimas", cors(), async (req, res) => {
+    const {connectedAccount, amount, paymentId} = req.body;
+
+    // const topup =  await stripe.topups.create({
+    //     amount: amount,
+    //     currency: 'eur',
+    // });
+    const transfer = await stripe.transfers.create({
+        amount: amount,
+        currency: "eur",
+        destination: connectedAccount,
+    }).then(() => {
+        res.json({
+            success: true,
+        })
+    }).catch((error) => {
+        console.log(error.message);
+    })
+});
+
 app.post("/stripe/grazinimas", cors(), async (req, res) => {
     let {id} = req.body;
     const refund = await stripe.refunds.create({
@@ -177,6 +197,8 @@ app.post("/stripe/grazinimas", cors(), async (req, res) => {
         success: true,
     })
 })
+
+
 
 app.post("/firebase/darbuotojai", cors(), async (req, res) => {
     let {uid} = req.body;

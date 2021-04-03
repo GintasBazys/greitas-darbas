@@ -10,7 +10,8 @@ interface Props {
     price: number,
     reservedUserEmail: string,
     connectedId: any,
-    title: string
+    title: string,
+    timeForOffer: number
 }
 
 const Checkout = (props: Props) => {
@@ -44,7 +45,7 @@ const Checkout = (props: Props) => {
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
-                        amount: props.price * 100,
+                        amount: props.price * props.timeForOffer * 100,
                         id: id,
                         customer: props.reservedUserEmail,
                         connectedAccount: props.connectedId
