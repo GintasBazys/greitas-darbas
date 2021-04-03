@@ -11,6 +11,7 @@ import {db} from "../../firebase";
 import {selectReservedRequest} from "../../features/requests/requestsSlice";
 import RequestsChangeProgressModalComponent from "./RequestsChangeProgressModalComponent";
 import history from "../../history";
+import axios from "axios";
 
 const RequestPaidComponent = () => {
     const image = useSelector(selectImage);
@@ -45,16 +46,63 @@ const RequestPaidComponent = () => {
         const response = window.confirm("Patvirtinti?");
 
         if (response) {
-            await db.collection("offers").where("title", "==", reservedRequest.title).limit(1).get()
+            await db.collection("requests").where("title", "==", reservedRequest.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
-                        await db.collection("offers").doc(doc.id).update({
+                        await db.collection("requests").doc(doc.id).update({
                             status: "Atšauktas darbuotojo"
                         })
                         await history.go(0);
                     })
                 })
 
+        }
+    }
+
+    const initiateRefund = async (reservedRequest: any) => {
+        const confirmation = window.confirm(`Patvirtinti darbo nutraukimą?`);
+        if (confirmation) {
+            try {
+                const response = await axios.post(
+                    "http://localhost:8080/stripe/darbas/grazinimas",
+                    {
+                        id: reservedRequest.paymentId,
+                    }
+                );
+                console.log(response.data.success);
+                if (response.data.success) {
+                    await db.collection("requests").where("title", "==", reservedRequest.title).limit(1).get()
+                        .then((querySnapshot) => {
+                            querySnapshot.forEach(async (doc) => {
+                                let docBeforeDelete = doc.id;
+                                await db.collection("requests").doc(doc.id).delete();
+                                let progressRating = 0;
+
+                                await db.collection("requestReview").doc(docBeforeDelete).get()
+                                    .then((doc) => {
+                                        progressRating = doc.data()?.progressRating;
+                                    }).then(() => {
+                                        db.collection("requestReview").doc(docBeforeDelete).delete()
+                                    })
+                                let rating: number = 0;
+                                await db.collection("users").doc(reservedRequest.reservedUser).get()
+                                    .then((doc) => {
+                                        let ratingCount: number = doc.data()?.ratingCount + 1;
+                                        rating = doc.data()?.rating;
+                                        db.collection("users").doc(reservedRequest.reservedUser).update({
+                                            rating: rating + progressRating / ratingCount,
+                                            ratingCount: ratingCount
+                                        })
+                                    })
+                                await history.go(0);
+                            })
+                        })
+                    //
+                }
+
+            } catch (e) {
+
+            }
         }
     }
 
@@ -85,7 +133,7 @@ const RequestPaidComponent = () => {
                                             <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
                                         </div>
                                         <div style={{marginTop: "2rem"}} className="center-element">
-                                            <Button variant="outline-danger">Atšaukti užsakymą</Button>
+                                            <Button variant="outline-danger" onClick={cancelRequest}>Atšaukti užsakymą</Button>
                                         </div>
                                     </div>
                                 </div> : <div></div>
@@ -96,7 +144,18 @@ const RequestPaidComponent = () => {
                                     <p>Laukite kol įvykdymas bus patvirtintas</p>
                                 </div> : <div></div>
                         }
-
+                        {
+                            reservedRequest.status === "Atšauktas užsakovo" ?
+                                <div className="center-element">
+                                    <Button onClick={() => initiateRefund(reservedRequest)} variant="outline-dark">Patvirtinti atšaukimą</Button>
+                                </div>: <div></div>
+                        }
+                        {
+                            reservedRequest.status === "Atšauktas užsakovo" ?
+                                <div className="center-element alert alert-warning" role="alert">
+                                    <p>Laukite kol užsakovas patvirtins atšaukimą</p>
+                                </div>: <div></div>
+                        }
 
 
                     </Col>

@@ -279,7 +279,17 @@ app.post("/stripe/grazinimas", cors(), async (req, res) => {
     })
 })
 
-
+app.post("/stripe/darbas/grazinimas", cors(), async (req, res) => {
+    let {id} = req.body;
+    const refund = await stripe.refunds.create({
+        payment_intent: id,
+    }).catch((error) => {
+        console.log(error.message)
+    })
+    res.json({
+        success: true,
+    })
+})
 
 app.post("/firebase/darbuotojai", cors(), async (req, res) => {
     let {uid} = req.body;

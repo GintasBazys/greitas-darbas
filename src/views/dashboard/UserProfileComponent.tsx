@@ -12,7 +12,7 @@ import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import * as firebase from "../../firebase";
 import UserNavBarComponent from "./UserNavbarComponent";
-import {FilePond, registerPlugin} from "react-filepond";
+import {FilePond} from "react-filepond";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
@@ -20,9 +20,9 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond/dist/filepond.min.css";
 import * as Pond from 'filepond';
 import "filepond/dist/filepond.css";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import LoadingComponent from "../LoadingComponent";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";;
 import {updateOffers, updateOffersUsername} from "../../features/offers/offersSlice";
+import profileRating from "../../assets/profile_rating.svg";
 
 const UserProfileComponent = () => {
     const dispatch = useDispatch();
@@ -46,6 +46,8 @@ const UserProfileComponent = () => {
 
     const [email, setEmail] = useState("");
     const [aboutMe, setAboutMe] = useState("");
+    const [userRating, setUserRating] = useState(0);
+    const [ratingCount, setRatingCount] = useState(0);
     const user = firebase.auth.currentUser;
     const userBeforeChange = useSelector(selectUser);
     const [username, setUsername] = useState("");
@@ -60,6 +62,8 @@ const UserProfileComponent = () => {
                 setAboutMe(doc.data()?.aboutMe);
                 setUsername(doc.data()?.username);
                 setUsernameBeforeChange(doc.data()?.username);
+                setUserRating(doc.data()?.rating);
+                setRatingCount(doc.data()?.ratingCount);
             })
     }, [user])
 
@@ -329,7 +333,13 @@ const UserProfileComponent = () => {
 
                     </Form>
                 </Col>
-                <Col md={2}></Col>
+                <Col md={2}>
+                    <div>
+                        <Image src={profileRating} fluid></Image>
+                        <p className="center-element">Įvertinimas: {Math.round(userRating)}</p>
+                        <p className="center-element">Įvertinta kartų: {ratingCount}</p>
+                    </div>
+                </Col>
             </Row>
         </Container>
     </div>

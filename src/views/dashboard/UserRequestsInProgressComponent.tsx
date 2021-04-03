@@ -72,13 +72,13 @@ const UserRequestsInProgressComponent = () => {
                                         item.status === "patvirtintasTeikejo" && item.user === auth.currentUser?.uid ? <div className="alert alert-warning" role="alert">Laukite kol bus atliktas mokėjimas{console.log(auth.currentUser?.uid)}</div> : <div></div>
                                     }
                                     {
-                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėta") && item.reservedUser === auth.currentUser?.uid ?
+                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėta" || item.status === "Atšauktas užsakovo" || item.status === "Atšauktas darbuotojo") && item.reservedUser === auth.currentUser?.uid ?
                                             <div>
                                                 <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>
                                     }
                                     {
-                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėta") && item.user === auth.currentUser?.uid ?
+                                        (item.status === "Mokėjimas atliktas" || item.status === "Atšauktas naudotojo" || item.status === "Atšaukimas patvirtintas" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėta" || item.status === "Atšauktas užsakovo" || item.status === "Atšauktas darbuotojo") && item.user === auth.currentUser?.uid ?
                                             <div>
                                                 <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
                                             </div> : <div></div>

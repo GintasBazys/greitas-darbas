@@ -28,20 +28,21 @@ const UserPaymentComponent = () => {
 
         await axios.get(`https://api.stripe.com/v1/customers?email=${email}`,config)
             .then((res) => {
-                console.log(res.data.data[0]?.id);
-                setUserID(res.data.data[0]?.id);
+                // console.log(res.data.data[0].id);
+                // setUserID(res.data.data[0].id);
+                // console.log(userID)
+                axios.get(`https://api.stripe.com/v1/payment_intents?limit=10&customer=${res.data.data[0].id}`, config)
+                    .then((res) => {
+                        const allPayments = res.data.data;
+                        setPayments(allPayments)
+                        // @ts-ignore
+                        lastPayment = allPayments[9].id
+                        //console.log(lastPayment);
+                    }).catch((error) => {
+                })
             })
 
-        await axios.get(`https://api.stripe.com/v1/payment_intents?limit=10&customer=${userID}`, config)
-            .then((res) => {
-                const allPayments = res.data.data;
-                setPayments(allPayments)
-                // @ts-ignore
-                lastPayment = allPayments[9].id
-                //console.log(lastPayment);
-            }).catch((error) => {
 
-        })
 
         // await axios.get(`https://api.stripe.com/v1/payment_intents?customer=${userID}&limit=10&starting_after=${lastPayment}`, config)
         //     .then((resp) => {
