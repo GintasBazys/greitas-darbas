@@ -22,6 +22,7 @@ const RequestsUpdateModalComponent = (props: Props) => {
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
     const previousTitle = props.item.title;
+    const [type, setType] = useState("");
 
     const dispatch = useDispatch();
 
@@ -35,6 +36,7 @@ const RequestsUpdateModalComponent = (props: Props) => {
                     setBudget(doc.data()?.budget)
                     setTitle(doc.data()?.title);
                     setIsRemote(doc.data()?.isRemote);
+
                 })
             })
     }, [])
@@ -100,6 +102,9 @@ const RequestsUpdateModalComponent = (props: Props) => {
             }, 2000);
         }
     }
+    const handleTypeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setType(event.target.value)
+    }
 
     return (
         <Modal
@@ -122,6 +127,10 @@ const RequestsUpdateModalComponent = (props: Props) => {
                     <Form.Group controlId="title">
                         <Form.Label>Pavadinimas</Form.Label>
                         <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
+                    </Form.Group>
+                    <Form.Group controlId="type">
+                        <Form.Label>Tipas</Form.Label>
+                        <Form.Control type="text" placeholder="Įveskite paslaugos tipą" value={type} onChange={handleTypeChange}/>
                     </Form.Group>
                     <Form.Group controlId="textarea">
                         <Form.Label>Aprašymas</Form.Label>

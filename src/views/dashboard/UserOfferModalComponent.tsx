@@ -20,7 +20,6 @@ const UserOfferModalComponent = (props: Props) => {
     const [price, setPrice] = useState("");
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
-    const previousTitle = props.item.title;
     const [availability, setAvailability] = useState([]);
     const [docId, setDocId] = useState("");
 
@@ -106,7 +105,6 @@ const UserOfferModalComponent = (props: Props) => {
                         }
                     </div>
                     <div className="center-element">
-                        <Button style={{marginRight: "2rem"}} variant="outline-dark">Parašyti žinutę</Button>
                         <Button variant="outline-dark" onClick={(event) => reserveOffer(event)}>Rezervuoti</Button>
                     </div>
 

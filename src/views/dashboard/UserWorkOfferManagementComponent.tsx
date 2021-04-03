@@ -46,7 +46,6 @@ const UserWorkOfferManagementComponent = () => {
     const [showOffers, setShowOffers] = useState(false);
     const [title, setTitle] = useState("");
     const [availability, setAvailability] = useState([]);
-    const [EVRK, setERVK] = useState("");
     const [connectedId, setConnectedId] = useState(false);
     const [files, setFiles] = useState([]);
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
@@ -56,7 +55,6 @@ const UserWorkOfferManagementComponent = () => {
             .then((doc) => {
                 setActivityType(doc.data()?.activityType);
                 setUserRating(doc.data()?.rating);
-                setERVK(doc.data()?.EVRK);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
                 }
@@ -259,10 +257,6 @@ const UserWorkOfferManagementComponent = () => {
                             <Form.Group>
                                 <Form.Label>Veikla</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} value={activityType}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>EVRK (pakeitimui susisiekti su klientų aptarnavimo specialistu)</Form.Label>
-                                <Form.Control disabled={true} type="text" value={EVRK}/>
                             </Form.Group>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>

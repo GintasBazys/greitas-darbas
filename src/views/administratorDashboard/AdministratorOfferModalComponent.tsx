@@ -95,7 +95,6 @@ const AdministratorOfferModalComponent = (props: Props) => {
                             })
                         }
                     </div>
-                    <Button variant="outline-dark">Parašyti žinutę</Button>
                 </Form>
 
             </Modal.Body>
