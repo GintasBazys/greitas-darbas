@@ -17,7 +17,6 @@ interface Props {
 
 const OffersUpdateModalComponent = (props: Props) => {
 
-    const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [location, setLocation] = useState("");
@@ -33,7 +32,6 @@ const OffersUpdateModalComponent = (props: Props) => {
         db.collection("offers").where("title", "==", props.item.title).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    setActivityType(doc.data()?.activityType);
                     setDescription(doc.data()?.description);
                     setPhoneNumber(doc.data()?.phoneNumber);
                     setLocation(doc.data()?.location);
@@ -96,7 +94,6 @@ const OffersUpdateModalComponent = (props: Props) => {
         if(description !== "" && phoneNumber !== "" && location !== "" && price !== "" && title !== "") {
 
             await dispatch(updateOffer({
-                activityType: activityType,
                 description: description,
                 phoneNumber: phoneNumber,
                 location: location,

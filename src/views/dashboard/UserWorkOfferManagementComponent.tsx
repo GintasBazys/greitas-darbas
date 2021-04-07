@@ -36,7 +36,6 @@ const UserWorkOfferManagementComponent = () => {
     const userMail = useSelector(selectUserEmail);
     const error = useSelector(selectError);
 
-    const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [location, setLocation] = useState("");
@@ -53,7 +52,6 @@ const UserWorkOfferManagementComponent = () => {
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
-                setActivityType(doc.data()?.activityType);
                 setUserRating(doc.data()?.rating);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
@@ -147,7 +145,6 @@ const UserWorkOfferManagementComponent = () => {
                 title: title,
                 availability: availability,
                 offerImages: urlsFromFirebaseStorage,
-                activityType: activityType
             }))
 
             await history.go(0);
@@ -170,7 +167,7 @@ const UserWorkOfferManagementComponent = () => {
     } = usePagination(
         db
             .collection("offers").orderBy("createdOn", "desc").where("username", "==", username), {
-            limit: 10
+            limit: 20
         }
     );
 
@@ -254,10 +251,6 @@ const UserWorkOfferManagementComponent = () => {
                         <NotificationComponent message={error} />
 
                         <Form>
-                            <Form.Group>
-                                <Form.Label>Veikla</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} value={activityType}/>
-                            </Form.Group>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>

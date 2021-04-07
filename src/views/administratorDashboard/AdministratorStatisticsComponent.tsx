@@ -7,6 +7,9 @@ import statistics from "../../assets/statistics.svg";
 import {db} from "../../firebase";
 import OfferStatisticsComponent from "../statistics/OfferStatisticsComponent";
 import OfferStatisticsPartTwo from "../statistics/OfferStatisticsPartTwo";
+import RequestsStatisticsComponent from "../statistics/RequestStatisticsComponent";
+import PaymentStatisticsComponent from "../statistics/PaymentStatisticsComponent";
+import UserStatisticsComponent from "../statistics/UserStatisticsComponet";
 
 const AdministratorStatisticsComponent = () => {
 
@@ -27,7 +30,6 @@ const AdministratorStatisticsComponent = () => {
             setOfferItems(items);
         })
     }, [])
-    console.log(offerItems)
 
     return (
         <div>
@@ -46,19 +48,19 @@ const AdministratorStatisticsComponent = () => {
                     <Col md={3}>
                         <h1 className="center-element">Darbai</h1>
                         <div className="center-element">
-                            <Button variant="outline-dark">Generuoti darbų ataskaitą</Button>
+                            <Button variant="outline-dark" onClick={() => RequestsStatisticsComponent(offerItems)}>Generuoti darbų ataskaitą</Button>
                         </div>
                     </Col>
                     <Col md={3}>
                         <h1 className="center-element">Mokėjimai</h1>
                         <div className="center-element">
-                            <Button variant="outline-dark">Generuoti mokėjimų ataskaitą</Button>
+                            <Button variant="outline-dark" onClick={() => PaymentStatisticsComponent(offerItems)}>Generuoti mokėjimų ataskaitą</Button>
                         </div>
                     </Col>
                     <Col md={3}>
                         <h1 className="center-element">Naudotojai</h1>
                         <div className="center-element">
-                            <Button variant="outline-dark">Generuoti naudotojų ataskaitą</Button>
+                            <Button variant="outline-dark" onClick={() => UserStatisticsComponent(offerItems)}>Generuoti naudotojų ataskaitą</Button>
                         </div>
 
                     </Col>

@@ -23,7 +23,7 @@ const OfferStatisticsComponent = (items: any) => {
     });
 
     // @ts-ignore
-    doc.autoTable(tableColumn, tableRows, { startY: 20 });
+    doc.autoTable(tableColumn, tableRows, { startY: 20, pageBreak: "auto", rowPageBreak: "auto" });
     const date = Date().split(" ");
 
     const dateStr = date[4];

@@ -61,10 +61,12 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             image: defaultAvatar,
             portfolioImages: [],
             rating: 0,
-            ratingCount: 0
+            ratingCount: 0,
+            allRating: 0
         })
             .then(() => {
                 console.log("Document successfully written!");
+                history.go(0);
             })
     })
         .catch((error) => {
@@ -134,13 +136,33 @@ export const fetchPictureAsync = (image: string) => async (dispatch: (arg0: { pa
 
 }
 
-export const fetchUpdateUserStatusToReview = (p: {user: any, documentURLS: Array<any>, activityType: string, EVRK: string}) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const fetchUpdateUserStatusToReview = (p: { date: Date; experienceLevel: string; phoneNumber: string; activity: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
-    await db.collection("users").doc(p.user.uid).update({
+    await db.collection("users").doc(p.user).update({
         status: "nepatvirtintas",
-        documentURLS: p.documentURLS,
-        activityType: p.activityType,
-        EVRK: p.EVRK
+        dateOfBirth: p.date,
+        nameAndSurname: p.nameAndSurname,
+        experienceLevel: p.experienceLevel,
+        activity: p.activity,
+        phoneNumber: p.phoneNumber,
+        location: p.location,
+        image: p.photo
+    }).catch((error) => {
+        console.log(error);
+    })
+}
+
+export const fetchUpdateClientStatusToReview = (p: { date: Date; phoneNumber: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+
+    await db.collection("users").doc(p.user).update({
+        status: "nepatvirtintas",
+        dateOfBirth: p.date,
+        nameAndSurname: p.nameAndSurname,
+        phoneNumber: p.phoneNumber,
+        location: p.location,
+        image: p.photo
+    }).catch((error) => {
+        console.log(error);
     })
 }
 

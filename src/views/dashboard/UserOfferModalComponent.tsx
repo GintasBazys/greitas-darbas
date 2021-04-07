@@ -13,7 +13,6 @@ interface Props {
 }
 
 const UserOfferModalComponent = (props: Props) => {
-    const [activityType, setActivityType] = useState("Veikla nenurodyta");
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [location, setLocation] = useState("");
@@ -29,7 +28,6 @@ const UserOfferModalComponent = (props: Props) => {
         db.collection("offers").where("title", "==", props.item.title).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    setActivityType(doc.data()?.activityType);
                     setDescription(doc.data()?.description);
                     setPhoneNumber(doc.data()?.phoneNumber);
                     setLocation(doc.data()?.location);

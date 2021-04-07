@@ -20,7 +20,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond/dist/filepond.min.css";
 import * as Pond from 'filepond';
 import "filepond/dist/filepond.css";
-import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";;
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {updateOffers, updateOffersUsername} from "../../features/offers/offersSlice";
 import profileRating from "../../assets/profile_rating.svg";
 

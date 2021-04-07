@@ -18,7 +18,6 @@ export const offersSlice = createSlice( {
 })
 
 export const addOffer = (info: {
-    activityType: any;
     phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; availability: any[]; title: string; user: string | undefined; userRating: number; username: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
@@ -26,7 +25,6 @@ export const addOffer = (info: {
         username: info.username,
         description: info.description,
         phoneNumber: info.phoneNumber,
-        activityType: info.activityType,
         location: info.location,
         price: info.price,
         isRemote: info.isRemote,
@@ -47,12 +45,11 @@ export const addOffer = (info: {
 
 }
 
-export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; availability: any[]; activityType: string; title: string; previousTitle: string }) => async (dispatch: any) => {
+export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; availability: any[]; title: string; previousTitle: any }) => async (dispatch: any) => {
     await firebase.offersCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
                 firebase.offersCollection.doc(doc.id).update({
-                    activityType: info.activityType,
                     description: info.description,
                     phoneNumber: info.phoneNumber,
                     location: info.location,

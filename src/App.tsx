@@ -42,6 +42,8 @@ import ClientManagerOfferViewComponent from "./views/clientManagerDashboard/Clie
 import ClientManagerProfileComponent from "./views/clientManagerDashboard/ClientManagerProfileComponent";
 import ClientManagerPaymentComponent from "./views/clientManagerDashboard/ClientManagerPaymentComponent";
 import ClientManagerStatisticsComponent from "./views/clientManagerDashboard/ClientManagerStatisticsComponent";
+import WorkerRegistrationComponent from "./views/dashboard/registration/WorkerRegistrationComponent";
+import UserRegistrationComponent from "./views/dashboard/registration/UserRegistrationComponent";
 
 function App() {
   return <Router history={history}>
@@ -52,6 +54,8 @@ function App() {
       <PrivateRoute exact path="/pradzia" component={DashboardComponent} />
       <PrivateRoute exact path="/pradzia/profilis" component={UserUnconfirmedProfileComponent} />
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
+      <PrivateRoute exact path="/pradzia/darbuotojas" component={WorkerRegistrationComponent} />
+      <PrivateRoute exact path="/pradzia/naudotojas" component={UserRegistrationComponent} />
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
       <PrivateRoute exact path="/administracija/paslauga" component={AdministratorOfferViewComponent} />
