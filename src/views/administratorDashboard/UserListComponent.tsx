@@ -4,17 +4,11 @@ import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
 import LoadingComponent from "../LoadingComponent";
 import axios from "axios";
+import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
+import {useSelector} from "react-redux";
+import {selectWorkerImage} from "../../features/worker/workerSlice";
 
-interface props {
-    users: boolean,
-    setUsers: any
-}
-
-const UserListComponent = ({users, setUsers}: props) => {
-
-    const handleHideUserList = () => {
-        setUsers(!users)
-    }
+const UserListComponent = () => {
 
     const {
         items,
@@ -29,6 +23,8 @@ const UserListComponent = ({users, setUsers}: props) => {
             limit: 15
         }
     );
+
+    const image = useSelector(selectWorkerImage);
 
     const removeUserAccount = (item: { username: string; }) => {
         const confirm = window.confirm("Patvirtinti naudotojo paskyros panaikinimą?");
@@ -53,23 +49,22 @@ const UserListComponent = ({users, setUsers}: props) => {
     }
 
     return (
-        <div>
+        <div style={{marginTop: "2rem"}}>
+            <AdministratorDashboardNavbar profileImage={image} />
             <div>
                 {
                     isLoading ? <LoadingComponent /> : items.map((item) => {
                         return (
-                            <div style={{marginTop: "2rem"}}>
-                                <p>{item.email}, statusas: {item.status}
-                                    <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeUserAccount(item)}>Panaikinti naudotojo paskyrą</Button>
-                                </p>
+                            <div style={{marginLeft: "20rem",borderStyle: "solid", width: "70%"}}>
+                                <div className="center-element" style={{marginTop: "2rem"}}>
+                                    <p>{item.email}, statusas: {item.status}
+                                        <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeUserAccount(item)}>Panaikinti naudotojo paskyrą</Button>
+                                    </p>
+                                </div>
                             </div>
                         )
                     })
                 }
-
-                <Button style={{marginTop: "2rem"}} variant="outline-dark" type="submit" onClick={() => handleHideUserList()}>
-                    Slėpti naudotojų sąrašą
-                </Button>
             </div>
             <div className="center-element" style={{marginTop: "2rem"}}>
                 <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>

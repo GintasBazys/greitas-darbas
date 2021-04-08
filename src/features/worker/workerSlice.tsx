@@ -137,7 +137,6 @@ export const signUpWorkerAsync  = (info: { username: string; email: string; pass
             username: info.username,
             email: info.email,
             status: "darbuotojas",
-            aboutMe: "Įveskite informacijos apie save..",
             createdOn: new Date().toISOString()
         })
             .then(() => {

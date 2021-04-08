@@ -51,7 +51,7 @@ auth.onAuthStateChanged( async user => {
             history.push("/pradzia");
         }
 
-        if(userStatus === "nepatvirtintas") {
+        if(userStatus === "nepatvirtintas_darbuotojas" || userStatus === "nepatvirtintas_naudotojas") {
             ReactDOM.render(<LoadingComponent/>, document.getElementById("root"));
             await store.dispatch(fetchUserAsync(user));
             await store.dispatch(fetchProfilePicture(user));

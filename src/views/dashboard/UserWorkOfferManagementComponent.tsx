@@ -44,7 +44,6 @@ const UserWorkOfferManagementComponent = () => {
     const [userRating, setUserRating] = useState(0);
     const [showOffers, setShowOffers] = useState(false);
     const [title, setTitle] = useState("");
-    const [availability, setAvailability] = useState([]);
     const [connectedId, setConnectedId] = useState(false);
     const [files, setFiles] = useState([]);
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
@@ -96,14 +95,6 @@ const UserWorkOfferManagementComponent = () => {
         setTitle(event.target.value)
     }
 
-    const handleAvailabilityChange = (event: any) => {
-        // @ts-ignore
-        let value = Array.from(event.target.selectedOptions, option => option.value);
-        // @ts-ignore
-        setAvailability(value)
-        console.log(value)
-    }
-
     const submitOffer = async () => {
         //todo istestuoti laukus kad nepraleistu netinkamo formato
 
@@ -143,7 +134,6 @@ const UserWorkOfferManagementComponent = () => {
                 isRemote: isRemote,
                 userRating: userRating,
                 title: title,
-                availability: availability,
                 offerImages: urlsFromFirebaseStorage,
             }))
 
@@ -273,12 +263,6 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label>Valandinė kaina</Form.Label>
                                 <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
-                            <Form.Group controlId="Select2" style={{display: "flex", flexDirection: "column"}}>
-                                <label htmlFor="availability" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
-                                <select style={{width: "15%"}} disabled={!connectedId} multiple={true} name="availability" value={availability} onChange={handleAvailabilityChange} required>
-                                    {days.map((item: React.ReactNode) => <option>{item}</option>)}
-                                </select>
-                            </Form.Group>
                             <Form.Group controlId="checkbox">
                                 <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}
                                             onChange={() => setIsRemote(!isRemote)}/>
@@ -312,36 +296,36 @@ const UserWorkOfferManagementComponent = () => {
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={() => submitOffer()}>Paskelbti</Button>
                         </div>
-                        <div>
-                            <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={() => setShowOffers(true)}>Peržiūrėti savo skelbimus</Button>
-                            {
-                                showOffers ?
-                                    <div>
-                                        {
-                                             items.length === 0 ? <div></div> : isLoading? <LoadingComponent /> : items.map((item) => (
-                                                <div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {item.title}
-                                                        <Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => updateOffer(item)}>Atnaujinti informaciją</Button>
-                                                        <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button>
-                                                    </div>
+                        {/*<div>*/}
+                        {/*    <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={() => setShowOffers(true)}>Peržiūrėti savo skelbimus</Button>*/}
+                        {/*    {*/}
+                        {/*        showOffers ?*/}
+                        {/*            <div>*/}
+                        {/*                {*/}
+                        {/*                     items.length === 0 ? <div></div> : isLoading? <LoadingComponent /> : items.map((item) => (*/}
+                        {/*                        <div>*/}
+                        {/*                            <div style={{marginTop: "2rem"}}>*/}
+                        {/*                                {item.title}*/}
+                        {/*                                <Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => updateOffer(item)}>Atnaujinti informaciją</Button>*/}
+                        {/*                                <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button>*/}
+                        {/*                            </div>*/}
 
-                                                    <OffersUpdateModalComponent show={modalShow} item={item} onHide={() => updateOffer(item)} />
-                                                </div>
-                                            ))
-                                        }
-                                        {
-                                            items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
-                                                <div className="center-element" style={{marginTop: "2rem"}}>
-                                                <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
-                                                <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
-                                                </div>
-                                        }
-                                    </div>
+                        {/*                            <OffersUpdateModalComponent show={modalShow} item={item} onHide={() => updateOffer(item)} />*/}
+                        {/*                        </div>*/}
+                        {/*                    ))*/}
+                        {/*                }*/}
+                        {/*                {*/}
+                        {/*                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :*/}
+                        {/*                        <div className="center-element" style={{marginTop: "2rem"}}>*/}
+                        {/*                        <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>*/}
+                        {/*                        <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>*/}
+                        {/*                        </div>*/}
+                        {/*                }*/}
+                        {/*            </div>*/}
 
-                                 : <div></div>
-                            }
-                        </div>
+                        {/*         : <div></div>*/}
+                        {/*    }*/}
+                        {/*</div>*/}
 
                     </Col>
                     <Col md={2}></Col>

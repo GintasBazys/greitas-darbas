@@ -1,18 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
+import {useSelector} from "react-redux";
+import {selectWorkerImage} from "../../features/worker/workerSlice";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
-import {useSelector} from "react-redux";
-import {Button, Image, Container, Row, Col, Navbar} from "react-bootstrap";
-import LoadingComponent from "../LoadingComponent";
-import userControlImage from "../../assets/admin_user_control.svg";
+import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import adminUserLink from "../../assets/admin_user_link.svg";
-import {selectWorkerImage} from "../../features/worker/workerSlice";
+import UserListComponent from "./UserListComponent";
+import userControlImage from "../../assets/admin_user_control.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 
-const AdministratorUserManagementComponent = () => {
-
+const AdministratorClientManagerComponent = () => {
     const image = useSelector(selectWorkerImage);
 
     let {
@@ -24,7 +23,7 @@ const AdministratorUserManagementComponent = () => {
         getNext,
     } = usePagination(
         db
-            .collection("users").orderBy("username").where("status", "==", "nepatvirtintas_darbuotojas"), {
+            .collection("users").orderBy("username").where("status", "==", "nepatvirtintas_naudotojas"), {
             limit: 10
         }
     );
@@ -38,7 +37,7 @@ const AdministratorUserManagementComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         db.collection("users").doc(doc.id).update({
-                            status: "patvirtintas_darbuotojas",
+                            status: "patvirtintas_naudotojas",
                         })
                     })
                     //db.collection("users").doc()
@@ -78,7 +77,7 @@ const AdministratorUserManagementComponent = () => {
                     <Col md={8}>
 
                         {
-                              items.length === 0 ? <div></div> : items.map(item => {
+                            items.length === 0 ? <div></div> : items.map(item => {
                                 return (
                                     <div style={{marginTop: "2rem"}}>
                                         <div style={{borderStyle: "solid"}}>
@@ -88,8 +87,6 @@ const AdministratorUserManagementComponent = () => {
                                                 <p className="center-element">Telefono numeris: {item.phoneNumber}</p>
                                                 <p className="center-element">Elektroninis paštas: {item.email}</p>
                                                 <p className="center-element">Vietovė: {item.location}</p>
-                                                <p className="center-element">Paslaugos tipas: {item.activity}</p>
-                                                <p className="center-element">Patirtis: {item.experienceLevel}</p>
                                                 <div className="center-element">
                                                     <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => confirmStatus(item)}>Patvirtinti</Button>
                                                     <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => denyStatus(item)}>Atmesti prašymą</Button>
@@ -108,6 +105,7 @@ const AdministratorUserManagementComponent = () => {
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
                         </div>
+
                     </Col>
                     <Col md={2}>
                         <Image style={{marginTop: "2rem"}} fluid src={userControlImage} alt="vartotojo valdymo puslapio nuotrauka"></Image>
@@ -118,4 +116,4 @@ const AdministratorUserManagementComponent = () => {
     )
 }
 
-export default AdministratorUserManagementComponent;
+export default AdministratorClientManagerComponent;

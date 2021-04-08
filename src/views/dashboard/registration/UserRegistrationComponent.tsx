@@ -86,7 +86,7 @@ const UserRegistrationComponent = () => {
             await dispatch(fetchUpdateClientStatusToReview({
                 user: user,
                 nameAndSurname: nameAndSurname,
-                date: date,
+                date: date.toISOString(),
                 location: location,
                 phoneNumber: phoneNumber,
                 photo: urlFromFirebaseStorage

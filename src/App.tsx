@@ -44,6 +44,9 @@ import ClientManagerPaymentComponent from "./views/clientManagerDashboard/Client
 import ClientManagerStatisticsComponent from "./views/clientManagerDashboard/ClientManagerStatisticsComponent";
 import WorkerRegistrationComponent from "./views/dashboard/registration/WorkerRegistrationComponent";
 import UserRegistrationComponent from "./views/dashboard/registration/UserRegistrationComponent";
+import AdministratorClientManagerComponent from "./views/administratorDashboard/AdministratorClientManagerComponent";
+import UserListComponent from "./views/administratorDashboard/UserListComponent";
+import EmployeeListComponent from "./views/administratorDashboard/EmplyeeListComponent";
 
 function App() {
   return <Router history={history}>
@@ -59,8 +62,11 @@ function App() {
       <PrivateRoute exact path="/administracija" component={AdministratorDashboardComponent} />
       <PrivateRoute exact path="/administracija/profilis" component={AdministratorProfileComponent} />
       <PrivateRoute exact path="/administracija/paslauga" component={AdministratorOfferViewComponent} />
-      <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorUserManagementComponent} />
+      <PrivateRoute exact path="/administracija/teikejai" component={AdministratorUserManagementComponent} />
+      <PrivateRoute exact path="/administracija/naudotojai" component={AdministratorClientManagerComponent} />
       <PrivateRoute exact path="/administracija/darbuotojai" component={AdministratorWorkerManagementComponent} />
+      <PrivateRoute exact path="/administracija/darbuotojai/sarasas" component={EmployeeListComponent} />
+      <PrivateRoute exact path="/administracija/naudotojai/sarasas" component={UserListComponent} />
       <PrivateRoute exact path="/administracija/mokejimai" component={AdministratorPaymentComponent} />
       <PrivateRoute exact path="/administracija/ataskaitos" component={AdministratorStatisticsComponent} />
       <PrivateRoute exact path="/administracija/pasiulymai" component={AdministratorRequestsViewComponent} />

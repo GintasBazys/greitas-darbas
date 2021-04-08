@@ -28,7 +28,6 @@ const AdministratorProfileComponent = () => {
             .then((doc) => {
                 //@ts-ignore
                 setEmail(user?.email);
-                setAboutMe(doc.data()?.aboutMe)
             })
     }, [user])
 
@@ -48,29 +47,6 @@ const AdministratorProfileComponent = () => {
 
     const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setEmail(event.target.value);
-    }
-
-    const changeAboutMe = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        event.preventDefault();
-        if (aboutMe === "") {
-            dispatch(sendWorkerError("Laukas negali būti tuščias"));
-            setTimeout(() => {
-                dispatch(sendWorkerError(""))
-            }, 5000);
-
-        } else {
-            await db.collection("workers").doc(auth.currentUser?.uid).update({
-                aboutMe: aboutMe
-            })
-            //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/administracija");
-            //console.log(username);
-        }
-
-    }
-
-    const handleAboutMeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setAboutMe(event.target.value);
     }
 
 
@@ -131,16 +107,6 @@ const AdministratorProfileComponent = () => {
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={(e) => changeEmail(e)}>Atnaujinti</Button>
                         </div>
-
-                        <Form.Group>
-                            <Form.Label>Papildyti profilio informaciją</Form.Label>
-                            <Form.Control as="textarea" rows={6} value={aboutMe} onChange={handleAboutMeChange} />
-                        </Form.Group>
-
-                        <div className="text-center">
-                            <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeAboutMe(e)}>Atnaujinti</Button>
-                        </div>
-
                     </Form>
                 </Col>
                 <Col md={2}></Col>

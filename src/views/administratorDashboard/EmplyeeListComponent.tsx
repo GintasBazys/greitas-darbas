@@ -6,6 +6,9 @@ import {db} from "../../firebase";
 import moment from "moment/min/moment-with-locales";
 import LoadingComponent from "../LoadingComponent";
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {selectWorkerImage} from "../../features/worker/workerSlice";
+import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 
 interface props {
     employees: boolean,
@@ -13,10 +16,6 @@ interface props {
 }
 
 const EmployeeListComponent = ({employees, setEmployees}: props) => {
-
-    const handleHideEmployeeList = () => {
-        setEmployees(!employees)
-    }
 
     const {
         items,
@@ -53,27 +52,28 @@ const EmployeeListComponent = ({employees, setEmployees}: props) => {
         }
 
     }
+    const image = useSelector(selectWorkerImage);
 
     moment.locale("lt");
 
     return (
         <div>
-            <div>
+            <AdministratorDashboardNavbar profileImage={image} />
+            <div style={{marginTop: "2rem"}}>
                 {
                     isLoading ? <LoadingComponent /> : items.map((item) => {
                         return (
-                            <div style={{marginTop: "2rem"}}>
+                            <div style={{marginLeft: "20rem",borderStyle: "solid", width: "70%"}}>
+                                <div className="center-element" style={{marginTop: "2rem"}}>
                                 <p>{item.email} - pradėjo dirbti {moment(item.createdOn).fromNow()}
                                     {item.status === "darbuotojas" ? <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeWorkerAccount(item)}>Panaikinti darbuotojo paskyrą</Button> : <div></div>}
                                 </p>
                             </div>
+                            </div>
+
                         )
                     })
                 }
-
-                <Button style={{marginTop: "2rem"}} variant="outline-dark" type="submit" onClick={() => handleHideEmployeeList()}>
-                    Slėpti darbuotojų sąrašą
-                </Button>
             </div>
             <div className="center-element" style={{marginTop: "2rem"}}>
                 <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>

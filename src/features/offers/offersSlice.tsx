@@ -18,7 +18,7 @@ export const offersSlice = createSlice( {
 })
 
 export const addOffer = (info: {
-    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; availability: any[]; title: string; user: string | undefined; userRating: number; username: string }) => async (dispatch: any) => {
+    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; title: string; user: string | undefined; userRating: number; username: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -32,9 +32,6 @@ export const addOffer = (info: {
         createdOn: new Date().toISOString(),
         status: "naujas",
         title: info.title,
-        availability: info.availability,
-        paymentId: "",
-        paymentStatus: "neatliktas",
         //currentClient: "",
         offerImages: info.offerImages
     }).then(r => {

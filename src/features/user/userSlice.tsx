@@ -136,10 +136,10 @@ export const fetchPictureAsync = (image: string) => async (dispatch: (arg0: { pa
 
 }
 
-export const fetchUpdateUserStatusToReview = (p: { date: Date; experienceLevel: string; phoneNumber: string; activity: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const fetchUpdateUserStatusToReview = (p: { date: string; experienceLevel: string; phoneNumber: string; activity: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
     await db.collection("users").doc(p.user).update({
-        status: "nepatvirtintas",
+        status: "nepatvirtintas_darbuotojas",
         dateOfBirth: p.date,
         nameAndSurname: p.nameAndSurname,
         experienceLevel: p.experienceLevel,
@@ -152,10 +152,10 @@ export const fetchUpdateUserStatusToReview = (p: { date: Date; experienceLevel: 
     })
 }
 
-export const fetchUpdateClientStatusToReview = (p: { date: Date; phoneNumber: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const fetchUpdateClientStatusToReview = (p: { date: string; phoneNumber: string; nameAndSurname: string; photo: any; location: string; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
     await db.collection("users").doc(p.user).update({
-        status: "nepatvirtintas",
+        status: "nepatvirtintas_naudotojas",
         dateOfBirth: p.date,
         nameAndSurname: p.nameAndSurname,
         phoneNumber: p.phoneNumber,

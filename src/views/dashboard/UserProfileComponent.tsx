@@ -234,7 +234,7 @@ const UserProfileComponent = () => {
                     <div style={{marginTop: "2rem"}}>
                         <p className="center-element">Darbų nuotraukos</p>
                         {
-                            portfolioImages.map((imageUrl: string, index: number) => (
+                            portfolioImages?.map((imageUrl: string, index: number) => (
                                 <a  href={imageUrl} download target="_blank"><Image width="200px" key={index} src={imageUrl} fluid style={{marginLeft: "2rem", marginTop: "2rem"}}/></a>
                             ))
                         }

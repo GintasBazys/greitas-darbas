@@ -4,7 +4,6 @@ import {selectWorkerImage, signUpWorkerAsync} from "../../features/worker/worker
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {Container, Row, Col, Form, Button} from "react-bootstrap";
 import history from "../../history";
-import EmployeeListComponent from "./EmplyeeListComponent";
 
 const AdministratorWorkerManagementComponent = () => {
 
@@ -33,12 +32,6 @@ const AdministratorWorkerManagementComponent = () => {
             await history.push("/administracija");
         }
 
-    }
-
-    const [employeeList, setEmployeeList] = useState(false);
-
-    const handleShowEmployeeList = () => {
-        setEmployeeList(!employeeList);
     }
 
     return (
@@ -70,14 +63,6 @@ const AdministratorWorkerManagementComponent = () => {
                                 </Button>
                             </div>
                         </Form>
-                            <div className="text-center">
-                                <Button style={{marginTop: "2rem"}} variant="outline-dark" type="submit" onClick={() => handleShowEmployeeList()}>
-                                    Rodyti darbuotojų sąrašą
-                                </Button>
-                            </div>
-                        {
-                            employeeList ? <EmployeeListComponent employees={employeeList} setEmployees={setEmployeeList}/> : <div></div>
-                        }
                     </Col>
                     <Col md={2}></Col>
                 </Row>

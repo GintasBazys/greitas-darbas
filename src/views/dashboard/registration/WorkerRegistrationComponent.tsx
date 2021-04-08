@@ -105,7 +105,7 @@ const WorkerRegistrationComponent = () => {
             await dispatch(fetchUpdateUserStatusToReview({
                 user: user,
                 nameAndSurname: nameAndSurname,
-                date: date,
+                date: date.toISOString(),
                 location: location,
                 activity: activity,
                 experienceLevel: experienceLevel,
