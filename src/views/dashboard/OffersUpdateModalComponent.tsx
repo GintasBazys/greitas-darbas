@@ -78,14 +78,6 @@ const OffersUpdateModalComponent = (props: Props) => {
         setTitle(event.target.value)
     }
 
-    const handleAvailabilityChange = (event: any) => {
-        // @ts-ignore
-        let value = Array.from(event.target.selectedOptions, option => option.value);
-        // @ts-ignore
-        setAvailability(value)
-        console.log(value)
-    }
-
     const errorMessage = useSelector(selectError);
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
@@ -100,7 +92,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                 price: price,
                 isRemote: isRemote,
                 title: title,
-                availability: availability,
                 previousTitle: previousTitle
             }))
             props.onHide();
@@ -152,12 +143,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                     <Form.Group controlId="price">
                         <Form.Label>Valandinė kaina</Form.Label>
                         <Form.Control type="text" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
-                    </Form.Group>
-                    <Form.Group controlId="Select4">
-                        <label htmlFor="availability2" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
-                        <select multiple={true} name="availability2" value={availability.map(availability => availability)} onChange={handleAvailabilityChange} required>
-                            {days.map((item: React.ReactNode) => <option>{item}</option>)}
-                        </select>
                     </Form.Group>
                 <Form.Group controlId="checkbox">
                     <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}

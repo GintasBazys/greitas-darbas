@@ -19,7 +19,6 @@ const UserOfferModalComponent = (props: Props) => {
     const [price, setPrice] = useState("");
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
-    const [availability, setAvailability] = useState([]);
     const [docId, setDocId] = useState("");
 
     const dispatch = useDispatch();
@@ -33,7 +32,6 @@ const UserOfferModalComponent = (props: Props) => {
                     setLocation(doc.data()?.location);
                     setPrice(doc.data()?.price)
                     setTitle(doc.data()?.title);
-                    setAvailability(doc.data()?.availability)
                     setDocId(doc.id);
                 })
             })
@@ -86,18 +84,12 @@ const UserOfferModalComponent = (props: Props) => {
                         <Form.Label>Valandinė kaina</Form.Label>
                         <Form.Control type="number" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} disabled={true}/>
                     </Form.Group>
-                    <Form.Group controlId="Select4">
-                        <label htmlFor="availability2" style={{marginRight: "1rem"}}>Pasiekiamumas:</label>
-                        <select multiple={true} name="availability2" disabled={true} value={availability.map(availability => availability)} >
-                            {days.map((item: React.ReactNode) => <option>{item}</option>)}
-                        </select>
-                    </Form.Group>
                     <Form.Group controlId="checkbox">
                         <Form.Check type="checkbox" disabled={true} label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}/>
                     </Form.Group>
                     <div>
                         {
-                            props.item.offerImages.map((image: any, index: number) => {
+                            props.item.offerImages?.map((image: any, index: number) => {
                                 return <Image fluid src={image} alt="nuotrauka" />
                             })
                         }

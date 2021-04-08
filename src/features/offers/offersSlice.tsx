@@ -18,7 +18,7 @@ export const offersSlice = createSlice( {
 })
 
 export const addOffer = (info: {
-    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; title: string; user: string | undefined; userRating: number; username: string }) => async (dispatch: any) => {
+    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; title: string; user: string | undefined; userRating: number; username: string, activity: string, experienceLevel: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -32,8 +32,9 @@ export const addOffer = (info: {
         createdOn: new Date().toISOString(),
         status: "naujas",
         title: info.title,
-        //currentClient: "",
-        offerImages: info.offerImages
+        offerImages: info.offerImages,
+        activity: info.activity,
+        experienceLevel: info.experienceLevel
     }).then(r => {
 
     }).catch((error) => {
@@ -42,7 +43,7 @@ export const addOffer = (info: {
 
 }
 
-export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; availability: any[]; title: string; previousTitle: any }) => async (dispatch: any) => {
+export const updateOffer = (info: { phoneNumber: string; price: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
     await firebase.offersCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -53,7 +54,6 @@ export const updateOffer = (info: { phoneNumber: string; price: string; isRemote
                     price: info.price,
                     isRemote: info.isRemote,
                     title: info.title,
-                    availability: info.availability,
                 })
             })
         }).catch((error) => {

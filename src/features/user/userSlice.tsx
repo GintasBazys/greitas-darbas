@@ -105,7 +105,9 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
     ).then((user) => {
         firebase.usersCollection.doc(user?.user?.uid).get().then((userProfile => {
             dispatch(signIn(userProfile.data()));
-        }))
+        })).then(() => {
+            history.go(0);
+        })
     }).catch((error) => {
         console.log(error.message)
     });

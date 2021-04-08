@@ -11,5 +11,8 @@ export const activities = [
     "Finansinės paslaugos",
     "Sporto paslaugos",
     "Transporto paslaugos",
-    "Sveikatos paslaugos"
+    "Sveikatos paslaugos",
+    "Maisto paslaugos",
+    "Augintinių paslaugos",
+    "Priežiūros paslaugos"
 ]

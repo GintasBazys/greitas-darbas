@@ -46,12 +46,18 @@ const UserWorkOfferManagementComponent = () => {
     const [title, setTitle] = useState("");
     const [connectedId, setConnectedId] = useState(false);
     const [files, setFiles] = useState([]);
+    const [activity, setActivity] = useState("");
+    const [experienceLevel, setExperienceLevel] = useState("");
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
 
     useEffect( () => {
          db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 setUserRating(doc.data()?.rating);
+                setLocation(doc.data()?.location);
+                setPhoneNumber(doc.data()?.phoneNumber);
+                setActivity(doc.data()?.activity);
+                setExperienceLevel(doc.data()?.experienceLevel);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
                 }
@@ -135,6 +141,8 @@ const UserWorkOfferManagementComponent = () => {
                 userRating: userRating,
                 title: title,
                 offerImages: urlsFromFirebaseStorage,
+                activity: activity,
+                experienceLevel: experienceLevel
             }))
 
             await history.go(0);
@@ -144,53 +152,6 @@ const UserWorkOfferManagementComponent = () => {
             setTimeout(() => {
                 dispatch(sendError(""))
             }, 2000);
-        }
-    }
-
-    const {
-        items,
-        isLoading,
-        isStart,
-        isEnd,
-        getPrev,
-        getNext,
-    } = usePagination(
-        db
-            .collection("offers").orderBy("createdOn", "desc").where("username", "==", username), {
-            limit: 20
-        }
-    );
-
-    const [modalShow, setModalShow] = useState(false);
-
-    const updateOffer = (item: any) => {
-        setModalShow(!modalShow)
-    }
-    const deleteOffer = async (item: any) => {
-        const response = window.confirm("Patvirtinti?");
-        if (response) {
-            let titleForImages = "";
-            await db.collection("offers").where("title", "==", item.title).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        titleForImages = doc.data()?.title;
-                        db.collection("offers").doc(doc.id).delete()
-                        const imagesRef = storageRef.child(`/${username}/pasiulymai/${titleForImages}/`);
-
-                        imagesRef.listAll().then((result) => {
-                            result.items.forEach((file) => {
-                                file.delete()
-                                    .then(() => {
-
-                                    }).catch((error) => {
-                                    console.log(error.message);
-                                });
-                            })
-                        })
-                        //db.collection("users").doc()
-                    })
-                })
-            //history.go(0);
         }
     }
 
@@ -245,13 +206,21 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Label>Pavadinimas</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
+                            <Form.Group controlId="activity">
+                                <Form.Label>Paslaugos rūšis. Keiskite informaciją profilio puslapyje</Form.Label>
+                                <Form.Control type="text" disabled={true} value={activity} />
+                            </Form.Group>
+                            <Form.Group controlId="experience">
+                                <Form.Label>Patirtis. Keiskite informaciją profilio puslapyje</Form.Label>
+                                <Form.Control type="text" disabled={true} value={experienceLevel} />
+                            </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
                                 <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
-                                <Form.Control type="tel" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
+                                <Form.Control type="text" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
                                 <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
@@ -296,36 +265,6 @@ const UserWorkOfferManagementComponent = () => {
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={() => submitOffer()}>Paskelbti</Button>
                         </div>
-                        {/*<div>*/}
-                        {/*    <Button style={{marginTop: "2rem"}} variant="outline-dark" onClick={() => setShowOffers(true)}>Peržiūrėti savo skelbimus</Button>*/}
-                        {/*    {*/}
-                        {/*        showOffers ?*/}
-                        {/*            <div>*/}
-                        {/*                {*/}
-                        {/*                     items.length === 0 ? <div></div> : isLoading? <LoadingComponent /> : items.map((item) => (*/}
-                        {/*                        <div>*/}
-                        {/*                            <div style={{marginTop: "2rem"}}>*/}
-                        {/*                                {item.title}*/}
-                        {/*                                <Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => updateOffer(item)}>Atnaujinti informaciją</Button>*/}
-                        {/*                                <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button>*/}
-                        {/*                            </div>*/}
-
-                        {/*                            <OffersUpdateModalComponent show={modalShow} item={item} onHide={() => updateOffer(item)} />*/}
-                        {/*                        </div>*/}
-                        {/*                    ))*/}
-                        {/*                }*/}
-                        {/*                {*/}
-                        {/*                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :*/}
-                        {/*                        <div className="center-element" style={{marginTop: "2rem"}}>*/}
-                        {/*                        <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>*/}
-                        {/*                        <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>*/}
-                        {/*                        </div>*/}
-                        {/*                }*/}
-                        {/*            </div>*/}
-
-                        {/*         : <div></div>*/}
-                        {/*    }*/}
-                        {/*</div>*/}
 
                     </Col>
                     <Col md={2}></Col>
