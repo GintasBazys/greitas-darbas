@@ -2,28 +2,31 @@ import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
 import history from "../../history";
+import {useSelector} from "react-redux";
+import {selectReservedOffer} from "../../features/offers/offersSlice";
 
 interface Props {
     show: boolean,
     onHide: () => void,
-    title: string
 }
 
 const ServiceProviderProgressModalComponent = (props: Props) => {
 
     const [progress, setProgress] = useState("");
+    const reservedOffer = useSelector(selectReservedOffer);
 
     const handleProgressChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setProgress(event.target.value);
     }
 
     const changeProgress = async () => {
-        await db.collection("offers").where("title", "==", props.title).limit(1).get()
+        await db.collection("reservedOffers").where("id", "==", reservedOffer.id).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach(async (doc) => {
-                    await db.collection("offers").doc(doc.id).update({
+                    await db.collection("reservedOffers").doc(doc.id).update({
                         status: progress,
                     })
+                    await history.go(0);
                 })
             })
     }

@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
-import {Button, Col, Container, Image, Row} from "react-bootstrap";
-import {selectReservedOffer} from "../../features/offers/offersSlice";
+import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
+import {selectReservedOffer, setReservedOffer} from "../../features/offers/offersSlice";
 import {db} from "../../firebase";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
@@ -11,6 +11,8 @@ import star from "../../assets/star.svg";
 import history from "../../history";
 import ServiceProviderProgressModalComponent from "./ServiceProviderProgressModalComponent";
 import offerProgress from "../../assets/offer_progress.svg";
+import moment from "moment";
+import store from "../../app/store";
 
 const ServiceProviderOfferPaidComponent = () => {
 
@@ -37,10 +39,10 @@ const ServiceProviderOfferPaidComponent = () => {
         const response = window.confirm("Patvirtinti?");
 
         if (response) {
-            await db.collection("offers").where("title", "==", reservedOffer.title).limit(1).get()
+            await db.collection("reservedOffers").where("id", "==", reservedOffer.id).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
-                        await db.collection("offers").doc(doc.id).update({
+                        await db.collection("reservedOffers").doc(doc.id).update({
                             status: "Atšauktas teikėjo"
                         })
                         await history.go(0);
@@ -52,7 +54,8 @@ const ServiceProviderOfferPaidComponent = () => {
 
     const [progressModalShow, setProgressModalShow] = useState(false);
 
-    const handleProgressModalShow = () => {
+    const handleProgressModalShow = (reservedOffer: any) => {
+        store.dispatch(setReservedOffer(reservedOffer))
         setProgressModalShow(!progressModalShow)
     }
 
@@ -63,45 +66,40 @@ const ServiceProviderOfferPaidComponent = () => {
                 <Row>
                     <Col md={6}>
                         <h1 className="center-element">Užsakymas</h1>
-                        <p className="center-element">Vietovė: {reservedOffer.location}</p>
+                        <p className="center-element">Vietovė: {reservedOffer.location}, {reservedOffer.address}</p>
                         <div>
                             <p className="center-element">Aprašymas: {reservedOffer.description}</p>
                         </div>
-
+                        <p className="center-element">Pavadinimas: {reservedOffer.title}</p>
                         <p className="center-element">Statusas: {reservedOffer.status}</p>
 
-                        <p className="center-element">Naudotojo vertinimas: {Math.round(reservedOffer.userRating)}<Image fluid src={star} /></p>
-                        <p className="center-element">Kaina: {reservedOffer.price *reservedOffer.timeForOffer} €</p>
+                        <p className="center-element">Kaina: {reservedOffer.price} €</p>
 
-                        <p className="center-element">Pradžia: {new Date(reservedOffer.reservedTimeDay).toISOString().substr(0, 10)} {reservedOffer.reservedTimeHour}</p>
-                        {
-                            reservedOffer.status === "Atšauktas naudotojo" ?
-                                <div className="alert alert-warning center-element" role="alert">
-                                    <Button onClick={confirmOfferCancel} style={{marginRight: "2rem"}} variant="outline-dark">Patvirtinti atšaukimą</Button>
-                                    <Button variant="outline-danger">Atmesti paslaugos atšaukimo prašymą</Button>
-                                </div> : <div></div>
-                        }
-                        {
-                            reservedOffer.status === "Mokėjimas atliktas" ?
+                        <p className="center-element">Pradžia: {moment(reservedOffer.reservedDay).format("YYYY-MM-DD")} {reservedOffer.reservedHour}</p>
+
                                 <div>
                                     <div className="center-element">
-                                        <Button variant="outline-dark" onClick={handleProgressModalShow}>Keisti vykdymo būseną</Button>
-                                        <ServiceProviderProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow()} title={reservedOffer.title} />
+                                        <Button variant="outline-dark" onClick={() => handleProgressModalShow(reservedOffer)}>Keisti vykdymo būseną</Button>
+                                        <ServiceProviderProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow(reservedOffer)} />
 
                                     </div>
+                                    {
+                                        reservedOffer.status === "Atliktas" ?
+                                            <div>
+                                                <Form.Group controlId="timeForOffer">
+                                                    <Form.Label>Įveskite paslaugos trukmę valandomis</Form.Label>
+                                                    <Form.Control type="text" placeholder="Įveskite paslaugos trukmę valandomis" value="10" />
+                                                </Form.Group>
+                                            </div> :
+                                             <div>
+
+                                             </div>
+                                    }
                                     <div style={{marginTop: "2rem"}} className="center-element">
                                         <Button onClick={confirmOfferCancel} variant="outline-danger">Atšaukti užsakymą</Button>
                                         <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
                                     </div>
                                 </div>
-                                 : <div></div>
-                        }
-                        {
-                                reservedOffer.status === "Atliktas" ?
-                                    <div>
-                                        <Button variant="outline-dark">Laukite patvirtinimo</Button>
-                                    </div> :<div></div>
-                        }
                     </Col>
                     <Col md={6}>
                         <h1 className="center-element">Paslaugos gavėjas</h1>

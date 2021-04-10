@@ -53,16 +53,16 @@ const Checkout = (props: Props) => {
                 );
 
                 if (response.data.success) {
-                    console.log(response.data.success);
-                    await db.collection("offers").doc(docId).update({
-                        paymentStatus: "Mokėjimas atliktas",
-                        status: "Mokėjimas atliktas",
-                        paymentId: response.data.paymentId
-                    })
-                    await db.collection("offerReview").doc(docId).set({
-                        progressRating: 0,
-                        comments: []
-                    })
+                    // console.log(response.data.success);
+                    // await db.collection("offers").doc(docId).update({
+                    //     paymentStatus: "Mokėjimas atliktas",
+                    //     status: "Mokėjimas atliktas",
+                    //     paymentId: response.data.paymentId
+                    // })
+                    // await db.collection("offerReview").doc(docId).set({
+                    //     progressRating: 0,
+                    //     comments: []
+                    // })
 
                     await history.go(0);
                 }

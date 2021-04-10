@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {auth, db, offerReview} from "../../firebase";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {selectReservedOffer} from "../../features/offers/offersSlice";
 
 interface Props {
     show: boolean,
     onHide: () => void,
-    title: string,
 }
 
 const OfferReviewModalComponent = (props: Props) => {
@@ -14,6 +14,7 @@ const OfferReviewModalComponent = (props: Props) => {
     const [comment, setComment] = useState("");
 
     const dispatch = useDispatch();
+    const reservedOffer = useSelector(selectReservedOffer);
 
     const handleCommentChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setComment(event.target.value);
@@ -25,7 +26,7 @@ const OfferReviewModalComponent = (props: Props) => {
         const response = window.confirm("Išsiųsti žinutę?");
 
         if (response) {
-            await db.collection("offers").where("title", "==", props.title).limit(1).get()
+            await db.collection("reservedOffers").where("id", "==", reservedOffer.id).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         db.collection("offerReview").doc(doc.id).get()

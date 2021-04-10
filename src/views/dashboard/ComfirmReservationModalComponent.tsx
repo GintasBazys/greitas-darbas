@@ -11,6 +11,8 @@ import lt from 'date-fns/locale/lt';
 import {useSelector} from "react-redux";
 import {selectUserEmail} from "../../features/user/userSlice";
 import {locations} from "./locations";
+// @ts-ignore
+import uuid from "uuid";
 registerLocale('lt', lt)
 
 interface Props {
@@ -59,11 +61,18 @@ const ComfirmReservationModalComponent = (props: Props) => {
         setLocation(event.target.value)
     }
 
+    const [address, setAddress] = useState("");
+
+    const handleAddressChange = (event: any) => {
+        setAddress(event.target.value)
+    }
+
     const sendConfirmationForOffer = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
         const confirm = window.confirm("Patvirtinti?");
         if (confirm) {
             let docId = ""
+            const id = uuid.v4();
             await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
@@ -86,7 +95,15 @@ const ComfirmReservationModalComponent = (props: Props) => {
                 paymentStatus: "Neatliktas",
                 reservedUserNameAndSurname: name,
                 reservedUserPhoneNumber: phoneNumber,
-                location: location
+                location: location,
+                address: address,
+                id: id
+
+            }).then(async (docRef) => {
+                await db.collection("offerReview").doc(docRef.id).set({
+                    progressRating: 0,
+                    comments: []
+                })
             })
             await history.go(0);
         }
@@ -123,6 +140,10 @@ const ComfirmReservationModalComponent = (props: Props) => {
                         <select name="location2" value={location} onChange={handleLocationChange} required>
                             {locations.map((item: React.ReactNode) => <option>{item}</option>)}
                         </select>
+                    </Form.Group>
+                    <Form.Group controlId="address">
+                        <Form.Label>Adresas</Form.Label>
+                        <Form.Control type="text" placeholder="Įveskite tikslų vietovės adresą" value={address} onChange={handleAddressChange}/>
                     </Form.Group>
                     {/*@ts-ignore*/}
                     <DatePicker locale="lt" selected={reservedTimeDay} onChange={(date):any => setReservedTimeDay(date)} />

@@ -27,6 +27,7 @@ const workerCollection = db.collection("workers");
 const requestCollection = db.collection("requests");
 const offersCollection = db.collection("offers");
 const offerReview = db.collection("offerReview");
+const requestReview = db.collection("requestReview");
 const reservedOffersCollection = db.collection("reservedOffers");
 const reservedRequestsCollection = db.collection("reservedRequests");
 
@@ -43,5 +44,6 @@ export {
     offersCollection,
     offerReview,
     reservedOffersCollection,
-    reservedRequestsCollection
+    reservedRequestsCollection,
+    requestReview
 };

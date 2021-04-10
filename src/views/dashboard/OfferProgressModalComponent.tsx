@@ -3,21 +3,23 @@ import React, {useEffect, useState} from "react";
 import StarRatingComponent from "react-star-rating-component";
 import {Button, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
+import {useSelector} from "react-redux";
+import {selectReservedOffer} from "../../features/offers/offersSlice";
 
 interface Props {
     show: boolean,
     onHide: () => void,
-    title: string
 }
 
 const OfferProgressModalComponent = (props: Props) => {
 
     const [rating, setRating] = useState(0);
+    const reservedOffer = useSelector(selectReservedOffer);
 
     // const [ratingCount, setRatingCount] = useState(0);
     //
     useEffect(() => {
-        db.collection("offers").where("title", "==", props.title).limit(1).get()
+        db.collection("reservedOffers").where("id", "==", reservedOffer.id).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     console.log(doc.id)
@@ -33,7 +35,7 @@ const OfferProgressModalComponent = (props: Props) => {
 
         event.preventDefault()
 
-        db.collection("offers").where("title", "==", props.title).limit(1).get()
+        db.collection("reservedOffers").where("id", "==", reservedOffer.id).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     db.collection("offerReview").doc(doc.id).update({

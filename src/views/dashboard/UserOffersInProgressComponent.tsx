@@ -13,6 +13,8 @@ import history from "../../history";
 import axios from "axios";
 import workInProgress from "../../assets/work_in_progress.svg";
 import searchIcon from "../../assets/search.svg";
+import store from "../../app/store";
+import {setReservedOffer} from "../../features/offers/offersSlice";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -45,11 +47,11 @@ const UserOffersInProgressComponent = () => {
         const confirmation = window.confirm("Atšaukti rezervaciją");
         if (confirmation) {
 
-            await db.collection("reservedOffers").where("title", "==", item.title).limit(1).get()
+            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
                         await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Atšaukta nesumokėjus",
+                            status: "Atšaukta rezervacija",
                         })
 
                         await history.go(0);
@@ -62,7 +64,7 @@ const UserOffersInProgressComponent = () => {
         const confirmation = window.confirm("Patvirtinti rezervaciją");
         if (confirmation) {
 
-            await db.collection("reservedOffers").where("title", "==", item.title).limit(1).get()
+            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
                         await db.collection("reservedOffers").doc(doc.id).update({
@@ -75,79 +77,38 @@ const UserOffersInProgressComponent = () => {
         }
     }
 
-    const initiateRefund = async (item: any) => {
-        console.log(item.price);
-        const confirmation = window.confirm(`Patvirtinti gražinimą? Suma: € ${item.price * item.timeForOffer}`);
+    const cancelReservationByUser = async (item: any) => {
+        const confirmation = window.confirm("Atšaukti vykdymą");
         if (confirmation) {
-            try {
-                const response = await axios.post(
-                    "http://localhost:8080/stripe/grazinimas",
-                    {
-                        id: item.paymentId,
-                    }
-                );
-                console.log(response.data.success);
-                if (response.data.success) {
-                    await db.collection("offers").where("title", "==", item.title).limit(1).get()
-                        .then((querySnapshot) => {
-                            querySnapshot.forEach(async (doc) => {
-                                await db.collection("offers").doc(doc.id).update({
-                                    status: "naujas",
-                                    reservedTimeDay: "",
-                                    reservedTimeHour: "",
-                                    reservedUser: "",
-                                    reservedUserEmail: "",
-                                    paymentId: "",
-                                    paymentStatus: "",
-                                    timeForOffer: ""
-                                })
-                                let progressRating = 0;
 
-                                await db.collection("offerReview").doc(doc.id).get()
-                                    .then((doc) => {
-                                        progressRating = doc.data()?.progressRating;
-                                    }).then(() => {
-                                        db.collection("offerReview").doc(doc.id).delete()
-                                    })
-                                let rating: number = 0;
-                                await db.collection("users").doc(item.user).get()
-                                    .then((doc) => {
-                                        let ratingCount: number = doc.data()?.ratingCount +1;
-                                        rating = doc.data()?.rating;
-                                        db.collection("users").doc(item.user).update({
-                                            rating: rating + progressRating / ratingCount,
-                                            ratingCount: ratingCount
-                                        })
-                                    })
-                                await history.go(0);
-                            })
+            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("reservedOffers").doc(doc.id).update({
+                            status: "Atšaukta naudotojo",
                         })
-                    //
-                }
 
-            } catch (e) {
-
-            }
+                        await history.go(0);
+                    })
+                })
         }
     }
 
-    const confirmCancelWithoutPay = async (item: any) => {
-        // await db.collection("offers").where("title", "==", item.title).limit(1).get()
-        //     .then((querySnapshot) => {
-        //         querySnapshot.forEach(async (doc) => {
-        //             await db.collection("offers").doc(doc.id).update({
-        //                 status: "naujas",
-        //                 reservedTimeDay: "",
-        //                 reservedTimeHour: "",
-        //                 reservedUser: "",
-        //                 reservedUserEmail: "",
-        //                 paymentId: "",
-        //                 paymentStatus: "",
-        //                 timeForOffer: ""
-        //             })
-        //             await history.go(0);
-        //         })
-        //     })
+    const cancelReservationByProvider = async (item: any) => {
+        const confirmation = window.confirm("Atšaukti vykdymą");
+        if (confirmation) {
+
+            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("reservedOffers").doc(doc.id).update({
+                            status: "Atšaukta teikėjo",
+                        })
+
+                        await history.go(0);
+                    })
+                })
+        }
     }
 
     const [search, setSearch] = useState("");
@@ -178,7 +139,7 @@ const UserOffersInProgressComponent = () => {
                     </Form.Group>
 
                 </div>
-                <div style={{display: "flex"}}>
+                <div style={{display: "flex", marginLeft: "10rem"}}>
                     {
                         items.map((item) => {
                             console.log(item.status);
@@ -200,6 +161,7 @@ const UserOffersInProgressComponent = () => {
                                                     <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
                                                     <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
                                                     <ListGroupItem>{item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
                                                     <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
@@ -233,6 +195,7 @@ const UserOffersInProgressComponent = () => {
                                                     <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
                                                     <ListGroupItem>{item.phoneNumber}</ListGroupItem>
                                                     <ListGroupItem>{item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
                                                     <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
@@ -251,7 +214,7 @@ const UserOffersInProgressComponent = () => {
                                             </Card> : <div></div>
                                     }
                                     {
-                                        item.status === "Patvirtinta" && item.user === auth.currentUser?.uid ?
+                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.user === auth.currentUser?.uid ?
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
@@ -266,14 +229,15 @@ const UserOffersInProgressComponent = () => {
                                                     <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
                                                     <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
                                                     <ListGroupItem>{item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
                                                     <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div>
-                                                        <Button variant="outline-dark">Peržiūrėti progresą</Button>
+                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/teikejas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationWithoutPay(item)}>Atšaukti</Button>
+                                                        <Button variant="outline-danger" onClick={() => cancelReservationByProvider(item)}>Atšaukti</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
@@ -284,7 +248,7 @@ const UserOffersInProgressComponent = () => {
                                             </Card> : <div></div>
                                     }
                                     {
-                                        item.status === "Patvirtinta" && item.reservedUser === auth.currentUser?.uid ?
+                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.reservedUser === auth.currentUser?.uid ?
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
@@ -299,14 +263,15 @@ const UserOffersInProgressComponent = () => {
                                                     <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
                                                     <ListGroupItem>{item.phoneNumber}</ListGroupItem>
                                                     <ListGroupItem>{item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
                                                     <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div>
-                                                        <Button variant="outline-dark">Peržiūrėti progresą</Button>
+                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/progresas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationWithoutPay(item)}>Atšaukti</Button>
+                                                        <Button variant="outline-danger" onClick={() => cancelReservationByUser(item)}>Atšaukti</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
