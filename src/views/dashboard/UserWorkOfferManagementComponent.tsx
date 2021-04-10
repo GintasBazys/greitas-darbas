@@ -48,6 +48,8 @@ const UserWorkOfferManagementComponent = () => {
     const [files, setFiles] = useState([]);
     const [activity, setActivity] = useState("");
     const [experienceLevel, setExperienceLevel] = useState("");
+    const [nameAndSurname, setNameAndSurname] = useState("");
+    const [profileImage, setProfileImage] = useState("");
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
 
     useEffect( () => {
@@ -58,6 +60,8 @@ const UserWorkOfferManagementComponent = () => {
                 setPhoneNumber(doc.data()?.phoneNumber);
                 setActivity(doc.data()?.activity);
                 setExperienceLevel(doc.data()?.experienceLevel);
+                setNameAndSurname(doc.data()?.nameAndSurname);
+                setProfileImage(doc.data()?.profileImage);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
                 }
@@ -65,7 +69,7 @@ const UserWorkOfferManagementComponent = () => {
     }, [])
 
     const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        if(event.target.value.length >= 101) {
+        if(event.target.value.length >= 501) {
             dispatch(sendError("Ne daugiau 500 simboliu"));
             setTimeout(() => {
                 dispatch(sendError(""))
@@ -142,7 +146,9 @@ const UserWorkOfferManagementComponent = () => {
                 title: title,
                 offerImages: urlsFromFirebaseStorage,
                 activity: activity,
-                experienceLevel: experienceLevel
+                experienceLevel: experienceLevel,
+                profileImage: profileImage,
+                nameAndSurname: nameAndSurname
             }))
 
             await history.go(0);

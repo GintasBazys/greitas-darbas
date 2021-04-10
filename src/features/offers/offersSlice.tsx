@@ -5,7 +5,8 @@ export const offersSlice = createSlice( {
     name: "offers",
     initialState: {
         offers: Array(0),
-        reservedOffer: {}
+        reservedOffer: {},
+        offer: {}
     },
     reducers: {
         setOffers: (state, action) => {
@@ -13,12 +14,14 @@ export const offersSlice = createSlice( {
         },
         setReservedOffer: (state, action) => {
             state.reservedOffer = action.payload;
+        },
+        setOffer: (state, action) => {
+            state.offer = action.payload
         }
     }
 })
 
-export const addOffer = (info: {
-    phoneNumber: string; price: string; isRemote: boolean; userMail: string; description: string; offerImages: Array<string>; location: string; title: string; user: string | undefined; userRating: number; username: string, activity: string, experienceLevel: string }) => async (dispatch: any) => {
+export const addOffer = (info: { activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; phoneNumber: string; experienceLevel: string; price: string; nameAndSurname: string; userMail: string; offerImages: Array<string>; location: string; user: string | undefined; username: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -34,7 +37,9 @@ export const addOffer = (info: {
         title: info.title,
         offerImages: info.offerImages,
         activity: info.activity,
-        experienceLevel: info.experienceLevel
+        experienceLevel: info.experienceLevel,
+        nameAndSurname: info.nameAndSurname,
+        profileImage: info.profileImage
     }).then(r => {
 
     }).catch((error) => {
@@ -84,8 +89,9 @@ export const updateOffersUsername = (info: {username: string, usernameBeforeChan
         })
 }
 
-export const {setOffers, setReservedOffer} = offersSlice.actions;
+export const {setOffers, setReservedOffer, setOffer} = offersSlice.actions;
 
 export const selectReservedOffer = (state: { offers: { reservedOffer: any; }; }) => state.offers.reservedOffer;
+export const selectOffer = (state: { offers: {offer: any; }; }) => state.offers.offer;
 
 export default offersSlice.reducer;

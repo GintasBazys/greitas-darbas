@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {auth, db} from "../../firebase";
 import {Button, Form, Image, Modal} from "react-bootstrap";
 import {locations} from "./locations";
 import {days} from "./days";
 import history from "../../history";
+import {selectOffer} from "../../features/offers/offersSlice";
 
 interface Props {
     show: boolean,
     onHide: () => void,
-    item: any
 }
 
 const UserOfferModalComponent = (props: Props) => {
@@ -20,22 +20,25 @@ const UserOfferModalComponent = (props: Props) => {
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
     const [docId, setDocId] = useState("");
+    const item = useSelector(selectOffer);
+    console.log(item.title);
+
+    //@ts-ignore
+    // db.collection("offers").where("title", "==", item.title).limit(1).get()
+    //     .then((querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             console.log(doc.id);
+    //             setDescription(doc.data()?.description);
+    //             setPhoneNumber(doc.data()?.phoneNumber);
+    //             setLocation(doc.data()?.location);
+    //             setPrice(doc.data()?.price)
+    //             setTitle(doc.data()?.title);
+    //             setIsRemote(doc.data()?.isRemote);
+    //             setDocId(doc.id);
+    //         })
+    // })
 
     const dispatch = useDispatch();
-
-    useEffect( () => {
-        db.collection("offers").where("title", "==", props.item.title).limit(1).get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    setDescription(doc.data()?.description);
-                    setPhoneNumber(doc.data()?.phoneNumber);
-                    setLocation(doc.data()?.location);
-                    setPrice(doc.data()?.price)
-                    setTitle(doc.data()?.title);
-                    setDocId(doc.id);
-                })
-            })
-    }, [])
 
     const reserveOffer = async (event: React.MouseEvent<HTMLElement>) => {
         await db.collection("offers").doc(docId).update({
@@ -64,32 +67,32 @@ const UserOfferModalComponent = (props: Props) => {
                 <Form>
                     <Form.Group controlId="title">
                         <Form.Label>Pavadinimas</Form.Label>
-                        <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} disabled={true}/>
+                        <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={item.title} disabled={true}/>
                     </Form.Group>
                     <Form.Group controlId="textarea">
                         <Form.Label>Aprašymas</Form.Label>
-                        <Form.Control as="textarea" rows={3} placeholder="Aprašykite savo siūlomą paslaugą" value={description} disabled={true}/>
+                        <Form.Control as="textarea" rows={3} placeholder="Aprašykite savo siūlomą paslaugą" value={item.description} disabled={true}/>
                     </Form.Group>
                     <Form.Group controlId="tel">
                         <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
-                        <Form.Control type="tel" value={phoneNumber} disabled={true}/>
+                        <Form.Control type="tel" value={item.phoneNumber} disabled={true}/>
                     </Form.Group>
                     <Form.Group controlId="Select3">
                         <label htmlFor="location2" style={{marginRight: "1rem"}}>Vietovė:</label>
-                        <select name="location2" value={location} required disabled={true}>
+                        <select name="location2" value={item.location} required disabled={true}>
                             {locations.map((item: React.ReactNode) => <option>{item}</option>)}
                         </select>
                     </Form.Group>
                     <Form.Group controlId="price">
                         <Form.Label>Valandinė kaina</Form.Label>
-                        <Form.Control type="number" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} disabled={true}/>
+                        <Form.Control type="number" placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={item.price} disabled={true}/>
                     </Form.Group>
                     <Form.Group controlId="checkbox">
-                        <Form.Check type="checkbox" disabled={true} label="Paslauga teikiama nuotoliniu būdu?" checked={isRemote}/>
+                        <Form.Check type="checkbox" disabled={true} label="Paslauga teikiama nuotoliniu būdu?" checked={item.isRemote}/>
                     </Form.Group>
                     <div>
                         {
-                            props.item.offerImages?.map((image: any, index: number) => {
+                            item.offerImages?.map((image: any, index: number) => {
                                 return <Image fluid src={image} alt="nuotrauka" />
                             })
                         }
