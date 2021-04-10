@@ -19,12 +19,15 @@ const UserNavBarComponent = ({profileImage}) => {
                     <Dropdown.Item href="#/action-1">Ieškoti darbuotojų</Dropdown.Item>
                     <Dropdown.Item href="#/action-2">Darbo pasiūlymų peržiūra</Dropdown.Item>
                     <Dropdown.Item href="#/action-3">Darbų valdymas</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Mano darbų pasiūlymai</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Ginčai</Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-dark" id="dropdown-basic-button2" title="Pasiūlymų paieška">
                     <Dropdown.Item onClick={() => history.push("/siulymas")}>Kurti paslaugos skelbimą</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/paslauga")}>Paslaugų užsakymas</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/vykdymas")}>Vykdomos paslaugos</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Mano paslaugos</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Ginčai</Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-info" id="dropdown-basic-button3" title="Papildomi pasirinkimai">
                     <Dropdown.Item onClick={() => history.push("/zinutes")}>Gautos žinutės</Dropdown.Item>

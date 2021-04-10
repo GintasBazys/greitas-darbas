@@ -42,7 +42,7 @@ const UserProfileViewComponent = () => {
                     setAboutMe(doc.data()?.aboutMe);
                     setUsername(doc.data()?.username);
                     setPortfolioImages(doc.data()?.portfolioImages);
-                    setProfileImage(doc.data()?.image);
+                    setProfileImage(doc.data()?.image[0]);
                     setUser(doc.id);
             })
         setLoading(false);

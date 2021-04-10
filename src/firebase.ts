@@ -26,10 +26,9 @@ const usersCollection = db.collection("users");
 const workerCollection = db.collection("workers");
 const requestCollection = db.collection("requests");
 const offersCollection = db.collection("offers");
-const statisticsCollection = db.collection("statistics");
-const messagesCollection = db.collection("messages");
-const reviewCollection = db.collection("reviews");
 const offerReview = db.collection("offerReview");
+const reservedOffersCollection = db.collection("reservedOffers");
+const reservedRequestsCollection = db.collection("reservedRequests");
 
 export {
     db,
@@ -42,8 +41,7 @@ export {
     workerCollection,
     requestCollection,
     offersCollection,
-    statisticsCollection,
-    messagesCollection,
-    reviewCollection,
-    offerReview
+    offerReview,
+    reservedOffersCollection,
+    reservedRequestsCollection
 };

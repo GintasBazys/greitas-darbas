@@ -6,6 +6,8 @@ import {locations} from "./locations";
 import {days} from "./days";
 import history from "../../history";
 import {selectOffer} from "../../features/offers/offersSlice";
+import {selectUserEmail} from "../../features/user/userSlice";
+import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";
 
 interface Props {
     show: boolean,
@@ -13,39 +15,50 @@ interface Props {
 }
 
 const UserOfferModalComponent = (props: Props) => {
-    const [description, setDescription] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [location, setLocation] = useState("");
-    const [price, setPrice] = useState("");
-    const [isRemote, setIsRemote] = useState(false);
-    const [title, setTitle] = useState("");
-    const [docId, setDocId] = useState("");
+
     const item = useSelector(selectOffer);
+    const userEmail = useSelector(selectUserEmail);
     console.log(item.title);
 
-    //@ts-ignore
-    // db.collection("offers").where("title", "==", item.title).limit(1).get()
-    //     .then((querySnapshot) => {
-    //         querySnapshot.forEach((doc) => {
-    //             console.log(doc.id);
-    //             setDescription(doc.data()?.description);
-    //             setPhoneNumber(doc.data()?.phoneNumber);
-    //             setLocation(doc.data()?.location);
-    //             setPrice(doc.data()?.price)
-    //             setTitle(doc.data()?.title);
-    //             setIsRemote(doc.data()?.isRemote);
-    //             setDocId(doc.id);
-    //         })
-    // })
+    const [modalShow, setModalShow] = useState(false);
 
     const dispatch = useDispatch();
 
-    const reserveOffer = async (event: React.MouseEvent<HTMLElement>) => {
-        await db.collection("offers").doc(docId).update({
-            status: "rezervuotas",
-            reservedUser: auth.currentUser?.uid
-        })
-        history.go(0);
+    const handleModalShow = () => {
+        props.onHide;
+        setModalShow(!modalShow)
+    }
+
+    const reserveOffer = async () => {
+
+        const confirm = window.confirm("Patvirtinti rezervaciją?");
+        if(confirm) {
+            // let docId = ""
+            // await db.collection("offers").where("title", "==", item.title).limit(1).get()
+            //     .then((querySnapshot) => {
+            //         querySnapshot.forEach((doc) => {
+            //             docId = doc.id;
+            //         })
+            //     })
+            // await db.collection("reservedOffers").add({
+            //     status: "rezervuotas",
+            //     price: item.price,
+            //     user: item.user,
+            //     userMail: item.userMail,
+            //     username: item.username,
+            //     profileImage: item.profileImage,
+            //     title: item.title,
+            //     description: item.description,
+            //     reservedDay: item.reservedDay,
+            //     reservedHour: item.reservedHour,
+            //     reservedUser: auth.currentUser?.uid,
+            //     reservedUserEmail: userEmail
+            // })
+            // await history.go(0);
+            await props.onHide;
+            setModalShow(!modalShow)
+        }
+
     }
 
     return (
@@ -98,7 +111,8 @@ const UserOfferModalComponent = (props: Props) => {
                         }
                     </div>
                     <div className="center-element">
-                        <Button variant="outline-dark" onClick={(event) => reserveOffer(event)}>Rezervuoti</Button>
+                        <Button variant="outline-dark" onClick={() => reserveOffer()}>Rezervuoti</Button>
+                        <ComfirmReservationModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
                     </div>
 
                 </Form>

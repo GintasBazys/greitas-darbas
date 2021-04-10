@@ -8,6 +8,9 @@ import TimePicker from "react-time-picker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import lt from 'date-fns/locale/lt';
+import {useSelector} from "react-redux";
+import {selectUserEmail} from "../../features/user/userSlice";
+import {locations} from "./locations";
 registerLocale('lt', lt)
 
 interface Props {
@@ -20,8 +23,20 @@ const ComfirmReservationModalComponent = (props: Props) => {
 
     const [reservedTimeDay, setReservedTimeDay] = useState(new Date());
     const [reservedTimeHour, setReservedTimeHour] = useState("");
+    const [name, setName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [timeForOffer, setTimeForOffer] = useState(0);
     const [docId, setDocId] = useState("");
+    const userEmail = useSelector(selectUserEmail);
+
+    useEffect( () => {
+        db.collection("users").doc(auth.currentUser?.uid).get()
+            .then((doc) => {
+                    setDocId(doc.id);
+                    setName(doc.data()?.nameAndSurname);
+                    setPhoneNumber(doc.data()?.phoneNumber);
+            })
+    }, []);
 
     useEffect( () => {
         db.collection("offers").where("title", "==", props.item.title).limit(1).get()
@@ -38,18 +53,42 @@ const ComfirmReservationModalComponent = (props: Props) => {
         setModalShow(!modalShow)
     }
 
+    const [location, setLocation] = useState("Akmenė");
+
+    const handleLocationChange = (event: any) => {
+        setLocation(event.target.value)
+    }
+
     const sendConfirmationForOffer = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
         const confirm = window.confirm("Patvirtinti?");
         if (confirm) {
-            await db.collection("offers").doc(docId).update({
-                status: "patvirtintasTeikejo",
-                reservedTimeDay: reservedTimeDay.toISOString(),
-                reservedTimeHour: reservedTimeHour,
-                timeForOffer: timeForOffer,
+            let docId = ""
+            await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        docId = doc.id;
+                    })
+                })
+            await db.collection("reservedOffers").add({
+                status: "rezervuotas",
+                price: props.item.price,
+                user: props.item.user,
+                userMail: props.item.userMail,
+                username: props.item.username,
+                profileImage: props.item.profileImage,
+                title: props.item.title,
+                description: props.item.description,
+                reservedDay: reservedTimeDay.toISOString(),
+                reservedHour: reservedTimeHour,
+                reservedUser: auth.currentUser?.uid,
+                reservedUserEmail: userEmail,
+                paymentStatus: "Neatliktas",
+                reservedUserNameAndSurname: name,
+                reservedUserPhoneNumber: phoneNumber,
+                location: location
             })
-            await props.onHide();
-            //await history.go(0);
+            await history.go(0);
         }
 
     }
@@ -74,15 +113,16 @@ const ComfirmReservationModalComponent = (props: Props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Nurodyti paslaugos atlikimo laiką
+                    Nurodyti norimą laiką
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group controlId="timeOffer">
-                        <Form.Label>Laikas, reikalingas paslaugai atlikti. Įveskite valandas(sveikojo skaičio formatu)</Form.Label>
-                        {/*@ts-ignore*/}
-                        <Form.Control type="number" placeholder="0" value={timeForOffer} onChange={handleChangeTimeForOffer}/>
+                    <Form.Group controlId="Select3">
+                        <label htmlFor="location2" style={{marginRight: "1rem"}}>Paslaugos atlikimo vieta:</label>
+                        <select name="location2" value={location} onChange={handleLocationChange} required>
+                            {locations.map((item: React.ReactNode) => <option>{item}</option>)}
+                        </select>
                     </Form.Group>
                     {/*@ts-ignore*/}
                     <DatePicker locale="lt" selected={reservedTimeDay} onChange={(date):any => setReservedTimeDay(date)} />

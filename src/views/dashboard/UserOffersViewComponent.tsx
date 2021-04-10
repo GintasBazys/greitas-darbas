@@ -43,27 +43,6 @@ const UserOffersViewComponent = () => {
 
     }
 
-    const reserveOffer = async (item: { title: string; }) => {
-
-        const confirm = window.confirm("Patvirtinti rezervaciją?");
-        if(confirm) {
-            let docId = ""
-            await db.collection("offers").where("title", "==", item.title).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        docId = doc.id;
-                    })
-                })
-            await db.collection("offers").doc(docId).update({
-                status: "rezervuotas",
-                reservedUser: auth.currentUser?.uid,
-                reservedUserEmail: userEmail
-            })
-            await history.go(0);
-        }
-
-    }
-
     const filter = () => {
         db.collection("offers").where("experienceLevel", "==", "Ekspertas").where("price", "==", "15").get()
             .then((querySnapshot) => {
