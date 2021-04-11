@@ -156,7 +156,7 @@ const WorkerRegistrationComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="activity">
                                 <label htmlFor="location">Veikla:</label>
-                                <select name="location" value={activity} onChange={handleActivityChange} required>
+                                <select name="activity" value={activity} onChange={handleActivityChange} required>
                                     {activities.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>

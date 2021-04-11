@@ -16,10 +16,10 @@ const UserNavBarComponent = ({profileImage}) => {
             <Navbar bg="light" expand="lg" className=" py-0 sticky-top dashboard-nav-width" variant="light">
                 <Navbar.Brand><Link to="/pagrindinis" className="admin-navbar-brand">Pradžia</Link></Navbar.Brand>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-primary" id="dropdown-basic-button" title="Darbuotojų paieška">
-                    <Dropdown.Item href="#/action-1">Ieškoti darbuotojų</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Darbo pasiūlymų peržiūra</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Darbų valdymas</Dropdown.Item>
-                    <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Mano darbų pasiūlymai</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paieska/kurimas")}>Kurti darbuotojų paieškos skelbimą</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paieska/siulymai")}>Darbo pasiūlymų peržiūra</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paieska/valdymas")}>Darbų valdymas</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/paieska/darbas/mano")}>Mano darbų pasiūlymai</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Ginčai</Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-dark" id="dropdown-basic-button2" title="Pasiūlymų paieška">

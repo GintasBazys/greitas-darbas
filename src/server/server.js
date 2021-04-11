@@ -157,7 +157,6 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                             transfer_data: {
                                  destination: connectedAccount
                             }
-                                        //requires_confirmation: false,
                         }).then((result) => {
                             res.json({
                                      paymentId: result.id,

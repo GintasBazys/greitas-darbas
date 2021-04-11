@@ -17,7 +17,7 @@ const Checkout = (props: Props) => {
     const stripe = useStripe();
     const elements = useElements();
     const [docId, setId] = useState("");
-    console.log(props.price);
+    console.log(props.connectedId);
 
     useEffect(() => {
         db.collection("reservedOffers").where("id", "==", props.id).limit(1).get()

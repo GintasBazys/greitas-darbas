@@ -10,6 +10,8 @@ import axios from "axios";
 import {locations} from "./locations";
 import {addRequest} from "../../features/requests/requestsSlice";
 import history from "../../history";
+import {activities} from "./registration/activities";
+import DatePicker from "react-datepicker";
 
 const UserSearchWorkerFormComponent = () => {
 
@@ -28,13 +30,17 @@ const UserSearchWorkerFormComponent = () => {
     const [type, setType] = useState("");
     const username = useSelector(selectUser);
     const [userRating, setUserRating] = useState(0);
+    const [profileImage, setProfileImage] = useState("");
 
     const [connectedId, setConnectedId] = useState(false);
+    const [nameAndSurname, setNameAndSurname] = useState("");
 
     useEffect( () => {
         db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 setUserRating(doc.data()?.rating);
+                setProfileImage(doc.data()?.image[0]);
+                setNameAndSurname(doc.data()?.nameAndSurname);
                 if(doc.data()?.connectedAccount != "") {
                     setConnectedId(true);
                 }
@@ -80,7 +86,7 @@ const UserSearchWorkerFormComponent = () => {
         setType(event.target.value)
     }
 
-    const createOffer = async () => {
+    const createRequest = async () => {
         await dispatch(addRequest({
             user: auth.currentUser?.uid,
             username: username,
@@ -89,15 +95,18 @@ const UserSearchWorkerFormComponent = () => {
             description: description,
             phoneNumber: phoneNumber,
             budget: budget,
-            estimatedTime: estimatedTime,
             isRemote: isRemote,
             location: location,
-            type: type,
-            userRating: userRating
+            activity: type,
+            userRating: userRating,
+            profileImage: profileImage,
+            term: reservedTimeDay.toISOString(),
+            nameAndSurname: nameAndSurname
         }));
         await history.go(0);
 
     }
+    const [reservedTimeDay, setReservedTimeDay] = useState(new Date());
 
     return (
         <div>
@@ -133,13 +142,15 @@ const UserSearchWorkerFormComponent = () => {
                                 <Form.Label>Pavadinimas</Form.Label>
                                 <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
-                            <Form.Group controlId="type">
-                                <Form.Label>Tipas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos tipą" value={type} onChange={handleTypeChange}/>
+                            <Form.Group controlId="activity">
+                                <label htmlFor="location">Veikla:</label>
+                                <select name="activity" value={type} onChange={handleTypeChange} required>
+                                    {activities.map((item: React.ReactNode) => <option>{item}</option>)}
+                                </select>
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
-                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
+                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą darbą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
@@ -149,11 +160,6 @@ const UserSearchWorkerFormComponent = () => {
                                 <Form.Label>Biudžetas</Form.Label>
                                 {/*@ts-ignore*/}
                                 <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite biudžeto sumą" value={budget} onChange={handleBudgetChange}/>
-                            </Form.Group>
-                            <Form.Group controlId="time">
-                                <Form.Label>Numatomas laikas</Form.Label>
-                                {/*@ts-ignore*/}
-                                <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite numatomą atlikimo laiką" value={estimatedTime} onChange={handleEstimatedTimeChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
                                 <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
@@ -165,8 +171,12 @@ const UserSearchWorkerFormComponent = () => {
                                 <Form.Check type="checkbox" label="Vykdymas nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
+                            <Form.Group>
+                                {/*@ts-ignore*/}
+                                <DatePicker locale="lt" selected={reservedTimeDay} onChange={(date):any => setReservedTimeDay(date)} />
+                            </Form.Group>
                             <div className="center-element">
-                                <Button variant="outline-dark" onClick={createOffer}>Paskelbti</Button>
+                                <Button variant="outline-dark" onClick={createRequest}>Paskelbti</Button>
                             </div>
 
                         </Form>

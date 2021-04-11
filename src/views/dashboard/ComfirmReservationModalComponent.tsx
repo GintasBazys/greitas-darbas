@@ -114,9 +114,6 @@ const ComfirmReservationModalComponent = (props: Props) => {
     //     setReservedTimeDay(event.target.value)
     // }
 
-    const handleChangeTimeForOffer = (event: { target: { value: React.SetStateAction<number>; }; }) => {
-        setTimeForOffer(event.target.value);
-    }
 
     return (
         <Modal

@@ -19,24 +19,23 @@ export const requestsSlice = createSlice( {
 
 export const {setRequests, setReservedRequest} = requestsSlice.actions;
 
-export const addRequest = (info: { estimatedTime: number; phoneNumber: string; isRemote: boolean; userMail: string; description: string; location: string; title: string; type: string; user: any; userRating: number; username: string; budget: number }) => async (dispatch: any) => {
+export const addRequest = (info: { activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; phoneNumber: string; nameAndSurname: string; userMail: string; location: string; term: string; user: string | undefined; username: string; budget: number }) => async (dispatch: any) => {
     await firebase.requestCollection.add({
         user: info.user,
         userMail: info.userMail,
         username: info.username,
         description: info.description,
         phoneNumber: info.phoneNumber,
-        type: info.type,
         location: info.location,
         budget: info.budget,
         isRemote: info.isRemote,
         userRating: info.userRating,
-        estimatedTime: info.estimatedTime,
         createdOn: new Date().toISOString(),
         status: "naujas",
         title: info.title,
-        paymentId: "",
-        paymentStatus: "neatliktas",
+        profileImage: info.profileImage,
+        term: info.term,
+        nameAndSurname: info.nameAndSurname
     }).then(r => {
 
     }).catch((error) => {

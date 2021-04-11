@@ -77,7 +77,7 @@ const UserOfferModalComponent = (props: Props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>g
+                <Form>
                     <Form.Group controlId="title">
                         <Form.Label>Pavadinimas</Form.Label>
                         <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={item.title} disabled={true}/>
