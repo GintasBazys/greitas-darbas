@@ -12,7 +12,7 @@ import {useSelector} from "react-redux";
 import {selectUserEmail} from "../../features/user/userSlice";
 import {locations} from "./locations";
 // @ts-ignore
-import uuid from "uuid";
+import {v4 as uuid} from "uuid";
 registerLocale('lt', lt)
 
 interface Props {

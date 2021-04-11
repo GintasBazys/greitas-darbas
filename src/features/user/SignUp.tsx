@@ -79,9 +79,6 @@ const SignUp = () => {
                     <Form.Label>Slaptažodis</Form.Label>
                     <Form.Control type="password" value={password} autoComplete="on" placeholder="Įveskite slaptažodį" autoFocus onChange={handlePasswordChange}/>
                 </Form.Group>
-                <div className="alert alert-warning" role="alert">
-                    Antrame registracijos etape reikės asmens tapatybės patvirtinimo (dokumento nuotrauka).
-                </div>
                 <Button variant="primary" type="submit" onClick={(e) => handleSubmit(e)}>
                     Pateikti
                 </Button>

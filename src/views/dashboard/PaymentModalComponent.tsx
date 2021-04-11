@@ -46,10 +46,10 @@ const PaymentModalComponent = (props: Props) => {
             <Modal.Body>
                 <Form>
                     <div style={{marginTop: "2rem"}}>
-                        {props.item.title} - Mokėti {props.item.timeForOffer * props.item.price} eurų.
+                        {props.item.title} - Mokėti {props.item.fullPrice} eurų.
                     </div>
                     <div style={{marginTop: "2rem"}}>
-                        <Stripe timeForOffer={props.item.timeForOffer} title={props.item.title} connectedId={connectedId} email={props.item.email} reservedUserEmail={props.item.reservedUserEmail} price={props.item.timeForOffer * props.item.price}/>
+                        <Stripe id={props.item.id} connectedId={connectedId} email={props.item.email} reservedUserEmail={props.item.reservedUserEmail} price={props.item.fullPrice}/>
                     </div>
 
                 </Form>

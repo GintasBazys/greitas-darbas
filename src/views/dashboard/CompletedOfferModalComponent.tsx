@@ -27,27 +27,16 @@ const CompletedOfferModalComponent = (props: Props) => {
     }, [])
 
     const [docId, setDocId] = useState("");
-    const [connectedAccount, setConnectedAccount] = useState(0);
 
     useEffect(() => {
         db.collection("users").doc(props.reservedOffer.user).get()
             .then((doc) => {
                 setDocId(doc.id);
-                setConnectedAccount(doc.data()?.connectedAccount)
             })
     }, [])
 
-    const transferPayment = async () => {
-        try {
-            const response = await axios.post(
-                "http://localhost:8080/stripe/pervedimas",
-                {
-                    connectedAccount: connectedAccount,
-                    amount: props.reservedOffer.price * props.reservedOffer.timeForOffer * 100,
-                }
-            );
-            console.log(response.data.success);
-            if (response.data.success) {
+    const completeOffer = async () => {
+
                 await db.collection("offers").where("title", "==", props.reservedOffer.title).limit(1).get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach(async (doc) => {
@@ -87,12 +76,6 @@ const CompletedOfferModalComponent = (props: Props) => {
                             await history.go(0);
                         })
                     })
-                //
-            }
-
-        } catch (e) {
-
-        }
     }
 
     return (
@@ -112,7 +95,7 @@ const CompletedOfferModalComponent = (props: Props) => {
             </Modal.Header>
             <Modal.Body>
                 <p>Galutinis progreso vertinimas: {userRating}</p>
-                <Button variant="outline-dark" onClick={transferPayment}>Patvirtinti</Button>
+                <Button variant="outline-dark" onClick={completeOffer}>Patvirtinti</Button>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Uždaryti</Button>

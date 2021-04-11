@@ -13,6 +13,7 @@ import ServiceProviderProgressModalComponent from "./ServiceProviderProgressModa
 import offerProgress from "../../assets/offer_progress.svg";
 import moment from "moment";
 import store from "../../app/store";
+import SubmitPaymentModalComponent from "./SubmitPaymentModalComponent";
 
 const ServiceProviderOfferPaidComponent = () => {
 
@@ -59,6 +60,19 @@ const ServiceProviderOfferPaidComponent = () => {
         setProgressModalShow(!progressModalShow)
     }
 
+    const [timeForOffer, setTimeForOffer] = useState(0);
+
+    const handleTimeForOfferChange = (event: any) => {
+        setTimeForOffer(event.target.value);
+    }
+
+    const [submitPaymentModalShow, setSubmitPaymentModalShow] = useState(false);
+
+    const handleSubmitPaymentModalShow = (reservedOffer: any) => {
+        store.dispatch(setReservedOffer(reservedOffer))
+        setSubmitPaymentModalShow(!progressModalShow)
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -86,9 +100,11 @@ const ServiceProviderOfferPaidComponent = () => {
                                     {
                                         reservedOffer.status === "Atliktas" ?
                                             <div>
-                                                <Form.Group controlId="timeForOffer">
+                                                <Form.Group style={{width: "20%"}} controlId="timeForOffer">
                                                     <Form.Label>Įveskite paslaugos trukmę valandomis</Form.Label>
-                                                    <Form.Control type="text" placeholder="Įveskite paslaugos trukmę valandomis" value="10" />
+                                                    <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={timeForOffer} onChange={handleTimeForOfferChange} />
+                                                    <Button style={{marginTop: "0.5rem"}} variant="outline-dark" onClick={() => handleSubmitPaymentModalShow(reservedOffer)}>Pateikti galutinę sumą</Button>
+                                                    <SubmitPaymentModalComponent timeForOffer={timeForOffer} show={submitPaymentModalShow} onHide={() => handleSubmitPaymentModalShow(reservedOffer)} />
                                                 </Form.Group>
                                             </div> :
                                              <div>

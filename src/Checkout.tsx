@@ -10,17 +10,17 @@ interface Props {
     price: number,
     reservedUserEmail: string,
     connectedId: any,
-    title: string,
-    timeForOffer: number
+    id: string,
 }
 
 const Checkout = (props: Props) => {
     const stripe = useStripe();
     const elements = useElements();
     const [docId, setId] = useState("");
+    console.log(props.price);
 
     useEffect(() => {
-        db.collection("offers").where("title", "==", props.title).limit(1).get()
+        db.collection("reservedOffers").where("id", "==", props.id).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     setId(doc.id);
@@ -45,7 +45,7 @@ const Checkout = (props: Props) => {
                 const response = await axios.post(
                     "http://localhost:8080/stripe/mokejimas",
                     {
-                        amount: props.price * props.timeForOffer * 100,
+                        amount: props.price,
                         id: id,
                         customer: props.reservedUserEmail,
                         connectedAccount: props.connectedId
@@ -53,17 +53,12 @@ const Checkout = (props: Props) => {
                 );
 
                 if (response.data.success) {
-                    // console.log(response.data.success);
-                    // await db.collection("offers").doc(docId).update({
-                    //     paymentStatus: "Mokėjimas atliktas",
-                    //     status: "Mokėjimas atliktas",
-                    //     paymentId: response.data.paymentId
-                    // })
-                    // await db.collection("offerReview").doc(docId).set({
-                    //     progressRating: 0,
-                    //     comments: []
-                    // })
-
+                    console.log(response.data.success);
+                    await db.collection("reservedOffers").doc(docId).update({
+                        paymentStatus: "Mokėjimas atliktas",
+                        status: "Mokėjimas atliktas",
+                        paymentId: response.data.paymentId
+                    })
                     await history.go(0);
                 }
             } catch (error) {

@@ -61,8 +61,9 @@ const UserWorkOfferManagementComponent = () => {
                 setActivity(doc.data()?.activity);
                 setExperienceLevel(doc.data()?.experienceLevel);
                 setNameAndSurname(doc.data()?.nameAndSurname);
-                setProfileImage(doc.data()?.profileImage);
-                if(doc.data()?.connectedAccount != "") {
+                setProfileImage(doc.data()?.image);
+                console.log(doc.data()?.connectedAccount);
+                if(doc.data()?.connectedAccount != "" && doc.data()?.connectedAccount !== undefined) {
                     setConnectedId(true);
                 }
             })

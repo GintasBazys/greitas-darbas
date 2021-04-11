@@ -103,7 +103,8 @@ let client = null;
 
 app.post("/stripe/mokejimas", cors(), async (req, res) => {
     let { amount, id, customer, connectedAccount} = req.body;
-    console.log(customer)
+
+    console.log(amount);
         await axios.get(`https://api.stripe.com/v1/customers?email=${customer}`, config)
                 .then((resp) => {
                     console.log(resp.data.data)
@@ -119,12 +120,15 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                         }
                         createClient().then(() => {
                              stripe.paymentIntents.create({
-                                amount: amount,
+                                 amount: amount * 100,
                                  currency: "EUR",
                                  description: "Greitas Darbas Ltd",
                                  payment_method: id,
                                  confirm:true,
                                  customer: client.id,
+                                 transfer_data: {
+                                      destination: connectedAccount
+                                  }
                                  //requires_confirmation: false,
 
                             }).then((result) => {
@@ -144,12 +148,15 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                         console.log(resp.data.data[0].id)
 
                          stripe.paymentIntents.create({
-                            amount: amount,
+                            amount: amount * 100,
                             currency: "EUR",
                             description: "Greitas Darbas Ltd",
                             payment_method: id,
                             customer: resp.data.data[0].id,
                             confirm:true,
+                            transfer_data: {
+                                 destination: connectedAccount
+                            }
                                         //requires_confirmation: false,
                         }).then((result) => {
                             res.json({
