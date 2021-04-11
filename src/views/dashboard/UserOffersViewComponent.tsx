@@ -14,6 +14,7 @@ import UserOfferModalComponent from "./UserOfferModalComponent";
 import history from "../../history";
 import store from "../../app/store";
 import {setOffer} from "../../features/offers/offersSlice";
+import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 
 const UserOffersViewComponent = () => {
 
@@ -43,11 +44,10 @@ const UserOffersViewComponent = () => {
 
     }
 
+    const [filterModalShow, setFilterModalShow] = useState(false);
+
     const filter = () => {
-        db.collection("offers").where("experienceLevel", "==", "Ekspertas").where("price", "==", "15").get()
-            .then((querySnapshot) => {
-                console.log(querySnapshot.docs.length);
-            })
+        setFilterModalShow(!filterModalShow);
     }
 
     const [search, setSearch] = useState("");
@@ -68,6 +68,7 @@ const UserOffersViewComponent = () => {
                         <div className="center-element">
                             <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
+                            <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
 
                     </Form.Group>

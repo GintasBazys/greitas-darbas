@@ -16,6 +16,8 @@ import searchIcon from "../../assets/search.svg";
 import store from "../../app/store";
 import {setReservedOffer} from "../../features/offers/offersSlice";
 import PaymentModalComponent from "./PaymentModalComponent";
+import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
+import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -112,16 +114,22 @@ const UserOffersInProgressComponent = () => {
         }
     }
 
+    const [completedModalShow, setCompletedModalShow] = useState(false);
+
+    const handleCompletedModalShow = () => {
+        setCompletedModalShow(!completedModalShow);
+    }
+
     const [search, setSearch] = useState("");
 
     const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearch(event.target.value);
     }
+
+    const [filterModalShow, setFilterModalShow] = useState(false);
+
     const filter = () => {
-        // db.collection("offers").where("experienceLevel", "==", "Ekspertas").where("price", "==", "15").get()
-        //     .then((querySnapshot) => {
-        //         console.log(querySnapshot.docs.length);
-        //     })
+        setFilterModalShow(!filterModalShow);
     }
 
 
@@ -137,6 +145,7 @@ const UserOffersInProgressComponent = () => {
                         <div className="center-element">
                             <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
+                            <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
 
                     </Form.Group>
@@ -384,7 +393,8 @@ const UserOffersInProgressComponent = () => {
                                                         Patvirtinkite mokėjimo gavimą
                                                     </div>
                                                     <div className="center-element">
-                                                        <Button variant="outline-dark">Patvirtinti mokėjimo gavimą</Button>
+                                                        <Button variant="outline-dark" onClick={handleCompletedModalShow}>Patvirtinti mokėjimo gavimą</Button>
+                                                        <CompletedOfferModalComponent reservedOffer={item} onHide={() => handleCompletedModalShow()} show={completedModalShow} />
                                                     </div>
                                                     <div style={{marginTop: "2rem"}} className="center-element">
                                                         <Button variant="outline-danger">Negautas mokėjimas</Button>

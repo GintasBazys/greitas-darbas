@@ -53,6 +53,7 @@ const UserProfileComponent = () => {
     const [username, setUsername] = useState("");
     const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
     const userId = firebase.auth.currentUser?.uid;
+    const [status, setStatus] = useState("");
 
     useEffect(() => {
         firebase.usersCollection.doc(auth.currentUser?.uid).get()
@@ -64,6 +65,7 @@ const UserProfileComponent = () => {
                 setUsernameBeforeChange(doc.data()?.username);
                 setUserRating(doc.data()?.rating);
                 setRatingCount(doc.data()?.ratingCount);
+                setStatus(doc.data()?.status);
             })
     }, [user])
 
@@ -247,6 +249,11 @@ const UserProfileComponent = () => {
                             <Image src={image} className="dashboard-profile-image" roundedCircle alt="profilio nuotrauka" />
                             <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
                         </Form.Group>
+                        {
+                            status === "patvirtintas_naudotojas" ? <div className="center-element">
+                                <Button variant="outline-dark">Sukurti paslaugų teikėjo paskyrą</Button>
+                            </div> : <div></div>
+                        }
                         <Form.Group>
                             <Form.Label>Pakeisti vartotojo vardą</Form.Label>
                             <Form.Control type="text" value={username} onChange={handleUsernameChange} />

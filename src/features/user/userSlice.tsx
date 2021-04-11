@@ -62,7 +62,9 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             portfolioImages: [],
             rating: 0,
             ratingCount: 0,
-            allRating: 0
+            allRating: 0,
+            sentMessages: [],
+            receivedMessages: []
         })
             .then(() => {
                 console.log("Document successfully written!");

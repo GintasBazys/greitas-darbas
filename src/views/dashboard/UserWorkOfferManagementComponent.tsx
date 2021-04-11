@@ -50,6 +50,7 @@ const UserWorkOfferManagementComponent = () => {
     const [experienceLevel, setExperienceLevel] = useState("");
     const [nameAndSurname, setNameAndSurname] = useState("");
     const [profileImage, setProfileImage] = useState("");
+    const [status, setStatus] = useState(false);
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
 
     useEffect( () => {
@@ -63,8 +64,12 @@ const UserWorkOfferManagementComponent = () => {
                 setNameAndSurname(doc.data()?.nameAndSurname);
                 setProfileImage(doc.data()?.image);
                 console.log(doc.data()?.connectedAccount);
+
                 if(doc.data()?.connectedAccount != "" && doc.data()?.connectedAccount !== undefined) {
                     setConnectedId(true);
+                }
+                if(doc.data()?.status === "patvirtintas_naudotojas") {
+                    setStatus(true);
                 }
             })
     }, [])
@@ -199,6 +204,11 @@ const UserWorkOfferManagementComponent = () => {
                                         </div>
                                     </div>
                             }
+                            {
+                                status ? <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
+                                    Sukurkite paslaugų teikėjo paskyrą profilio lange
+                                </div> :<div></div>
+                            }
 
 
                         </div>
@@ -207,11 +217,11 @@ const UserWorkOfferManagementComponent = () => {
                     </Col>
                     <Col md={8}>
                         <NotificationComponent message={error} />
-
+                        {console.log(status)}
                         <Form>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
+                                <Form.Control type="text"  disabled={!connectedId || status} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="activity">
                                 <Form.Label>Paslaugos rūšis. Keiskite informaciją profilio puslapyje</Form.Label>
@@ -223,21 +233,21 @@ const UserWorkOfferManagementComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
-                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
+                                <Form.Control as="textarea" rows={3} disabled={!connectedId || status} placeholder="Aprašykite savo siūlomą paslaugą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
+                                <Form.Control type="text" disabled={!connectedId || status} value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
                                 <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
-                                <select name="location" disabled={!connectedId} value={location} onChange={handleLocationChange} required>
+                                <select name="location" disabled={!connectedId || status} value={location} onChange={handleLocationChange} required>
                                     {locations.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>
                             <Form.Group controlId="price">
                                 <Form.Label>Valandinė kaina</Form.Label>
-                                <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
+                                <Form.Control type="number" disabled={!connectedId || status} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
                             <Form.Group controlId="checkbox">
                                 <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}

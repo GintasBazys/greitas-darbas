@@ -14,7 +14,7 @@ const CompletedOfferModalComponent = (props: Props) => {
     const [userRating, setUSerRating] = useState(0);
 
     useEffect(() => {
-        db.collection("offers").where("title", "==", props.reservedOffer.title).limit(1).get()
+        db.collection("reservedOffers").where("id", "==", props.reservedOffer.id).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     db.collection("offerReview").doc(doc.id).get()
@@ -23,7 +23,6 @@ const CompletedOfferModalComponent = (props: Props) => {
                         })
                 })
             })
-        db.collection("offerReview").doc()
     }, [])
 
     const [docId, setDocId] = useState("");
@@ -37,19 +36,10 @@ const CompletedOfferModalComponent = (props: Props) => {
 
     const completeOffer = async () => {
 
-                await db.collection("offers").where("title", "==", props.reservedOffer.title).limit(1).get()
+                await db.collection("reservedOffers").where("id", "==", props.reservedOffer.id).limit(1).get()
                     .then((querySnapshot) => {
                         querySnapshot.forEach(async (doc) => {
-                            await db.collection("offers").doc(doc.id).update({
-                                status: "naujas",
-                                reservedTimeDay: "",
-                                reservedTimeHour: "",
-                                reservedUser: "",
-                                reservedUserEmail: "",
-                                paymentId: "",
-                                paymentStatus: "",
-                                timeForOffer: ""
-                            })
+                            await db.collection("reservedOffers").doc(doc.id).delete()
                             let progressRating = 0;
 
                             await db.collection("offerReview").doc(doc.id).get()
@@ -60,20 +50,28 @@ const CompletedOfferModalComponent = (props: Props) => {
                                 })
                             let rating: number = 0;
                             await db.collection("users").doc(docId).get()
-                                .then((doc) => {
+                                .then(async (doc) => {
                                     let ratingCount: number = doc.data()?.ratingCount + 1;
+                                    let allRating: number = doc.data()?.allRating;
                                     rating = doc.data()?.rating;
-                                    db.collection("users").doc(docId).update({
-                                        rating: rating + progressRating / ratingCount,
-                                        ratingCount: ratingCount
-                                    }).then(() => {
-                                        db.collection("offers").doc(doc.id).update({
-                                            userRating: rating + progressRating / ratingCount,
-                                        })
+                                    await db.collection("users").doc(docId).update({
+                                        rating: (allRating + progressRating) / ratingCount,
+                                        ratingCount: ratingCount,
+                                        allRating: allRating + progressRating
+                                    }).then(async () => {
+                                        await db.collection("offers").where("user", "==", props.reservedOffer.user).get()
+                                            .then((querySnapshot) => {
+                                                querySnapshot.forEach((doc) => {
+                                                    db.collection("offers").doc(doc.id).update({
+                                                        userRating: (allRating + progressRating) / ratingCount,
+                                                    })
+                                                })
+                                            })
+                                        await history.go(0);
                                     })
                                 })
 
-                            await history.go(0);
+
                         })
                     })
     }

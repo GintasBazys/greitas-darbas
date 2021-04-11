@@ -72,7 +72,7 @@ const ComfirmReservationModalComponent = (props: Props) => {
         const confirm = window.confirm("Patvirtinti?");
         if (confirm) {
             let docId = ""
-            const id = uuid.v4();
+            const id = uuid();
             await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
