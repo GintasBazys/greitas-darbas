@@ -18,6 +18,7 @@ import {setReservedOffer} from "../../features/offers/offersSlice";
 import PaymentModalComponent from "./PaymentModalComponent";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
+import FilterOffersInProgressModalComponent from "./filter/FilterOffersInProgressModalComponent";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -145,7 +146,7 @@ const UserOffersInProgressComponent = () => {
                         <div className="center-element">
                             <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
-                            <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
+                            <FilterOffersInProgressModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
 
                     </Form.Group>

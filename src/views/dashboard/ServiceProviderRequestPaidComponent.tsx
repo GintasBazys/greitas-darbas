@@ -13,11 +13,10 @@ import offerProgress from "../../assets/offer_progress.svg";
 import {selectReservedRequest} from "../../features/requests/requestsSlice";
 import RequestsProgressModalComponent from "./RequestsProgressModalComponent";
 import RequestsReviewModalComponent from "./RequestsReviewModalComponent";
-import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
-import CompletedRequestModalComponent from "./CompletedRequestModalComponent";
-import axios from "axios";
+
 import moment from "moment";
-import RequestsChangeProgressModalComponent from "./RequestsChangeProgressModalComponent";
+import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
+import CompletedRequestModalComponent from "./CompletedRequestModalComponent";
 
 const ServiceProviderRequestPaidComponent = () => {
     const image = useSelector(selectImage);
@@ -70,7 +69,7 @@ const ServiceProviderRequestPaidComponent = () => {
 
     const [completedModalShow, setCompletedModalShow] = useState(false);
 
-    const handleCompletedOfferModalComponent = () => {
+    const handleCompletedRequestModalComponent = (reservedRequest: any) => {
         setCompletedModalShow(!completedModalShow);
     }
 
@@ -94,7 +93,8 @@ const ServiceProviderRequestPaidComponent = () => {
 
                         <p className="center-element">Naudotojo vertinimas: {Math.round(reservedRequest.userRating)}<Image fluid src={star} /></p>
                         <p className="center-element">Biudžetas: {reservedRequest.budget} €</p>
-
+                        {
+                            reservedRequest.status !== "Atliktas" ?
                                 <div>
                                     <div className="center-element">
                                         <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
@@ -105,8 +105,20 @@ const ServiceProviderRequestPaidComponent = () => {
                                     <div style={{marginTop: "2rem"}} className="center-element">
                                         <Button variant="outline-danger" onClick={cancelRequest}>Atšaukti užsakymą</Button>
                                     </div>
-                                </div>
-
+                                </div> : <div></div>
+                        }
+                        {
+                            reservedRequest.status === "Atliktas" ?
+                                <div>
+                                    <div className="center-element">
+                                        <Button variant="outline-dark" onClick={() => handleCompletedRequestModalComponent(reservedRequest)}>Atlikite mokėjimą</Button>
+                                        <CompletedRequestModalComponent  show={completedModalShow} onHide={() => handleCompletedRequestModalComponent(reservedRequest)}  reservedRequest={reservedRequest}/>
+                                    </div>
+                                    <div className="center-element" style={{marginTop: "2rem"}}>
+                                        <Button variant="outline-danger">Blogai atliktas darbas</Button>
+                                    </div>
+                                </div> : <div></div>
+                        }
                     </Col>
                     <Col md={6}>
                         <h1 className="center-element">Darbuotojas</h1>

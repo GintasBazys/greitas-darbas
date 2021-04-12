@@ -1,12 +1,12 @@
 import React from "react";
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 
 interface Props {
     show: boolean,
     onHide: () => void,
 }
 
-const FilterOffersModalComponent = (props: Props) => {
+const FilterOffersInProgressModalComponent = (props: Props) => {
     return (
         <Modal
             {...props}
@@ -23,13 +23,14 @@ const FilterOffersModalComponent = (props: Props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-             <div>
-                 <p>Kategorija: </p>
-                 <p>Patirtis: </p>
-                 <p>Reitingas: </p>
-                 <p>Kaina: </p>
-                 <p>Vietovė:</p>
-             </div>
+                <div>
+                    <p>Kategorija: </p>
+                    <p>Patirtis: </p>
+                    <p>Reitingas: </p>
+                    <p>Kaina: </p>
+                    <p>Vietovė:</p>
+                    <p>Statusas:</p>
+                </div>
 
             </Modal.Body>
             <Modal.Footer>
@@ -39,4 +40,4 @@ const FilterOffersModalComponent = (props: Props) => {
     )
 }
 
-export default FilterOffersModalComponent;
+export default FilterOffersInProgressModalComponent

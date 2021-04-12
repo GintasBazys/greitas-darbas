@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
+import history from "../../history";
 
 interface Props {
     show: boolean,
@@ -23,6 +24,7 @@ const RequestsChangeProgressModalComponent = (props: Props) => {
                     await db.collection("requests").doc(doc.id).update({
                         status: progress,
                     })
+                    await history.go(0);
                 })
             })
     }

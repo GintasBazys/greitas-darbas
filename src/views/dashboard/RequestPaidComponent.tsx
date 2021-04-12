@@ -82,14 +82,20 @@ const RequestPaidComponent = () => {
                         <p className="center-element">Biudžetas: {reservedRequest.budget} €</p>
                                 <div>
                                     <div>
-                                        <div className="center-element">
-                                            <Button variant="outline-dark" onClick={handleProgressModalShow}>Keisti vykdymo būseną</Button>
-                                            <RequestsChangeProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow()} title={reservedRequest.title} />
-                                            <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
-                                        </div>
-                                        <div style={{marginTop: "2rem"}} className="center-element">
-                                            <Button variant="outline-danger" onClick={cancelRequest}>Atšaukti užsakymą</Button>
-                                        </div>
+                                        {
+                                            reservedRequest.status !== "Atliktas" ?
+                                                <div>
+                                                    <div className="center-element">
+                                                        <Button variant="outline-dark" onClick={handleProgressModalShow}>Keisti vykdymo būseną</Button>
+                                                        <RequestsChangeProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow()} title={reservedRequest.title} />
+                                                        <Button style={{marginLeft: "2rem"}} variant="outline-dark">Peržiūrėti komentarus</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}} className="center-element">
+                                                        <Button variant="outline-danger" onClick={cancelRequest}>Atšaukti užsakymą</Button>
+                                                    </div>
+                                                </div> : <div></div>
+                                        }
+
                                     </div>
                                 </div>
                         {

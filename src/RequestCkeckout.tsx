@@ -26,8 +26,7 @@ const RequestCheckout = (props: Props) => {
                 })
             })
     })
-    console.log(props.reservedUserEmail);
-
+    console.log(props.email);
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         // @ts-ignore
@@ -58,11 +57,6 @@ const RequestCheckout = (props: Props) => {
                         status: "Mokėjimas atliktas",
                         paymentId: response.data.paymentId
                     })
-                    await db.collection("requestReview").doc(docId).set({
-                        progressRating: 5,
-                        comments: []
-                    })
-
                     await history.go(0);
                 }
             } catch (error) {

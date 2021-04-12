@@ -9,14 +9,14 @@ import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstr
 import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
-import RequestPaymentModalComponent from "./RequestPaymentModalComponent";
 import store from "../../app/store";
 import {setReservedRequest} from "../../features/requests/requestsSlice";
 import history from "../../history";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import workInProgress from "../../assets/work_in_progress.svg";
-import {setReservedOffer} from "../../features/offers/offersSlice";
+import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
+import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
 
 
 const UserRequestsInProgressComponent = () => {
@@ -74,13 +74,19 @@ const UserRequestsInProgressComponent = () => {
                     await db.collection("requests").doc(doc.id).update({
                         status: "Patvirtinta",
                     })
-                    await db.collection("offerReview").doc(doc.id).set({
+                    await db.collection("requestReview").doc(doc.id).set({
                         progressRating: 0,
                         comments: []
                     })
                     await history.go(0);
                 })
             })
+    }
+
+    const [completedModalShow, setCompletedModalShow] = useState(false);
+
+    const handleCompletedRequestModalComponent = (reservedRequest: any) => {
+        setCompletedModalShow(!completedModalShow);
     }
 
     return (
@@ -237,6 +243,78 @@ const UserRequestsInProgressComponent = () => {
                                                 </Card.Body>
                                             </Card> : <div></div>
                                     }
+
+                                    {
+                                        item.status === "Mokėjimas atliktas" && item.user === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    <Card.Title>{item.title}</Card.Title>
+                                                    <Card.Text>
+                                                        {
+                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
+                                                        }
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
+                                                        Atlikote mokėjimą sėkmingai
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
+                                    {
+                                        item.status === "Mokėjimas atliktas" && item.reservedUser === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    <Card.Title>{item.title}</Card.Title>
+                                                    <Card.Text>
+                                                        {
+                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
+                                                        }
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
+                                                        Patvirtinkite mokėjimo gavimą
+                                                    </div>
+                                                    <div className="center-element">
+                                                        <Button variant="outline-dark" onClick={() => handleCompletedRequestModalComponent(item)}>Patvirtinti mokėjimo gavimą</Button>
+                                                        <RequestCompleteModalComponent reservedRequest={item} onHide={() => handleCompletedRequestModalComponent(item)} show={completedModalShow} />
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}} className="center-element">
+                                                        <Button variant="outline-danger">Negautas mokėjimas</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
                                 </div>
                             )
                         })

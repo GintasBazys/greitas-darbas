@@ -9,7 +9,7 @@ const PUBLISHABLE_KEY = "pk_test_51IEDvEJIin4U4oiG7nA5nG8q8vNXkWor5XCqicDRYxsu9t
 const stripe = loadStripe(PUBLISHABLE_KEY);
 
 interface Props {
-    email: string,
+    userMail: string,
     budget: number,
     reservedUserEmail: string,
     connectedId: any,
@@ -19,7 +19,7 @@ interface Props {
 const RequestStripe = (props: Props) => {
     return (
         <Elements stripe={stripe}>
-            <RequestCheckout title={props.title} connectedId={props.connectedId} email={props.email} reservedUserEmail={props.reservedUserEmail} budget={props.budget}/>
+            <RequestCheckout title={props.title} connectedId={props.connectedId} email={props.userMail} reservedUserEmail={props.reservedUserEmail} budget={props.budget}/>
         </Elements>
     )
 }

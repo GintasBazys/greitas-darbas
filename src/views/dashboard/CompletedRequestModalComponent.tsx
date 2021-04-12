@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
 import axios from "axios";
+import Stripe from "../../Stripe";
+import RequestStripe from "../../RequestStripe";
 
 interface Props {
     reservedRequest: any,
@@ -38,54 +40,50 @@ const CompletedRequestModalComponent = (props: Props) => {
     }, [])
 
     const transferPayment = async () => {
-        try {
-            const response = await axios.post(
-                "http://localhost:8080/stripe/darbas/pervedimas",
-                {
-                    connectedAccount: connectedAccount,
-                    amount: props.reservedRequest.budget * 100,
-                }
-            );
-            console.log(response.data.success);
-            if (response.data.success) {
-                await db.collection("requests").where("title", "==", props.reservedRequest.title).limit(1).get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach(async (doc) => {
-
-                            await db.collection("requestReview").doc(doc.id).get()
-                                .then((doc) => {
-                                    progressRating = doc.data()?.progressRating;
-                                }).then(() => {
-                                    db.collection("requestReview").doc(doc.id).delete()
-                                })
-
-                            await db.collection("requests").doc(doc.id).delete()
-                            let progressRating = 0;
-
-                            let rating: number = 0;
-                            await db.collection("users").doc(docId).get()
-                                .then((doc) => {
-                                    let ratingCount: number = doc.data()?.ratingCount + 1;
-                                    rating = doc.data()?.rating;
-                                    db.collection("users").doc(docId).update({
-                                        rating: rating + progressRating / ratingCount,
-                                        ratingCount: ratingCount
-                                    }).then(() => {
-                                        db.collection("requests").doc(doc.id).update({
-                                            userRating: rating + progressRating / ratingCount,
-                                        })
-                                    })
-                                })
-
-                            await history.go(0);
-                        })
-                    })
-                //
-            }
-
-        } catch (e) {
-
-        }
+        // try {
+        //     const response = await axios.post(
+        //         "http://localhost:8080/stripe/darbas/pervedimas",
+        //         {
+        //             connectedAccount: connectedAccount,
+        //             amount: props.reservedRequest.budget * 100,
+        //         }
+        //     );
+        //     console.log(response.data.success);
+        //     if (response.data.success) {
+        //         await db.collection("requests").where("title", "==", props.reservedRequest.title).limit(1).get()
+        //             .then((querySnapshot) => {
+        //                 querySnapshot.forEach(async (doc) => {
+        //
+        //                     await db.collection("requestReview").doc(doc.id).get()
+        //                         .then((doc) => {
+        //                             progressRating = doc.data()?.progressRating;
+        //                         }).then(() => {
+        //                             db.collection("requestReview").doc(doc.id).delete()
+        //                         })
+        //                    
+        //                     let progressRating = 0;
+        //                     let rating: number = 0;
+        //                     await db.collection("users").doc(docId).get()
+        //                         .then(async (doc) => {
+        //                             let ratingCount: number = doc.data()?.ratingCount + 1;
+        //                             let allRating: number = doc.data()?.allRating;
+        //                             rating = doc.data()?.rating;
+        //                             await db.collection("users").doc(docId).update({
+        //                                 rating: (allRating + progressRating) / ratingCount,
+        //                                 ratingCount: ratingCount,
+        //                                 allRating: allRating + progressRating
+        //                             }).then(async () => {
+        //                                 await db.collection("requests").doc(doc.id).delete();
+        //                                 await history.go(0);
+        //                             })
+        //                         })
+        //                 })
+        //                 //
+        //             })
+        //     }
+        // }catch (e) {
+        //    
+        // }
     }
 
     return (
@@ -105,7 +103,8 @@ const CompletedRequestModalComponent = (props: Props) => {
             </Modal.Header>
             <Modal.Body>
                 <p>Galutinis progreso vertinimas: {userRating}</p>
-                <Button variant="outline-dark" onClick={transferPayment}>Patvirtinti</Button>
+                <p>Mokėtina suma: {props.reservedRequest.budget}€</p>
+                <RequestStripe connectedId={connectedAccount} userMail={props.reservedRequest.userMail} reservedUserEmail={props.reservedRequest.reservedUserEmail} budget={props.reservedRequest.budget} title={props.reservedRequest.title}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Uždaryti</Button>

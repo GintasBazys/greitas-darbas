@@ -190,7 +190,7 @@ const UserSearchWorkerFormComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="address">
                                 <Form.Label>Adresas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite tikslų adresą" value={title} onChange={handleAddressChange}/>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite tikslų adresą" value={address} onChange={handleAddressChange}/>
                             </Form.Group>
                             <div className="center-element">
                                 <Button variant="outline-dark" onClick={createRequest}>Paskelbti</Button>
