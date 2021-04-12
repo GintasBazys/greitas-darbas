@@ -71,7 +71,8 @@ const UserRequestModalComponent = (props: Props) => {
                             status: "rezervuotas",
                             reservedUserNameAndSurname: reservedUserName,
                             reservedUserPhoneNumber: reservedUserPhone,
-                            paymentStatus: "Mokėjimas neatliktas"
+                            paymentStatus: "Mokėjimas neatliktas",
+                            reservedUser: auth.currentUser?.uid
                         })
                         await history.go(0);
                     })
