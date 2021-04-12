@@ -27,19 +27,20 @@ const RequestsProgressModalComponent = (props: Props) => {
             })
     }, [])
 
-    const changeProgressRating = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const changeProgressRating = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
 
         event.preventDefault()
 
-        db.collection("requests").where("title", "==", props.title).limit(1).get()
+        await db.collection("requests").where("title", "==", props.title).limit(1).get()
             .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    db.collection("requestReview").doc(doc.id).update({
+                querySnapshot.forEach(async (doc) => {
+                    await db.collection("requestReview").doc(doc.id).update({
                         progressRating: rating
                     })
+                    await props.onHide();
                 })
             })
-        props.onHide();
+
     }
 
     const handleStarClick = (nextValue: any) => setRating(nextValue);

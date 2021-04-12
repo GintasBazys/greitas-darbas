@@ -15,8 +15,10 @@ interface Props {
 const SubmitPaymentModalComponent = (props: Props) => {
 
     const reservedOffer = useSelector(selectReservedOffer);
-    const [fullPrice, setFullPrice] = useState(Number(props.timeForOffer * reservedOffer.price));
-
+    console.log(props.timeForOffer);
+    console.log(reservedOffer.price);
+    const tempPrice = props.timeForOffer * reservedOffer.price;
+    const [fullPrice, setFullPrice] = useState(tempPrice);
     const handlePriceChange = (event: any) => {
         setFullPrice(event.target.value);
     }

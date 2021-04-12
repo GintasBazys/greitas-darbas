@@ -112,7 +112,7 @@ const UserWorkforceViewComponent = () => {
                                         <ListGroupItem>{item.nameAndSurname} {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
                                         <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
                                         <ListGroupItem>Biudžetas: {item.budget}€</ListGroupItem>
-                                        <ListGroupItem>{item.phoneNumber}</ListGroupItem>
+                                        <ListGroupItem>+{item.phoneNumber}</ListGroupItem>
                                         <ListGroupItem>Vietovė: {item.location}, {item.address === "" ? <div>Nenurodyta tiksli vieta</div> : <div>{item.address}</div>}</ListGroupItem>
                                     </ListGroup>
                                     <Card.Body>

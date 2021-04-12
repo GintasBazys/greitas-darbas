@@ -16,6 +16,7 @@ import history from "../../history";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import workInProgress from "../../assets/work_in_progress.svg";
+import {setReservedOffer} from "../../features/offers/offersSlice";
 
 
 const UserRequestsInProgressComponent = () => {
@@ -64,6 +65,22 @@ const UserRequestsInProgressComponent = () => {
                     })
                 })
         }
+    }
+
+    const confirmReservation = async (item: any) => {
+        await db.collection("requests").where("title", "==", item.title).limit(1).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach(async (doc) => {
+                    await db.collection("requests").doc(doc.id).update({
+                        status: "Patvirtinta",
+                    })
+                    await db.collection("offerReview").doc(doc.id).set({
+                        progressRating: 0,
+                        comments: []
+                    })
+                    await history.go(0);
+                })
+            })
     }
 
     return (
@@ -118,7 +135,7 @@ const UserRequestsInProgressComponent = () => {
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
                                                         <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
@@ -145,15 +162,77 @@ const UserRequestsInProgressComponent = () => {
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div>
-                                                        <Button variant="outline-dark">Patvirtinti rezervaciją</Button>
+                                                        <Button variant="outline-dark" onClick={() => confirmReservation(item)}>Patvirtinti darbo pradžią</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         <Button variant="outline-danger" onClick={() => cancelReservation(item)}>Atšaukti rezervaciją</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+                                    {
+                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.user === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    <Card.Title>{item.title}</Card.Title>
+                                                    <Card.Text>
+                                                        {
+                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
+                                                        }
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/teikejas")}}>Peržiūrėti progresą</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+                                    {
+                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.reservedUser === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    <Card.Title>{item.title}</Card.Title>
+                                                    <Card.Text>
+                                                        {
+                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
+                                                        }
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Užsakovas: {item.nameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>{item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        <Button variant="outline-dark" onClick={() => {store.dispatch(setReservedRequest(item)), history.push("/darbas/vykdymas/progresas")}}>Peržiūrėti progresą</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>

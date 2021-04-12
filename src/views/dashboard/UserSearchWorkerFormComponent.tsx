@@ -106,7 +106,8 @@ const UserSearchWorkerFormComponent = () => {
             reservedUserNameAndSurname: "",
             reservedUserPhoneNumber: "",
             paymentStatus: "",
-            reservedUser: ""
+            reservedUser: "",
+            reservedUserEmail: ""
         }));
         await history.go(0);
 

@@ -16,6 +16,8 @@ import RequestsReviewModalComponent from "./RequestsReviewModalComponent";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import CompletedRequestModalComponent from "./CompletedRequestModalComponent";
 import axios from "axios";
+import moment from "moment";
+import RequestsChangeProgressModalComponent from "./RequestsChangeProgressModalComponent";
 
 const ServiceProviderRequestPaidComponent = () => {
     const image = useSelector(selectImage);
@@ -72,80 +74,27 @@ const ServiceProviderRequestPaidComponent = () => {
         setCompletedModalShow(!completedModalShow);
     }
 
-    const transferPayment = async (reservedOffer: any) => {
-        const confirmation = window.confirm(`Patvirtinti įvykdymą`);
-
-        if (confirmation) {
-            handleCompletedOfferModalComponent();
-        }
-    }
-
-    const initiateRefund = async (reservedRequest: any) => {
-        const confirmation = window.confirm(`Patvirtinti darbo nutraukimą?`);
-        if (confirmation) {
-            try {
-                const response = await axios.post(
-                    "http://localhost:8080/stripe/darbas/grazinimas",
-                    {
-                        id: reservedRequest.paymentId,
-                    }
-                );
-                console.log(response.data.success);
-                if (response.data.success) {
-                    await db.collection("requests").where("title", "==", reservedRequest.title).limit(1).get()
-                        .then((querySnapshot) => {
-                            querySnapshot.forEach(async (doc) => {
-                                let docBeforeDelete = doc.id;
-                                await db.collection("requests").doc(doc.id).delete();
-                                let progressRating = 0;
-
-                                await db.collection("requestReview").doc(docBeforeDelete).get()
-                                    .then((doc) => {
-                                        progressRating = doc.data()?.progressRating;
-                                    }).then(() => {
-                                        db.collection("requestReview").doc(docBeforeDelete).delete()
-                                    })
-                                let rating: number = 0;
-                                await db.collection("users").doc(reservedRequest.reservedUser).get()
-                                    .then((doc) => {
-                                        let ratingCount: number = doc.data()?.ratingCount + 1;
-                                        rating = doc.data()?.rating;
-                                        db.collection("users").doc(reservedRequest.reservedUser).update({
-                                            rating: rating + progressRating / ratingCount,
-                                            ratingCount: ratingCount
-                                        })
-                                    })
-                                await history.go(0);
-                            })
-                        })
-                    //
-                }
-
-            } catch (e) {
-
-            }
-        }
-    }
-
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
             <Container fluid>
                 <Row>
                     <Col md={6}>
-                        <h1 className="center-element">Užsakymas</h1>
-                        <p className="center-element">Vietovė: {reservedRequest.location}</p>
-                        <div>
-                            <p className="center-element">Aprašymas: {reservedRequest.description}</p>
+                        <h1 className="center-element">Darbas</h1>
+                        <p className="center-element">Pavadinimas: {reservedRequest.title}</p>
+                        <p className="center-element">Vietovė: {reservedRequest.location}, {reservedRequest.address}</p>
+                        <p className="center-element">Telefono numeris: {reservedRequest.reservedUserPhoneNumber}</p>
+                        <p className="center-element">El. paštas: {reservedRequest.reservedUserEmail}</p>
+                        <p className="center-element">Aprašymas:</p>
+                        <div style={{borderStyle: "solid"}}>
+                            <p >{reservedRequest.description}</p>
                         </div>
-
+                        <p className="center-element">Terminas: {moment(reservedRequest.term).format("YYYY-MM-DD")}</p>
                         <p className="center-element">Statusas: {reservedRequest.status}</p>
 
                         <p className="center-element">Naudotojo vertinimas: {Math.round(reservedRequest.userRating)}<Image fluid src={star} /></p>
                         <p className="center-element">Biudžetas: {reservedRequest.budget} €</p>
 
-                        {
-                            reservedRequest.status === "Mokėjimas atliktas" || reservedRequest.status === "Atidėta" || reservedRequest.status === "Vykdomas" ?
                                 <div>
                                     <div className="center-element">
                                         <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
@@ -157,28 +106,6 @@ const ServiceProviderRequestPaidComponent = () => {
                                         <Button variant="outline-danger" onClick={cancelRequest}>Atšaukti užsakymą</Button>
                                     </div>
                                 </div>
-                                : <div></div>
-                        }
-
-                        {
-                            reservedRequest.status === "Atliktas" ?
-                                <div className="center-element">
-                                    <Button variant="outline-dark" onClick={() => transferPayment(reservedRequest)}>Patvirtinkite įvykdymą</Button>
-                                    <CompletedRequestModalComponent show={completedModalShow} reservedRequest={reservedRequest} onHide={() => handleCompletedOfferModalComponent()} />
-                                </div> : <div></div>
-                        }
-                        {
-                            reservedRequest.status === "Atšauktas užsakovo" ?
-                                <div className="center-element alert alert-warning" role="alert">
-                                    <p>Laukite kol darbuotojas patvirtins atšaukimą</p>
-                                </div>: <div></div>
-                        }
-                        {
-                            reservedRequest.status === "Atšauktas darbuotojo" ?
-                                <div className="center-element">
-                                    <Button onClick={() => initiateRefund(reservedRequest)} variant="outline-dark">Patvirtinti atšaukimą</Button>
-                                </div>: <div></div>
-                        }
 
                     </Col>
                     <Col md={6}>
