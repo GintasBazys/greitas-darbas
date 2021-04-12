@@ -101,12 +101,21 @@ const UserSearchWorkerFormComponent = () => {
             userRating: userRating,
             profileImage: profileImage,
             term: reservedTimeDay.toISOString(),
-            nameAndSurname: nameAndSurname
+            nameAndSurname: nameAndSurname,
+            address: address,
+            reservedUserNameAndSurname: "",
+            reservedUserPhoneNumber: "",
+            paymentStatus: ""
         }));
         await history.go(0);
 
     }
     const [reservedTimeDay, setReservedTimeDay] = useState(new Date());
+    const [address, setAddress] = useState("");
+
+    const handleAddressChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setAddress(event.target.value)
+    }
 
     return (
         <div>
@@ -172,8 +181,14 @@ const UserSearchWorkerFormComponent = () => {
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                             <Form.Group>
+
+                                <label htmlFor="location" style={{marginRight: "1rem"}}>Terminas:</label>
                                 {/*@ts-ignore*/}
                                 <DatePicker locale="lt" selected={reservedTimeDay} onChange={(date):any => setReservedTimeDay(date)} />
+                            </Form.Group>
+                            <Form.Group controlId="address">
+                                <Form.Label>Adresas</Form.Label>
+                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite tikslų adresą" value={title} onChange={handleAddressChange}/>
                             </Form.Group>
                             <div className="center-element">
                                 <Button variant="outline-dark" onClick={createRequest}>Paskelbti</Button>

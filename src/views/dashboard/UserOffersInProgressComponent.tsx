@@ -220,7 +220,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -254,7 +254,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -288,7 +288,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -323,7 +323,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -363,7 +363,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -402,7 +402,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>
@@ -435,7 +435,7 @@ const UserOffersInProgressComponent = () => {
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}
                                                         <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                                     </div>
                                                 </Card.Body>
                                             </Card> : <div></div>

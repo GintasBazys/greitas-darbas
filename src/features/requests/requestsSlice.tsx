@@ -19,7 +19,7 @@ export const requestsSlice = createSlice( {
 
 export const {setRequests, setReservedRequest} = requestsSlice.actions;
 
-export const addRequest = (info: { activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; phoneNumber: string; nameAndSurname: string; userMail: string; location: string; term: string; user: string | undefined; username: string; budget: number }) => async (dispatch: any) => {
+export const addRequest = (info: { address: string; activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; reservedUserNameAndSurname: string; phoneNumber: string; nameAndSurname: string; userMail: string; reservedUserPhoneNumber: string; location: string; term: string; user: string | undefined; paymentStatus: string; username: string; budget: number }) => async (dispatch: any) => {
     await firebase.requestCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -35,7 +35,12 @@ export const addRequest = (info: { activity: string; isRemote: boolean; descript
         title: info.title,
         profileImage: info.profileImage,
         term: info.term,
-        nameAndSurname: info.nameAndSurname
+        nameAndSurname: info.nameAndSurname,
+        address: info.address,
+        activity: info.activity,
+        reservedUserNameAndSurname: info.reservedUserNameAndSurname,
+        reservedUserPhoneNumber: info.reservedUserPhoneNumber,
+        paymentStatus: info.paymentStatus
     }).then(r => {
 
     }).catch((error) => {
@@ -43,7 +48,7 @@ export const addRequest = (info: { activity: string; isRemote: boolean; descript
     })
 }
 
-export const updateRequest = (info: { phoneNumber: string; budget: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
+export const updateRequest = (info: {date: string; address: string; activity: string; phoneNumber: string; budget: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
     await firebase.requestCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {
             querySnapshot.forEach(async (doc) => {
@@ -54,6 +59,9 @@ export const updateRequest = (info: { phoneNumber: string; budget: string; isRem
                     budget: info.budget,
                     isRemote: info.isRemote,
                     title: info.title,
+                    activity: info.activity,
+                    address: info.activity,
+                    date: info.date
                 })
             })
         }).catch((error) => {

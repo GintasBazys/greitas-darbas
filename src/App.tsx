@@ -82,7 +82,8 @@ function App() {
       <PrivateRoute exact path="/paieska" component={UserWorkforceSearchComponent} />
       <PrivateRoute exact path="/paieska/siulymai" component={UserWorkforceViewComponent} />
       <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />
-      <PrivateRoute exact path="/paieska/valdymas" component={UserRequestsManagementComponent} />
+      <PrivateRoute exact path="/paieska/valdymas" component={UserRequestsInProgressComponent} />
+      <PrivateRoute exact path="/paieska/darbas/mano" component={UserRequestsManagementComponent} />
       <PrivateRoute exact path="/vykdymas" component={UserOffersInProgressComponent} />
       <PrivateRoute exact path="/darbai" component={UserRequestsInProgressComponent} />
       <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />

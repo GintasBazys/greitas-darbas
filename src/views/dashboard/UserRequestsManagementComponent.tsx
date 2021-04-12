@@ -50,14 +50,15 @@ const UserRequestsManagementComponent = () => {
         }
     }
 
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
-            <div className="center">
+            <div>
                 {
                     items.length === 0 ? <div></div> : isLoading? <LoadingComponent /> : items.map((item) => (
-                        <div>
-                            <div style={{marginTop: "2rem"}}>
+                        <div style={{marginLeft: "20rem",borderStyle: "solid", width: "70%"}}>
+                            <div className="center-element" style={{marginTop: "2rem", marginBottom: "2rem"}}>
                                 {item.title}
                                 <Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => updateRequest(item)}>Atnaujinti informaciją</Button>
                                 <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteRequest(item)}>Pašalinti darbo pasiūlymą</Button>

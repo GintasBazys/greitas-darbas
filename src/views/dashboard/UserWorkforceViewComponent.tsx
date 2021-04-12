@@ -29,7 +29,7 @@ const UserWorkforceViewComponent = () => {
         getNext,
     } = usePagination(
         db.collection("requests").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
-            limit: 5
+            limit: 1
         }
     );
 
@@ -110,18 +110,18 @@ const UserWorkforceViewComponent = () => {
                                     </Card.Body>
                                     <ListGroup className="list-group-flush">
                                         <ListGroupItem>{item.nameAndSurname} {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
-                                        <ListGroupItem>Patirtis: {item.experienceLevel}</ListGroupItem>
-                                        <ListGroupItem>{item.price}€/val</ListGroupItem>
+                                        <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                        <ListGroupItem>Biudžetas: {item.budget}€</ListGroupItem>
                                         <ListGroupItem>{item.phoneNumber}</ListGroupItem>
-                                        <ListGroupItem>{item.location}</ListGroupItem>
+                                        <ListGroupItem>Vietovė: {item.location}, {item.address === "" ? <div>Nenurodyta tiksli vieta</div> : <div>{item.address}</div>}</ListGroupItem>
                                     </ListGroup>
                                     <Card.Body>
                                         <div>
                                             <Button variant="outline-dark" onClick={() => handleModalShow(item)}>Peržiūrėti visą informaciją</Button>
-                                            <UserOfferModalComponent show={modalShow} onHide={() => handleModalShow(item)} />
+                                            <UserRequestModalComponent show={modalShow} onHide={() => handleModalShow(item)}  item={item}/>
                                         </div>
                                         <div style={{marginTop: "2rem"}}>
-                                            <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                            <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                         </div>
                                     </Card.Body>
                                 </Card>

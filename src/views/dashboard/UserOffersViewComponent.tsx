@@ -101,7 +101,7 @@ const UserOffersViewComponent = () => {
                                                 <UserOfferModalComponent show={modalShow} onHide={() => handleModalShow(item)} />
                                             </div>
                                             <div style={{marginTop: "2rem"}}>
-                                                <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
+                                                <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
                                             </div>
                                         </Card.Body>
                                     </Card>
