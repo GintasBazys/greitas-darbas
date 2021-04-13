@@ -99,13 +99,15 @@ const UserWorkforceViewComponent = () => {
                         items.map((item) => {
                             return (
                                 <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                    <Card.Img variant="top" src={item.profileImage} />
+                                    <Card.Img variant="top" src={item.profileImage} style={{maxWidth: "100%", height: "400px"}}/>
                                     <Card.Body>
-                                        <Card.Title>{item.title}</Card.Title>
+                                        {/*@ts-ignore*/}
+                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                            <Card.Title style={{minHeight: "48px"}}>{item.title}</Card.Title>
+                                        </div>
                                         <Card.Text>
-                                            {
-                                                item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                            }
+                                            {/*@ts-ignore*/}
+                                            <div style={{ display: "-webkit-box", "-webkit-line-clamp": "3", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                         </Card.Text>
                                     </Card.Body>
                                     <ListGroup className="list-group-flush">
