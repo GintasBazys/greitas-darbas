@@ -23,6 +23,9 @@ import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {updateOffers, updateOffersUsername} from "../../features/offers/offersSlice";
 import profileRating from "../../assets/profile_rating.svg";
+import ProviderModalComponent from "./ProviderModalComponent";
+import {activities} from "./registration/activities";
+import {experienceLevels} from "./registration/experienceLevel";
 
 const UserProfileComponent = () => {
     const dispatch = useDispatch();
@@ -54,6 +57,16 @@ const UserProfileComponent = () => {
     const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
     const userId = firebase.auth.currentUser?.uid;
     const [status, setStatus] = useState("");
+    const [activity, setActivity] = useState("Klientų aptarnavimas");
+    const [experienceLevel, setExperienceLevel] = useState("Pradedantysis");
+
+    const handleActivityChange = (event: any) => {
+        setActivity(event.target.value)
+    }
+
+    const handleExperienceChange = (event: any) => {
+        setExperienceLevel(event.target.value)
+    }
 
     useEffect(() => {
         firebase.usersCollection.doc(auth.currentUser?.uid).get()
@@ -66,6 +79,8 @@ const UserProfileComponent = () => {
                 setUserRating(doc.data()?.rating);
                 setRatingCount(doc.data()?.ratingCount);
                 setStatus(doc.data()?.status);
+                setActivity(doc.data()?.activity);
+                setExperienceLevel(doc.data()?.experienceLevel);
             })
     }, [user])
 
@@ -102,6 +117,44 @@ const UserProfileComponent = () => {
         } else {
             await db.collection("users").doc(auth.currentUser?.uid).update({
                 aboutMe: aboutMe
+            })
+            //await dispatch(fetchUserAsync({uid: userId}));
+            await history.push("/pagrindinis");
+            //console.log(username);
+        }
+
+    }
+
+    const changeActivity = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        if (activity === "") {
+            dispatch(sendError("Laukas negali būti tuščias"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 5000);
+
+        } else {
+            await db.collection("users").doc(auth.currentUser?.uid).update({
+                activity: activity
+            })
+            //await dispatch(fetchUserAsync({uid: userId}));
+            await history.push("/pagrindinis");
+            //console.log(username);
+        }
+
+    }
+
+    const changeExperience = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        if (experienceLevel === "") {
+            dispatch(sendError("Laukas negali būti tuščias"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 5000);
+
+        } else {
+            await db.collection("users").doc(auth.currentUser?.uid).update({
+                experienceLevel: experienceLevel
             })
             //await dispatch(fetchUserAsync({uid: userId}));
             await history.push("/pagrindinis");
@@ -228,6 +281,12 @@ const UserProfileComponent = () => {
         }
     }
 
+    const [modalShow, setModalShow] = useState(false);
+
+    const handleModalShow = () => {
+        setModalShow(!modalShow)
+    }
+
     return <div>
         <UserNavBarComponent profileImage={image}/>
         <Container fluid>
@@ -251,9 +310,24 @@ const UserProfileComponent = () => {
                         </Form.Group>
                         {
                             status === "patvirtintas_naudotojas" ? <div className="center-element">
-                                <Button variant="outline-dark">Sukurti paslaugų teikėjo paskyrą</Button>
+                                <Button variant="outline-dark" onClick={handleModalShow}>Sukurti paslaugų teikėjo paskyrą</Button>
+                                <ProviderModalComponent show={modalShow} onHide={() => handleModalShow()} />
                             </div> : <div></div>
                         }
+                        <Form.Group controlId="activity">
+                            <label htmlFor="location">Veikla:</label>
+                            <select name="activity" value={activity} onChange={handleActivityChange} required>
+                                {activities.map((item: React.ReactNode) => <option>{item}</option>)}
+                            </select>
+                                <Button style={{textAlign: "center", marginLeft: "2rem"}} variant="outline-dark" onClick={(e) => changeActivity(e)}>Atnaujinti</Button>
+                        </Form.Group>
+                        <Form.Group controlId="experience">
+                            <label htmlFor="location">Patirtis:</label>
+                            <select name="location" value={experienceLevel} onChange={handleExperienceChange} required>
+                                {experienceLevels.map((item: React.ReactNode) => <option>{item}</option>)}
+                            </select>
+                                <Button style={{textAlign: "center", marginLeft: "2rem"}} variant="outline-dark" onClick={(e) => changeExperience(e)}>Atnaujinti</Button>
+                        </Form.Group>
                         <Form.Group>
                             <Form.Label>Pakeisti vartotojo vardą</Form.Label>
                             <Form.Control type="text" value={username} onChange={handleUsernameChange} />

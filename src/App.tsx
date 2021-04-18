@@ -50,6 +50,7 @@ import UserMyOffersComponent from "./views/dashboard/UserMyOffersComponent";
 import FilteredOffersInProgressPageComponent from "./views/dashboard/filter/FilteredOffersInProgressPageComponent";
 import FilteredOffersPageComponent from "./views/dashboard/filter/FilteredOffersPageComponent";
 import SearchOffersComponent from "./views/dashboard/filter/SearchOffersComponent";
+import UserReceivedMessagesComponent from "./views/dashboard/UserReceivedMessagesComponent";
 
 function App() {
   return <Router history={history}>
@@ -90,7 +91,8 @@ function App() {
       <PrivateRoute exact path="/paieska/darbas/mano" component={UserRequestsManagementComponent} />
       <PrivateRoute exact path="/vykdymas" component={UserOffersInProgressComponent} />
       <PrivateRoute exact path="/darbai" component={UserRequestsInProgressComponent} />
-      <PrivateRoute exact path="/zinutes" component={UserMessagesComponent} />
+      <PrivateRoute exact path="/zinutes/gauta" component={UserMessagesComponent} />
+      <PrivateRoute exact path="/zinutes/issiusta" component={UserReceivedMessagesComponent} />
       <PrivateRoute exact path="/vykdymas/progresas" component={OfferPaidComponent} />
       <PrivateRoute exact path="/vykdymas/teikejas" component={ServiceProviderOfferPaidComponent} />
       <PrivateRoute exact path="/darbas/vykdymas/progresas" component={RequestPaidComponent} />

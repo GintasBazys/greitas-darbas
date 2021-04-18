@@ -6,7 +6,8 @@ export const offersSlice = createSlice( {
     initialState: {
         offers: Array(0),
         reservedOffer: {},
-        offer: {}
+        offer: {},
+        reservedTime: 0
     },
     reducers: {
         setOffers: (state, action) => {
@@ -17,6 +18,9 @@ export const offersSlice = createSlice( {
         },
         setOffer: (state, action) => {
             state.offer = action.payload
+        },
+        setReservedTime: (state, action) => {
+            state.reservedTime = action.payload
         }
     }
 })
@@ -89,9 +93,10 @@ export const updateOffersUsername = (info: {username: string, usernameBeforeChan
         })
 }
 
-export const {setOffers, setReservedOffer, setOffer} = offersSlice.actions;
+export const {setOffers, setReservedOffer, setOffer, setReservedTime} = offersSlice.actions;
 
 export const selectReservedOffer = (state: { offers: { reservedOffer: any; }; }) => state.offers.reservedOffer;
+export const selectReservedTime = (state: { offers: { reservedTime: any; }; }) => state.offers.reservedTime;
 export const selectOffer = (state: { offers: {offer: any; }; }) => state.offers.offer;
 
 export default offersSlice.reducer;

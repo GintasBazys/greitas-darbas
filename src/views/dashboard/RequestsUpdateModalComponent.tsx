@@ -141,7 +141,7 @@ const RequestsUpdateModalComponent = (props: Props) => {
                         <Form.Control type="text" placeholder="Įveskite paslaugos pavadinima" value={title} onChange={handleTitleChange}/>
                     </Form.Group>
                     <Form.Group controlId="activity">
-                        <label htmlFor="location">Veikla:</label>
+                        <label htmlFor="activity">Veikla:</label>
                         <select name="activity" value={type} onChange={handleTypeChange} required>
                             {activities.map((item: React.ReactNode) => <option>{item}</option>)}
                         </select>

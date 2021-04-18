@@ -3,7 +3,7 @@ import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
-import {selectReservedOffer, setReservedOffer} from "../../features/offers/offersSlice";
+import {selectReservedOffer, setReservedOffer, setReservedTime} from "../../features/offers/offersSlice";
 import {db} from "../../firebase";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
@@ -62,15 +62,16 @@ const ServiceProviderOfferPaidComponent = () => {
 
     const [timeForOffer, setTimeForOffer] = useState(0);
 
-    const handleTimeForOfferChange = (event: any) => {
+    const handleTimeForOfferChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
         setTimeForOffer(event.target.value);
     }
 
     const [submitPaymentModalShow, setSubmitPaymentModalShow] = useState(false);
 
-    const handleSubmitPaymentModalShow = (reservedOffer: any) => {
-        store.dispatch(setReservedOffer(reservedOffer))
-        setSubmitPaymentModalShow(!progressModalShow)
+    const handleSubmitPaymentModalShow = async (reservedOffer: any) => {
+        await store.dispatch(setReservedOffer(reservedOffer))
+        await store.dispatch(setReservedTime(timeForOffer));
+        await setSubmitPaymentModalShow(!submitPaymentModalShow)
     }
 
     return (
@@ -99,9 +100,10 @@ const ServiceProviderOfferPaidComponent = () => {
                                     </div>
                                     {
                                         reservedOffer.status === "Atliktas" ?
-                                            <div>
-                                                <Form.Group style={{width: "20%"}} controlId="timeForOffer">
+                                            <div className="center-element">
+                                                <Form.Group controlId="timeForOffer">
                                                     <Form.Label>Įveskite paslaugos trukmę valandomis</Form.Label>
+                                                    {/*@ts-ignore*/}
                                                     <Form.Control type="number" placeholder="Įveskite paslaugos trukmę valandomis" value={timeForOffer} onChange={handleTimeForOfferChange} />
                                                     <Button style={{marginTop: "0.5rem"}} variant="outline-dark" onClick={() => handleSubmitPaymentModalShow(reservedOffer)}>Pateikti galutinę sumą</Button>
                                                     <SubmitPaymentModalComponent timeForOffer={timeForOffer} show={submitPaymentModalShow} onHide={() => handleSubmitPaymentModalShow(reservedOffer)} />
