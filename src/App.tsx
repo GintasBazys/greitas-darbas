@@ -47,6 +47,8 @@ import AdministratorClientManagerComponent from "./views/administratorDashboard/
 import UserListComponent from "./views/administratorDashboard/UserListComponent";
 import EmployeeListComponent from "./views/administratorDashboard/EmplyeeListComponent";
 import UserMyOffersComponent from "./views/dashboard/UserMyOffersComponent";
+import FilteredOffersInProgressPageComponent from "./views/dashboard/filter/FilteredOffersInProgressPageComponent";
+import FilteredOffersPageComponent from "./views/dashboard/filter/FilteredOffersPageComponent";
 
 function App() {
   return <Router history={history}>
@@ -77,6 +79,8 @@ function App() {
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />
       <PrivateRoute exact path="/paslauga" component={UserOffersViewComponent} />
       <PrivateRoute exact path="/paslauga/mano" component={UserMyOffersComponent} />
+      <PrivateRoute exact path="/paslauga/progresas/filtravimas" component={FilteredOffersInProgressPageComponent}/>
+      <PrivateRoute exact path="/paslauga/filtravimas" component={FilteredOffersPageComponent}/>
       <PrivateRoute exact path="/mokejimai" component={UserPaymentComponent} />
       <PrivateRoute exact path="/paieska/siulymai" component={UserWorkforceViewComponent} />
       <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />

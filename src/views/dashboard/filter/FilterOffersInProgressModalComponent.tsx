@@ -3,6 +3,19 @@ import {Button, Form, Modal} from "react-bootstrap";
 import {experienceLevels} from "../registration/experienceLevel";
 import {activities} from "../registration/activities";
 import {locations} from "../locations";
+import FilteredOffersInProgressPageComponent from "./FilteredOffersInProgressPageComponent";
+import history from "../../../history";
+import store from "../../../app/store";
+import {
+    selectExperience,
+    setFilteredCategory,
+    setFilteredExperience,
+    setFilteredLocation,
+    setFilteredPrice,
+    setFilteredRating,
+    setFilteredStatus
+} from "../../../features/filter/offersInProgressFilterSlice";
+import {useSelector} from "react-redux";
 
 interface Props {
     show: boolean,
@@ -11,11 +24,12 @@ interface Props {
 
 const FilterOffersInProgressModalComponent = (props: Props) => {
 
-    const [category, setCategory] = useState("-");
-    const [experience, setExperience] = useState("-");
-    const [rating, setRating] = useState("-");
-    const [price, setPrice] = useState("-");
-    const [location, setLocation] = useState("-");
+    const [category, setCategory] = useState("Klientų aptarnavimas");
+    const [experience, setExperience] = useState("Pradedantysis");
+    const [rating, setRating] = useState("Mažesnis nei 5");
+    const [price, setPrice] = useState("Kaina (didėjančiai)");
+    const [location, setLocation] = useState("Akmenė");
+    const [status, setStatus] = useState("rezervuotas");
 
     const handleExperienceChange = (event: any) => {
         setExperience(event.target.value)
@@ -31,6 +45,21 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
     }
     const handleLocationChange = (event: any) => {
         setLocation(event.target.value)
+    }
+    const handleStatusChange = (event: any) => {
+        setStatus(event.target.value)
+    }
+
+
+    const filter = async () => {
+        console.log(experience);
+        await store.dispatch(setFilteredCategory(category));
+        await store.dispatch(setFilteredExperience(experience));
+        await store.dispatch(setFilteredPrice(price));
+        await store.dispatch(setFilteredLocation(location));
+        await store.dispatch(setFilteredRating(rating));
+        await store.dispatch(setFilteredStatus(status));
+        await history.push("/paslauga/progresas/filtravimas");
     }
 
     return (
@@ -51,32 +80,11 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
             <Modal.Body>
                 <div>
                     <Form>
-                        <Form.Group controlId="activity">
-                            <label style={{marginRight: "1rem"}} htmlFor="location">Veikla:</label>
-                            <select name="activity" value={category} onChange={handleCategoryChange} required>
-                                {activities.map((item: React.ReactNode) => <option>{item}</option>)}
-                            </select>
-                        </Form.Group>
-                        <Form.Group controlId="experience">
-                            <label style={{marginRight: "1rem"}} htmlFor="location">Patirtis:</label>
-                            <select name="experience" value={experience} onChange={handleExperienceChange} required>
-                                {experienceLevels.map((item: React.ReactNode) => <option>{item}</option>)}
-                            </select>
-                        </Form.Group>
-                        <Form.Group controlId="rating">
-                            <label style={{marginRight: "1rem"}} htmlFor="rating">Reitingas:</label>
-                            <select name="rating" value={rating} onChange={handleRatingChange} required>
-                                <option>Mažesnis nei 5</option>
-                                <option>Didesnis nei 5</option>
-                                <option>Didesnis nei 8</option>
-                                <option>Bet koks vertinimas</option>
-                            </select>
-                        </Form.Group>
                         <Form.Group controlId="price">
                             <label style={{marginRight: "1rem"}} htmlFor="price">Kaina:</label>
                             <select name="location" value={price} onChange={handlePriceChange} required>
-                                <option>Pradžiai mažiausia kaina</option>
-                                <option>Pradžiai dižiausia kaina</option>
+                                <option>Kaina (didėjančiai)</option>
+                                <option>Kaina (mažėjančiai)</option>
                             </select>
                         </Form.Group>
                         <Form.Group controlId="location">
@@ -87,14 +95,15 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
                         </Form.Group>
                         <Form.Group controlId="status">
                             <label style={{marginRight: "1rem"}} htmlFor="price">Statusas:</label>
-                            <select name="status" value={price} onChange={handlePriceChange} required>
+                            <select name="status" value={status} onChange={handleStatusChange} required>
+                                <option>rezervuotas</option>
                                 <option>Vykdomas</option>
                                 <option>Atliktas</option>
                                 <option>Atidėtas</option>
                             </select>
                         </Form.Group>
                         <div className="center-element">
-                            <Button variant="outline-dark" >Filtruoti</Button>
+                            <Button variant="outline-dark" onClick={filter}>Filtruoti</Button>
                         </div>
 
                     </Form>
