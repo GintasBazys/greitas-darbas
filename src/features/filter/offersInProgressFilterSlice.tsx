@@ -9,7 +9,8 @@ export const offersInProgressFilterSlice = createSlice( {
         price: "",
         rating: "",
         location: "",
-        status: ""
+        status: "",
+        search: ""
 
     },
     reducers: {
@@ -33,12 +34,15 @@ export const offersInProgressFilterSlice = createSlice( {
         },
         setFilteredStatus: (state, action) => {
             state.status = action.payload;
-        }
+        },
+        setFilteredSearch: (state, action) => {
+            state.search = action.payload;
+        },
     }
 })
 
 
-export const {setOffers, setFilteredCategory, setFilteredLocation, setFilteredPrice, setFilteredRating, setFilteredExperience, setFilteredStatus} = offersInProgressFilterSlice.actions;
+export const {setOffers, setFilteredCategory, setFilteredLocation, setFilteredPrice, setFilteredRating, setFilteredExperience, setFilteredStatus, setFilteredSearch} = offersInProgressFilterSlice.actions;
 
 export default offersInProgressFilterSlice.reducer;
 
@@ -48,3 +52,4 @@ export const selectRating = (state: { offersInProgressFilter: { rating: string; 
 export const selectLocation = (state: { offersInProgressFilter: { location: string; }; }) => state.offersInProgressFilter.location;
 export const selectPrice = (state: { offersInProgressFilter: { price: string; }; }) => state.offersInProgressFilter.price;
 export const selectStatus = (state: { offersInProgressFilter: { status: string; }; }) => state.offersInProgressFilter.status;
+export const selectSearch = (state: { offersInProgressFilter: { search: string; }; }) => state.offersInProgressFilter.search;

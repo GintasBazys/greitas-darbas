@@ -15,6 +15,7 @@ import history from "../../history";
 import store from "../../app/store";
 import {setOffer} from "../../features/offers/offersSlice";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
+import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
 
 const UserOffersViewComponent = () => {
 
@@ -56,6 +57,12 @@ const UserOffersViewComponent = () => {
         setSearch(event.target.value);
     }
 
+    const searchOffers = async () => {
+        console.log(search);
+        await store.dispatch(setFilteredSearch(search));
+        await history.push("/paslauga/paieska");
+    }
+
     moment.locale("lt")
     return (
         <div>
@@ -66,7 +73,7 @@ const UserOffersViewComponent = () => {
                         <Form.Label>Ieškoti</Form.Label>
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
-                            <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
+                            <Button variant="outline-dark" style={{marginRight: "2rem"}} onClick={searchOffers}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
                             <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
