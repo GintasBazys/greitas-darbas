@@ -3,6 +3,7 @@ import * as firebase from "../../firebase";
 import {auth, db, secondaryApp} from "../../firebase";
 import defaultAvatar from "../../assets/avatar.png";
 import history from "../../history";
+import {sendError} from "../user/userSlice";
 
 export const workerSlice = createSlice( {
     name: "worker",
@@ -52,6 +53,10 @@ export const loginWorkerAsync = (info: { email: string; password: string; checke
             })
             .catch(function(error) {
                 console.log(error.message)
+                dispatch(sendWorkerError("Neteisingas el. pašto adresas ar slaptažodis"));
+                setTimeout(() => {
+                    dispatch(sendWorkerError(""))
+                }, 2000);
             });
 
     } else if(info.checkedRemember){
@@ -61,6 +66,10 @@ export const loginWorkerAsync = (info: { email: string; password: string; checke
             })
             .catch(function(error) {
                 console.log(error.message)
+                dispatch(sendWorkerError("Neteisingas el. pašto adresas ar slaptažodis"));
+                setTimeout(() => {
+                    dispatch(sendWorkerError(""))
+                }, 2000);
             });
     }
 
@@ -73,6 +82,10 @@ export const loginWorkerAsync = (info: { email: string; password: string; checke
         }))
     }).catch((error) => {
         console.log(error.message)
+        dispatch(sendWorkerError("Neteisingas el. pašto adresas ar slaptažodis"));
+        setTimeout(() => {
+            dispatch(sendWorkerError(""))
+        }, 2000);
     });
 }
 

@@ -7,6 +7,7 @@ import login from "../../assets/login.svg";
 import FooterComponent from "./FooterComponent";
 import history from "../../history";
 import {selectWorkerError, changeWorkerRemember} from "../../features/worker/workerSlice";
+import WorkerNotificationComponent from "./WorkerNotificationComponent";
 
 const WorkerLoginPageComponent = (props: any) => {
     const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const WorkerLoginPageComponent = (props: any) => {
                         </Col>
                         <Col md={6} className="login-form">
                             <Form onSubmit={props.handleSubmit} style={{width: "75%"}}>
-                                <NotificationComponent message={errorMessage} />
+                                <WorkerNotificationComponent message={errorMessage} />
                                 <Form.Group controlId="email">
                                     <Form.Label>El. pašto adresas</Form.Label>
                                     <Form.Control type="email" placeholder="Įveskite el. pašto adresą" value={props.email} autoComplete="on"

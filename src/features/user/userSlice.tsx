@@ -89,6 +89,10 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
             })
             .catch(function(error) {
                 console.log(error.message)
+                dispatch(sendError("Neteisingas el. pašto adresas ar slaptažodis"));
+                setTimeout(() => {
+                    dispatch(sendError(""))
+                }, 2000);
             });
 
     } else if(info.checkedRemember){
@@ -98,6 +102,10 @@ export const loginAsync = (info: { email: string; password: string; checkedRemem
             })
             .catch(function(error) {
                 console.log(error.message)
+                dispatch(sendError("Neteisingas el. pašto adresas ar slaptažodis"));
+                setTimeout(() => {
+                    dispatch(sendError(""))
+                }, 2000);
             });
     }
 

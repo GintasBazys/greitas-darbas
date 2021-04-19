@@ -3,7 +3,6 @@ import "filepond/dist/filepond.min.css";
 import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
-import {auth, storageRef} from "../../firebase";
 import {useDispatch, useSelector} from "react-redux";
 import {
     logout,
@@ -23,9 +22,9 @@ const DashboardComponent = () => {
 
     const image = useSelector(selectImage);
 
-    window.addEventListener('popstate', function(event) {
-        history.go(1);
-    });
+    // window.addEventListener('popstate', function(event) {
+    //     history.go(1);
+    // });
 
     const handleWorkerRegister = () => {
         history.push("/pradzia/darbuotojas")

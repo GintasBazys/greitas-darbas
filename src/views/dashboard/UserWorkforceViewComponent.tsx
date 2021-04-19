@@ -5,7 +5,6 @@ import UserNavBarComponent from "./UserNavbarComponent";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
 import history from "../../history";
-import {Link} from "react-router-dom";
 import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
 import star from "../../assets/star.svg";
 // @ts-ignore
@@ -15,7 +14,6 @@ import store from "../../app/store";
 import {setOffer} from "../../features/offers/offersSlice";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
-import UserOfferModalComponent from "./UserOfferModalComponent";
 
 const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);

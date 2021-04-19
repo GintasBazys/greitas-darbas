@@ -32,9 +32,9 @@ const UserRegistrationComponent = () => {
 
     const image = useSelector(selectImage);
 
-    window.addEventListener('popstate', function(event) {
-        history.go(1);
-    });
+    // window.addEventListener('popstate', function(event) {
+    //     history.go(1);
+    // });
 
     const handlePageChange = () => {
         history.push("/pradzia")

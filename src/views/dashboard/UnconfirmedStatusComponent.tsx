@@ -9,9 +9,9 @@ const UnconfirmedStatusComponent = () => {
 
     const dispatch = useDispatch();
 
-    window.addEventListener('popstate', function(event) {
-        history.go(1);
-    });
+    // window.addEventListener('popstate', function(event) {
+    //     history.go(1);
+    // });
 
     return (
         <div className="center">

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {auth} from "../../firebase";
 import {Button, Form, Modal} from "react-bootstrap";
 import * as firebase from "../../firebase";

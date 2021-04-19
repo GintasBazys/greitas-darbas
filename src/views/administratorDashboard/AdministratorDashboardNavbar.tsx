@@ -26,6 +26,7 @@ const AdministratorDashboardNavbar = ({profileImage}) => {
                 </DropdownButton>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-info" id="dropdown-basic-button3" title="Papildomi pasirinkimai">
                     <Dropdown.Item onClick={() => history.push("/administracija/mokejimai")}>Mokėjimai</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/administracija/ataskaitos")}>Ataskaitos</Dropdown.Item>
                 </DropdownButton>
                 <NavDropdown
                     style={{marginLeft: "10rem"}} title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
