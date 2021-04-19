@@ -11,7 +11,7 @@ import star from "../../assets/star.svg";
 import moment from "moment/min/moment-with-locales";
 import UserRequestModalComponent from "./UserRequestModalComponent";
 import store from "../../app/store";
-import {setOffer} from "../../features/offers/offersSlice";
+import {setRequest} from "../../features/requests/requestsSlice";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 
@@ -27,7 +27,7 @@ const UserWorkforceViewComponent = () => {
         getNext,
     } = usePagination(
         db.collection("requests").orderBy("user").where("user", "!=", auth.currentUser?.uid).orderBy("createdOn").where("status", "==", "naujas"), {
-            limit: 1
+            limit: 5
         }
     );
 
@@ -57,7 +57,7 @@ const UserWorkforceViewComponent = () => {
     const [modalShow, setModalShow] = useState(false);
 
     const handleModalShow = async (item: any) => {
-        await store.dispatch(setOffer(item));
+        await store.dispatch(setRequest(item));
         await setModalShow(!modalShow);
 
     }
@@ -118,7 +118,7 @@ const UserWorkforceViewComponent = () => {
                                     <Card.Body>
                                         <div>
                                             <Button variant="outline-dark" onClick={() => handleModalShow(item)}>Peržiūrėti visą informaciją</Button>
-                                            <UserRequestModalComponent show={modalShow} onHide={() => handleModalShow(item)}  item={item}/>
+                                            <UserRequestModalComponent show={modalShow} onHide={() => handleModalShow(item)}/>
                                         </div>
                                         <div style={{marginTop: "2rem"}}>
                                             <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>

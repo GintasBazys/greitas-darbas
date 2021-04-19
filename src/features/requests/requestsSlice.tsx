@@ -5,7 +5,8 @@ export const requestsSlice = createSlice( {
     name: "requests",
     initialState: {
         requests: Array(0),
-        reservedRequest: {}
+        reservedRequest: {},
+        request: {}
     },
     reducers: {
         setRequests: (state, action) => {
@@ -13,11 +14,14 @@ export const requestsSlice = createSlice( {
         },
         setReservedRequest: (state, action) => {
             state.reservedRequest = action.payload;
-        }
+        },
+        setRequest: (state, action) => {
+            state.request = action.payload;
+        },
     }
 })
 
-export const {setRequests, setReservedRequest} = requestsSlice.actions;
+export const {setRequests, setReservedRequest, setRequest} = requestsSlice.actions;
 
 export const addRequest = (info: { address: string; activity: string; isRemote: boolean; description: string; profileImage: string; title: string; reservedUserEmail: string; userRating: number; reservedUser: string; reservedUserNameAndSurname: string; phoneNumber: string; nameAndSurname: string; userMail: string; reservedUserPhoneNumber: string; location: string; term: string; user: string | undefined; paymentStatus: string; username: string; budget: number }) => async (dispatch: any) => {
     await firebase.requestCollection.add({
@@ -72,5 +76,6 @@ export const updateRequest = (info: {date: string; address: string; activity: st
 }
 
 export const selectReservedRequest = (state: { requests: { reservedRequest: any; }; }) => state.requests.reservedRequest;
+export const selectRequest = (state: { requests: { request: any; }; }) => state.requests.request;
 
 export default requestsSlice.reducer;

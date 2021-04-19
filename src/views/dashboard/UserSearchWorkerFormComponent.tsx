@@ -105,7 +105,7 @@ const UserSearchWorkerFormComponent = () => {
             address: address,
             reservedUserNameAndSurname: "",
             reservedUserPhoneNumber: "",
-            paymentStatus: "",
+            paymentStatus: "Mokėjimas neatliktas",
             reservedUser: "",
             reservedUserEmail: ""
         }));

@@ -7,49 +7,26 @@ import {v4 as uuid} from "uuid";
 import history from "../../history";
 import {useSelector} from "react-redux";
 import {selectUserEmail} from "../../features/user/userSlice";
+import {selectRequest} from "../../features/requests/requestsSlice";
 
 interface Props {
     show: boolean,
     onHide: () => void,
-    item: any
 }
 
 const UserRequestModalComponent = (props: Props) => {
 
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [budget, setBudget] = useState(0);
-    const [estimatedTime, setEstimatedTime] = useState(0);
-    const [isRemote, setIsRemote] = useState(false);
-    const [location, setLocation] = useState("");
-    const [type, setType] = useState("");
-    const [docId, setDocId] = useState("");
-    const [term, setTerm] = useState("");
-    const [address, setAddress] = useState("");
+    const request = useSelector(selectRequest);
 
-    useEffect( () => {
-        db.collection("requests").where("title", "==", props.item.title).limit(1).get()
-            .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    setType(doc.data()?.activity);
-                    setDescription(doc.data()?.description);
-                    setPhoneNumber(doc.data()?.phoneNumber);
-                    setLocation(doc.data()?.location);
-                    setBudget(doc.data()?.budget)
-                    setTitle(doc.data()?.title);
-                    setEstimatedTime(doc.data()?.estimatedTime);
-                    setIsRemote(doc.data()?.isRemote);
-                    setDocId(doc.id);
-                    setTerm(doc.data()?.term);
-                    setAddress(doc.data()?.address);
-                })
-            })
-    }, [])
-
-    const handleTypeChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setType(event.target.value);
-    }
+    const phoneNumber = request.phoneNumber;
+    const title = request.title;
+    const description = request.description;
+    const budget = request.budget;
+    const isRemote = request.isRemote;
+    const location = request.location;
+    const term = request.term;
+    const address = request.address;
+    const activity = request.activity;
 
     const userEmail = useSelector(selectUserEmail);
 
@@ -104,7 +81,7 @@ const UserRequestModalComponent = (props: Props) => {
                     </Form.Group>
                     <Form.Group controlId="activity">
                         <label htmlFor="location">Veikla:</label>
-                        <Form.Control type="text" disabled={true} name="activity" value={type}>
+                        <Form.Control type="text" disabled={true} name="activity" value={activity}>
                         </Form.Control>
                     </Form.Group>
                     <Form.Group controlId="textarea" >
@@ -121,9 +98,9 @@ const UserRequestModalComponent = (props: Props) => {
                         <Form.Control type="number" disabled={true} placeholder="Įveskite biudžeto sumą" value={budget}/>
                     </Form.Group>
                     <Form.Group controlId="time">
-                        <Form.Label>Numatomas laikas</Form.Label>
+                        <Form.Label>Terminas</Form.Label>
                         {/*@ts-ignore*/}
-                        <Form.Control type="number" disabled={true} placeholder="Įveskite numatomą atlikimo laiką" value={estimatedTime}/>
+                        <Form.Control type="number" disabled={true} placeholder="Terminas" value={term}/>
                     </Form.Group>
                     <Form.Group controlId="Select1">
                         <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>

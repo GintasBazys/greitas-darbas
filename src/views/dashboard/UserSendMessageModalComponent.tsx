@@ -26,26 +26,27 @@ const UserSendMessageModalComponent = (props: Props) => {
         event.preventDefault();
 
         const response = window.confirm("Išsiųsti žinutę?");
+        console.log(props.sender + props.receiver + props.user);
         if (response) {
                 let messages: any[] = [];
                 let sentMessages: any[] = [];
 
                 await firebase.usersCollection.doc(props.user).get()
                     .then((doc) => {
-                        messages = doc.data()?.receivedMessages;
+                        messages = doc.data()?.sentMessages;
                     });
 
                 await firebase.usersCollection.doc(props.user).update({
-                    receivedMessages: [{sender: props.sender, message: message}, ...messages]
+                    sentMessages: [{receiver: props.sender, message: message, createdOn: new Date().toISOString()}, ...messages]
                 })
 
                 await firebase.usersCollection.doc(auth.currentUser?.uid).get()
                     .then((doc) => {
-                        sentMessages = doc.data()?.sentMessages;
+                        sentMessages = doc.data()?.receivedMessages;
                     });
 
                 await firebase.usersCollection.doc(auth.currentUser?.uid).update({
-                    sentMessages: [{receiver: props.receiver, message: message}, ...sentMessages]
+                    receivedMessages: [{sender: props.receiver, message: message, createdOn: new Date().toISOString()}, ...sentMessages]
                 })
 
             await props.onHide();

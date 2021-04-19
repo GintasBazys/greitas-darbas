@@ -85,9 +85,7 @@ const ServiceProviderRequestPaidComponent = () => {
                         <p className="center-element">Telefono numeris: {reservedRequest.reservedUserPhoneNumber}</p>
                         <p className="center-element">El. paštas: {reservedRequest.reservedUserEmail}</p>
                         <p className="center-element">Aprašymas:</p>
-                        <div style={{borderStyle: "solid"}}>
-                            <p >{reservedRequest.description}</p>
-                        </div>
+                        <p >{reservedRequest.description}</p>
                         <p className="center-element">Terminas: {moment(reservedRequest.term).format("YYYY-MM-DD")}</p>
                         <p className="center-element">Statusas: {reservedRequest.status}</p>
 
@@ -132,7 +130,7 @@ const ServiceProviderRequestPaidComponent = () => {
                         <p className="center-element"><Link to={{pathname: "/kitas",  query:{user: reservedRequest.reservedUser}}}>{reservedRequest.reservedUserEmail}</Link></p>
                         <div className="center-element">
                             <Button variant="outline-dark" onClick={() => handleMessageModalShow()}>Išsiųsti žinutę</Button>
-                            <UserSendMessageModalComponent user={reservedRequest.reservedUser} receiver={reservedRequest.reservedUserEmail} sender={reservedRequest.userMail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
+                            <UserSendMessageModalComponent user={reservedRequest.user} receiver={reservedRequest.userMail} sender={reservedRequest.reservedUserEmail} show={messageModalShow} onHide={() => handleMessageModalShow()}/>
                         </div>
                     </Col>
                 </Row>
