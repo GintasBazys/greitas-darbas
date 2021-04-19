@@ -92,7 +92,7 @@ const UserWorkforceViewComponent = () => {
                     </Form.Group>
 
                 </div>
-                <div style={{display: "flex"}}>
+                <div style={{display: "flex", marginLeft: "10rem"}}>
                     {
                         items.map((item) => {
                             return (

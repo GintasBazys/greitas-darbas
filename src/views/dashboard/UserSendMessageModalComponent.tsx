@@ -1,6 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {auth} from "../../firebase";
+import {auth, db} from "../../firebase";
 import {Button, Form, Modal} from "react-bootstrap";
 import * as firebase from "../../firebase";
 import {selectUserEmail} from "../../features/user/userSlice";
@@ -15,6 +15,20 @@ interface Props {
 
 const UserSendMessageModalComponent = (props: Props) => {
     const [message, setMessage] = useState("");
+
+    const [id, setId] = useState("");
+
+    console.log(props.sender)
+
+    useEffect(() => {
+        db.collection("users").where("email", "==", props.sender).limit(1).get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+
+                    setId(doc.id);
+                })
+            })
+    },[])
 
     const userEmail = useSelector(selectUserEmail);
 
@@ -40,12 +54,12 @@ const UserSendMessageModalComponent = (props: Props) => {
                     sentMessages: [{receiver: props.sender, message: message, createdOn: new Date().toISOString()}, ...messages]
                 })
 
-                await firebase.usersCollection.doc(auth.currentUser?.uid).get()
+                await firebase.usersCollection.doc(id).get()
                     .then((doc) => {
                         sentMessages = doc.data()?.receivedMessages;
                     });
 
-                await firebase.usersCollection.doc(auth.currentUser?.uid).update({
+                await firebase.usersCollection.doc(id).update({
                     receivedMessages: [{sender: props.receiver, message: message, createdOn: new Date().toISOString()}, ...sentMessages]
                 })
 
