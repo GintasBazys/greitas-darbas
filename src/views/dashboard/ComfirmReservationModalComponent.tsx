@@ -94,6 +94,8 @@ const ComfirmReservationModalComponent = (props: Props) => {
                 paymentStatus: "Neatliktas",
                 reservedUserNameAndSurname: name,
                 reservedUserPhoneNumber: phoneNumber,
+                phoneNumber: props.item.phoneNumber,
+                nameAndSurname: props.item.nameAndSurname,
                 location: location,
                 address: address,
                 id: id

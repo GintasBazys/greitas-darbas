@@ -14,5 +14,6 @@ export const activities = [
     "Sveikatos paslaugos",
     "Maisto paslaugos",
     "Augintinių paslaugos",
-    "Priežiūros paslaugos"
+    "Priežiūros paslaugos",
+    "Kita"
 ]

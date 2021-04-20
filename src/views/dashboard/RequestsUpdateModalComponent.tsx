@@ -168,7 +168,7 @@ const RequestsUpdateModalComponent = (props: Props) => {
                     </Form.Group>
                     <Form.Group controlId="address">
                         <Form.Label>Adresas</Form.Label>
-                        <Form.Control type="text" placeholder="Įveskite tikslų adresą" value={title} onChange={handleAddressChange}/>
+                        <Form.Control type="text" placeholder="Įveskite tikslų adresą" value={address} onChange={handleAddressChange}/>
                     </Form.Group>
                     <Form.Group controlId="price">
                         <Form.Label>Biudžetas</Form.Label>

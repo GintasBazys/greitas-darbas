@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
-import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Form, Image, ListGroup, ListGroupItem, Row} from "react-bootstrap";
 import {selectReservedOffer, setReservedOffer, setReservedTime} from "../../features/offers/offersSlice";
 import {db} from "../../firebase";
 import {Link} from "react-router-dom";
@@ -14,6 +14,7 @@ import offerProgress from "../../assets/offer_progress.svg";
 import moment from "moment";
 import store from "../../app/store";
 import SubmitPaymentModalComponent from "./SubmitPaymentModalComponent";
+import workInProgress from "../../assets/work_in_progress.svg";
 
 const ServiceProviderOfferPaidComponent = () => {
 
@@ -81,18 +82,31 @@ const ServiceProviderOfferPaidComponent = () => {
                 <Row>
                     <Col md={6}>
                         <h1 className="center-element">Užsakymas</h1>
-                        <p className="center-element">Vietovė: {reservedOffer.location}, {reservedOffer.address}</p>
-                        <div>
-                            <p className="center-element">Aprašymas: {reservedOffer.description}</p>
-                        </div>
-                        <p className="center-element">Pavadinimas: {reservedOffer.title}</p>
-                        <p className="center-element">Statusas: {reservedOffer.status}</p>
-
-                        <p className="center-element">Kaina: {reservedOffer.price} €</p>
-
-                        <p className="center-element">Pradžia: {moment(reservedOffer.reservedDay).format("YYYY-MM-DD")} {reservedOffer.reservedHour}</p>
-
-                                <div>
+                        <Card style={{ width: '30rem', marginLeft: "230px"}}>
+                            <Card.Img variant="top" src={workInProgress} />
+                            <Card.Body>
+                                {/*@ts-ignore*/}
+                                <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                    <Card.Title>{reservedOffer.title}</Card.Title>
+                                </div>
+                                <Card.Text>
+                                    {/*@ts-ignore*/}
+                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{reservedOffer.description}</div>
+                                </Card.Text>
+                            </Card.Body>
+                            <ListGroup className="list-group-flush">
+                                <ListGroupItem>Užsakovas: {reservedOffer.reservedUserNameAndSurname}</ListGroupItem>
+                                <ListGroupItem>Vykdytojas: {reservedOffer.userMail}</ListGroupItem>
+                                <ListGroupItem>Paslaugos vykdytojo nr. {reservedOffer.phoneNumber}</ListGroupItem>
+                                <ListGroupItem>Paslaugos užsakovo nr. {reservedOffer.reservedUserPhoneNumber}</ListGroupItem>
+                                <ListGroupItem>Miestas: {reservedOffer.location}</ListGroupItem>
+                                <ListGroupItem>Adresas: {reservedOffer.address}</ListGroupItem>
+                                <ListGroupItem>Pradžia: {moment(reservedOffer.reservedDay).format("YYYY-MM-DD")} {reservedOffer.reservedHour}</ListGroupItem>
+                                <ListGroupItem>Valandinė kaina: {reservedOffer.price} €</ListGroupItem>
+                                <ListGroupItem>Statusas: {reservedOffer.status}</ListGroupItem>
+                            </ListGroup>
+                        </Card>
+                                <div style={{marginTop: "2rem"}}>
                                     <div className="center-element">
                                         <Button variant="outline-dark" onClick={() => handleProgressModalShow(reservedOffer)}>Keisti vykdymo būseną</Button>
                                         <ServiceProviderProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow(reservedOffer)} />
