@@ -118,19 +118,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.nameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div className="alert alert-warning center-element" role="alert">
@@ -152,19 +159,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div>
@@ -186,19 +200,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div style={{marginTop: "2rem"}}>
@@ -217,19 +238,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.nameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div style={{marginTop: "2rem"}}>
@@ -249,19 +277,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
@@ -281,19 +316,26 @@ const UserRequestsInProgressComponent = () => {
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                                 <Card.Img variant="top" src={workInProgress} />
                                                 <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
                                                     <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                 </Card.Body>
                                                 <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Darbuotojas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>Atlikimo vieta: {item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>Terminas: {moment(item.reservedDay).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
                                                 </ListGroup>
                                                 <Card.Body>
                                                     <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
