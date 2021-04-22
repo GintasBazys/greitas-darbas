@@ -25,6 +25,8 @@ const AdministratorDashboardNavbar = ({profileImage}) => {
                     <Dropdown.Item onClick={() => history.push("/administracija/darbuotojai/sarasas")}>Darbuotojų peržiūra</Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton style={{marginLeft: "10rem"}} variant="outline-info" id="dropdown-basic-button3" title="Papildomi pasirinkimai">
+                    <Dropdown.Item onClick={() => history.push("/administracija/paslauga")}>Paslaugos</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/administracija/pasiulymai")}>Darbo skelbimai</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/administracija/mokejimai")}>Mokėjimai</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/administracija/ataskaitos")}>Ataskaitos</Dropdown.Item>
                 </DropdownButton>
