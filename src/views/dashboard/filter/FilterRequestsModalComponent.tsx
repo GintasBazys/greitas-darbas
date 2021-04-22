@@ -1,6 +1,11 @@
 import React from "react";
 
-const FilterRequestsModalComponent = () => {
+interface Props {
+    show: boolean,
+    onHide: () => void,
+}
+
+const FilterRequestsModalComponent = (props: Props) => {
     return (
         <div></div>
     )

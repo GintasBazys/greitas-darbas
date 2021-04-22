@@ -47,7 +47,7 @@ const ServiceProviderRequestPaidComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
                         await db.collection("requests").doc(doc.id).update({
-                            status: "Atšauktas užsakovo"
+                            status: "Atšaukta teikėjo"
                         })
                         await history.go(0);
                     })

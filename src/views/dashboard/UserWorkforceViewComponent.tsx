@@ -14,6 +14,7 @@ import store from "../../app/store";
 import {setRequest} from "../../features/requests/requestsSlice";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
+import FilterRequestsModalComponent from "./filter/FilterRequestsModalComponent";
 
 const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);
@@ -85,8 +86,8 @@ const UserWorkforceViewComponent = () => {
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
                             <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
-                            <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
-                            <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
+                            <Button variant="outline-dark" onClick={filter}>Filtruoti skelbimus</Button>
+                            <FilterRequestsModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
 
                     </Form.Group>

@@ -17,6 +17,7 @@ import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import workInProgress from "../../assets/work_in_progress.svg";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
+import FilterRequestsInProgressModalComponent from "./filter/FilterRequestsInProgressModalComponent";
 
 
 const UserRequestsInProgressComponent = () => {
@@ -89,6 +90,21 @@ const UserRequestsInProgressComponent = () => {
         setCompletedModalShow(!completedModalShow);
     }
 
+    const confirmCancelByProvider = async (item: any) => {
+        const confirmation = window.confirm("Patvirtinti");
+        if (confirmation) {
+
+            await db.collection("requests").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach(async (doc) => {
+                        await db.collection("requestReview").doc(doc.id).delete()
+                        await db.collection("requests").doc(doc.id).delete()
+                        await history.go(0)
+                    })
+                })
+        }
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -100,8 +116,8 @@ const UserRequestsInProgressComponent = () => {
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
                             <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
-                            <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
-                            <FilterOffersModalComponent show={filterModalShow} onHide={() => filter()} />
+                            <Button variant="outline-dark" onClick={filter}>Filtruoti skelbimus</Button>
+                            <FilterRequestsInProgressModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>
 
                     </Form.Group>
@@ -347,6 +363,162 @@ const UserRequestsInProgressComponent = () => {
                                                     </div>
                                                     <div style={{marginTop: "2rem"}} className="center-element">
                                                         <Button variant="outline-danger">Negautas mokėjimas</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
+                                    {
+                                        item.status === "Atšaukta naudotojo" && item.user === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
+                                                    <Card.Text>
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
+                                                        <Button variant="outline-dark" onClick={() => confirmCancelByProvider(item)}>Patvirtinti atšaukimą</Button>
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
+                                    {
+                                        item.status === "Atšaukta naudotojo" && item.reservedUser === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
+                                                    <Card.Text>
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
+                                                        Atšaukimas nepatvirtintas užsakovo
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
+                                    {
+                                        item.status === "Atšaukta teikėjo" && item.user === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
+                                                    <Card.Text>
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
+                                                        Atšaukimas nepatvirtintas darbuotojo
+                                                    </div>
+                                                    <div style={{marginTop: "2rem"}}>
+                                                        {/*@ts-ignore*/}
+                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
+                                                        <Card.Link href={`mailto:${item.reservedUserEmail}`}>Susiekti el. paštu</Card.Link>
+                                                    </div>
+                                                </Card.Body>
+                                            </Card> : <div></div>
+                                    }
+
+                                    {
+                                        item.status === "Atšaukta teikėjo" && item.reservedUser === auth.currentUser?.uid ?
+                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
+                                                <Card.Img variant="top" src={workInProgress} />
+                                                <Card.Body>
+                                                    {/*@ts-ignore*/}
+                                                    <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>
+                                                        <Card.Title>{item.title}</Card.Title>
+                                                    </div>
+                                                    <Card.Text>
+                                                        {/*@ts-ignore*/}
+                                                        <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
+                                                    </Card.Text>
+                                                </Card.Body>
+                                                <ListGroup className="list-group-flush">
+                                                    <ListGroupItem>Užsakovas: {item.userMail}</ListGroupItem>
+                                                    <ListGroupItem>Vykdytojas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                    <ListGroupItem>Darbuotojo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Užsakovo nr. {item.phoneNumber}</ListGroupItem>
+                                                    <ListGroupItem>Miestas: {item.location}</ListGroupItem>
+                                                    <ListGroupItem>Adresas: {item.address}</ListGroupItem>
+                                                    <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
+                                                    <ListGroupItem>Biudžetas: {item.budget} €</ListGroupItem>
+                                                    <ListGroupItem>Statusas: {item.status}</ListGroupItem>
+                                                    <ListGroupItem>Naudotojo vertinimas: {Math.round(item.userRating)}</ListGroupItem>
+                                                </ListGroup>
+                                                <Card.Body>
+                                                    <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
+                                                        <Button variant="outline-dark" onClick={() => confirmCancelByProvider(item)}>Patvirtinti atšaukimą</Button>
                                                     </div>
                                                     <div style={{marginTop: "2rem"}}>
                                                         {/*@ts-ignore*/}

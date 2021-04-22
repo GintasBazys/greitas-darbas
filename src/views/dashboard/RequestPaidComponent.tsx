@@ -52,7 +52,7 @@ const RequestPaidComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
                         await db.collection("requests").doc(doc.id).update({
-                            status: "Atšauktas darbuotojo"
+                            status: "Atšaukta naudotojo"
                         })
                         await history.go(0);
                     })

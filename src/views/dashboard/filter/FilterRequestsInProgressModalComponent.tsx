@@ -1,6 +1,11 @@
 import React from "react";
 
-const FilterRequestsInProgressModalComponent = () => {
+interface Props {
+    show: boolean,
+    onHide: () => void,
+}
+
+const FilterRequestsInProgressModalComponent = (props: Props) => {
     return (
         <div></div>
     )

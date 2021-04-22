@@ -123,7 +123,7 @@ const UserOffersViewComponent = () => {
                 </div>
 
                 {
-                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                    items.length === 0 ? <div className="center-element" style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
                         <div className="center-element" style={{marginTop: "2rem"}}>
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>

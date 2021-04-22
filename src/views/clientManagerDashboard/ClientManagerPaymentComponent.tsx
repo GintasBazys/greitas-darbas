@@ -48,7 +48,7 @@ const ClientManagerPaymentComponent = () => {
         <div>
             <ClientManagerNavbarComponent profileImage={image} />
             {
-                payments.length > 0 ? <div className="center">
+                payments.length > 0 ? <div>
                     <Payments items={currentItems} loading={loading} />
                     {/*@ts-ignore*/}
                     <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>

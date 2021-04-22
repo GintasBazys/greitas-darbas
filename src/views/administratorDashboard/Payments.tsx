@@ -1,6 +1,8 @@
 import React from "react";
 import LoadingComponent from "../LoadingComponent";
-import {Button} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
+import mail from "../../assets/mail.svg";
+import money from "../../assets/money.svg";
 
 interface Props {
     items: any,
@@ -15,15 +17,24 @@ const Payments = ({items, loading}: Props) => {
     }
 
     return (
-        <div>
+        <div style={{display: "flex"}}>
             {// @ts-ignore
                 items.map((payment) => {
                     return (
-                        <div style={{display: "flex"}}>
+                        <div>
                             <div>
-                                {payment.receipt_email} Mokėta: {payment.amount/ 100} {payment.currency} - mokėjimo statusas: {payment.status}
+                                <Card style={{ width: '18rem', marginLeft: "5px"}}>
+                                    <Card.Img variant="top" src={money} />
+                                    <Card.Body>
+                                        <Card.Title>Mokėta: {payment.amount/ 100} {payment.currency}</Card.Title>
+                                        <Card.Text>
+                                            mokėjimo statusas: {payment.status}
+                                        </Card.Text>
+                                        <Button variant="outline-dark">Daugiau informacijos</Button>
+                                    </Card.Body>
+                                </Card>
                             </div>
-                            <Button style={{marginLeft: "2rem"}} variant="outline-dark">Daugiau informacijos</Button>
+
                         </div>
                     )
                 })

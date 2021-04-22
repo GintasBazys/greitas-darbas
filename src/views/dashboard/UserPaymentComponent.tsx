@@ -84,10 +84,15 @@ const UserPaymentComponent = () => {
         <div>
             <UserNavBarComponent profileImage={image} />
 
-            <div className="center">
+            <div>
                 <Payments items={currentItems} loading={loading} />
                 {/*@ts-ignore*/}
                 <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
+                <div style={{marginTop: "2rem", width: "40%"}} className="alert alert-warning" role="alert">
+                    <p>*Succeeded - Sėkmingas mokėjimas</p>
+                    <p>*Processing - Vykdomas mokėjimas</p>
+                    <p>*Payment failed - Nesėkmingas mokėjimas</p>
+                </div>
             </div>
         </div>
     )
