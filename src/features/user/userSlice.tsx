@@ -160,7 +160,7 @@ export const fetchUpdateUserStatusToReview = (p: { date: string; experienceLevel
         location: p.location,
         image: p.photo
     }).catch((error) => {
-        console.log(error);
+        console.log(error.message);
     })
 }
 
@@ -174,7 +174,16 @@ export const fetchUpdateClientStatusToReview = (p: { date: string; phoneNumber: 
         location: p.location,
         image: p.photo
     }).catch((error) => {
-        console.log(error);
+        console.log(error.message);
+    })
+}
+
+export const fetchUpdatePicture = (p: {photo: any; user: any }) => async (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+
+    await db.collection("users").doc(p.user).update({
+        image: p.photo
+    }).catch((error) => {
+        console.log(error.message);
     })
 }
 

@@ -54,6 +54,28 @@ export const addRequest = (info: { address: string; activity: string; isRemote: 
     })
 }
 
+export const updateRequests = (info: {mail: string}) => async (dispatch: any) => {
+    await firebase.requestCollection.where("userMail", "==", info.mail).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.requestCollection.doc(doc.id).update({
+                    userMail: info.mail
+                })
+            })
+        })
+}
+
+export const updateRequestsUsername = (info: {username: string, usernameBeforeChange: string}) => async (dispatch: any) => {
+    await firebase.requestCollection.where("username", "==", info.usernameBeforeChange).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.requestCollection.doc(doc.id).update({
+                    username: info.username
+                })
+            })
+        })
+}
+
 export const updateRequest = (info: {date: string; address: string; activity: string; phoneNumber: string; budget: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
     await firebase.requestCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {

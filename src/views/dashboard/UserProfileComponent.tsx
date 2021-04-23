@@ -3,7 +3,7 @@ import {
     selectError,
     sendError,
     selectImage,
-    selectUser, fetchUpdateUserWorkPicturesToReview, fetchUserAsync,
+    selectUser, fetchUpdateUserWorkPicturesToReview, fetchUserAsync, fetchUpdatePicture,
 } from "../../features/user/userSlice";
 import history from "../../history";
 import {auth, db, emailProvider, storageRef} from "../../firebase";
@@ -26,6 +26,7 @@ import profileRating from "../../assets/profile_rating.svg";
 import ProviderModalComponent from "./ProviderModalComponent";
 import {activities} from "./registration/activities";
 import {experienceLevels} from "./registration/experienceLevel";
+import {updateRequests, updateRequestsUsername} from "../../features/requests/requestsSlice";
 
 const UserProfileComponent = () => {
     const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const UserProfileComponent = () => {
     Pond.registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateSize, FilePondPluginFileValidateType);
 
     const [files, setFiles] = useState([]);
+    const [profileImage, setProfileImage] = useState([]);
     const [portfolioImages, setPortfolioImages] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -51,7 +53,7 @@ const UserProfileComponent = () => {
     const [aboutMe, setAboutMe] = useState("");
     const [userRating, setUserRating] = useState(0);
     const [ratingCount, setRatingCount] = useState(0);
-    const user = firebase.auth.currentUser;
+    const user = firebase.auth?.currentUser;
     const userBeforeChange = useSelector(selectUser);
     const [username, setUsername] = useState("");
     const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
@@ -85,17 +87,40 @@ const UserProfileComponent = () => {
     }, [user])
 
 
-    const handleImageChange = (event: any) => {
-        if (event.target.files && event.target.files[0]) {
-            let reader = new FileReader();
-            reader.onload = (e) => {
-                // @ts-ignore
-                image = e.target.result;
+    const handleImageChange = async (event: any) => {
+        // if (event.target.files && event.target.files[0]) {
+        //     let reader = new FileReader();
+        //     reader.onload = (e) => {
+        //         // @ts-ignore
+        //         image = e.target.result;
+        //         dispatch(fetchPictureAsync(image))
+        //     };
+        //     reader.readAsDataURL(event.target.files[0]);
+        // }
+        let urlFromFirebaseStorage: Array<string> = [];
+        const imagesRef = await storageRef.child(`/${username}/profilis/`);
 
-                dispatch(fetchPictureAsync(image))
-            };
-            reader.readAsDataURL(event.target.files[0]);
-        }
+        await imagesRef.listAll().then((result) => {
+            result.items.forEach((file) => {
+                file.delete()
+                    .then(() => {
+
+                    }).catch((error) => {
+                    console.log(error.message);
+                });
+            })
+        })
+        let urls = profileImage.map(async (file: any) => {
+            await storageRef.child(`/${username}/profilis/${file.file.name}`).put(file.file);
+            const url = await storageRef.child(`/${username}/profilis/${file.file.name}`).getDownloadURL();
+            await urlFromFirebaseStorage.push(url);
+        });
+        await Promise.all(urls).then((results) => {
+            //console.log(urls);
+        })
+        await console.log(urlFromFirebaseStorage)
+        await dispatch(fetchUpdatePicture({photo: urlFromFirebaseStorage, user: userId}))
+        await history.go(0);
     }
 
     const handleUsernameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -193,7 +218,8 @@ const UserProfileComponent = () => {
                             await db.collection("users").doc(auth.currentUser?.uid).update({
                                 email: email
                             })
-                            await dispatch(updateOffers({mail: email}))
+                            await dispatch(updateOffers({mail: email}));
+                            await dispatch(updateRequests({mail: email}));
                             await history.push("pagrindinis");
                         })
                 }).catch((error) => {
@@ -208,7 +234,6 @@ const UserProfileComponent = () => {
 
     const sendPortfolioPictures = async () => {
 
-        //TODO: uzdeti nuotrauku limita
         let urlsFromFirebaseStorage: Array<string> = [];
         let urls = files.map(async (file: any) => {
             await storageRef.child(`/${userBeforeChange}/darbai/${file.file.name}`).put(file.file);
@@ -278,6 +303,7 @@ const UserProfileComponent = () => {
             })
             await dispatch(fetchUserAsync({uid: userId}));
             await dispatch(updateOffersUsername({username: username, usernameBeforeChange: usernameBeforeChange}));
+            await dispatch(updateRequestsUsername({username: username, usernameBeforeChange: usernameBeforeChange}));
         }
     }
 
@@ -305,8 +331,33 @@ const UserProfileComponent = () => {
 
                     <Form>
                         <Form.Group>
-                            <Image src={image} className="dashboard-profile-image" roundedCircle alt="profilio nuotrauka" />
-                            <input accept="image/png,image/jpeg, image/jpg" type="file" onChange={handleImageChange}/>
+                            <div>
+                                <Image src={image} className="profile-image" style={{marginLeft: "500px"}} alt="profilio nuotrauka" />
+
+                                <FilePond
+                                    allowImagePreview={true}
+                                    files={profileImage}
+                                    // @ts-ignore
+                                    onupdatefiles={setProfileImage}
+                                    allowMultiple={true}
+                                    maxFiles={1}
+                                    allowReorder={false}
+                                    allowFileTypeValidation={true}
+                                    acceptedFileTypes={["image/*"]}
+                                    name="nuotrauka"
+                                    fileValidateTypeLabelExpectedTypes="Nuotraukos formatas: .png, .jpg..."
+                                    labelFileTypeNotAllowed="Negalimas failo tipas"
+                                    credits={false}
+                                    labelIdle='<span class="filepond--label-action">Atnaujinti profilio nuotrauką</span>'
+                                    allowFileSizeValidation={true}
+                                    maxTotalFileSize="5MB"
+                                    labelMaxTotalFileSizeExceeded="Viršytas maksimalus nuotraukos dydis"
+                                    labelMaxTotalFileSize="Didziausias galimas failo dydis 5MB"
+                                />
+                                <Button  variant="outline-dark" style={{width: "15%", marginTop: "10px", height: "80%", marginLeft: "500px"}} onClick={handleImageChange}>Atnaujinti nuotrauką</Button>
+                            </div>
+
+
                         </Form.Group>
                         {
                             status === "patvirtintas_naudotojas" ? <div className="center-element">
@@ -326,7 +377,7 @@ const UserProfileComponent = () => {
                             <select name="location" value={experienceLevel} onChange={handleExperienceChange} required>
                                 {experienceLevels.map((item: React.ReactNode) => <option>{item}</option>)}
                             </select>
-                                <Button style={{textAlign: "center", marginLeft: "2rem"}} variant="outline-dark" onClick={(e) => changeExperience(e)}>Atnaujinti</Button>
+                                <Button style={{textAlign: "center", marginLeft: "84px"}} variant="outline-dark" onClick={(e) => changeExperience(e)}>Atnaujinti</Button>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Pakeisti vartotojo vardą</Form.Label>

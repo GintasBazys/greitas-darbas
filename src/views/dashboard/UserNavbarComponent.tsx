@@ -34,17 +34,13 @@ const UserNavBarComponent = ({profileImage}) => {
                     <Dropdown.Item onClick={() => history.push("/zinutes/issiusta")}>Išsiųstos žinutės</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/mokejimai")}>Mokėjimai</Dropdown.Item>
                 </DropdownButton>
-                <NavDropdown
-                    style={{marginLeft: "10rem"}} title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
-                        <span className="dashboard-user-margin">{user}</span>
-                    </div>
-                    }
-                    id="basic-nav-dropdown">
-                    <Link to="/profilis" className="dropdown-menu-item">Profilis</Link>
-                    <a className="dropdown-menu-item" onClick={() => dispatch(logout())}>
-                        Atsijungti
-                    </a>
-                </NavDropdown>
+                <div style={{marginLeft: "10rem"}}>
+                    <Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
+                </div>
+                <DropdownButton variant="outline-success" id="dropdown-basic-button4" title="Profilis">
+                    <Dropdown.Item onClick={() => history.push("/profilis")}>Profilis</Dropdown.Item>
+                    <Dropdown.Item onClick={() => dispatch(logout())}>Atsijungti</Dropdown.Item>
+                </DropdownButton>
             </Navbar>
         </div>
     )
