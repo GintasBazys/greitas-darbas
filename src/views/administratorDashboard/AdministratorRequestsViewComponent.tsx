@@ -3,13 +3,14 @@ import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {Link} from "react-router-dom";
-import {Button, Image} from "react-bootstrap";
+import {Button, Image, Table} from "react-bootstrap";
 import star from "../../assets/star.svg";
 import {usePagination} from "use-pagination-firestore";
-import {db} from "../../firebase";
+import {db, storageRef} from "../../firebase";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import AdministratorRequestModalComponent from "./AdministratorRequestModalComponent";
+import AdministratorOfferModalComponent from "./AdministratorOfferModalComponent";
 
 const AdministratorRequestsViewComponent = () => {
     const image = useSelector(selectWorkerImage);
@@ -34,22 +35,86 @@ const AdministratorRequestsViewComponent = () => {
     }
     moment.locale("lt")
 
+    const deleteRequest = async (item: any) => {
+        const response = window.confirm("Patvirtinti?");
+        if (response) {
+            await db.collection("requests").where("title", "==", item.title).limit(1).get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => {
+                        db.collection("requests").doc(doc.id).delete();
+                        //db.collection("users").doc()
+                    })
+                })
+            //history.go(0);
+        }
+    }
+
     return (
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
             <div>
                 {
-                    items.map((item) => {
+                    <div style={{width: "100%"}}>
+                        <div style={{marginTop: "2rem", border: "1px solid grey", marginBottom: "2rem"}}>
+                            <div>
 
-                        return (
-                            <div className="center-element" style={{marginTop: "2rem"}}>
-                                {/*@ts-ignore*/}
-                                {item.title} - {item.location}, paskelbta: {moment(item.createdOn).fromNow()} - <Link style={{marginRight: "5px"}} to={{pathname: "/naudotojas/kitas",  query:{user: item.username}}}>{item.username}</Link>  {Math.round(item.userRating)}<span style={{marginLeft: "5px"}}><Image fluid src={star} /></span> <Button variant="outline-dark" style={{marginRight: "2rem", marginLeft: "2rem"}} onClick={() => handleModalShow()}>Peržiūrėti visą informaciją</Button> <Button variant="outline-danger">Panaikinti pasiūlymą</Button>
-                                <AdministratorRequestModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} />
+                                <Table striped bordered hover responsive>
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Pavadinimas</th>
+                                        <th>Sukūrimo data</th>
+                                        <th>Statusas</th>
+                                        <th>El. pašto adresas</th>
+                                        <th>Telefono nr.</th>
+                                        <th>Vietovė</th>
+                                        <th>Biudžetas</th>
+                                        <th>Informacijos peržiūra</th>
+                                        <th>Skelbimo panaikinimas</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {
+                                        items.map((item, index) => (
+                                            <tr key={index}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.title}</td>
+                                                <td>{moment(item.createdOn).fromNow()}</td>
+                                                <td>
+                                                    {
+                                                        item.status === "rezervuotas" ?
+                                                            <div className="alert alert-danger" role="alert">
+                                                                Darbas yra rezervuotas
+                                                            </div> : <div></div>
+                                                    }
+                                                    {
+                                                        item.status !== "naujas" && item.status !== "rezervuotas" ?
+                                                            <div className="alert alert-danger" role="alert">
+                                                                Darbas yra vykdomas
+                                                            </div> : <div></div>
+                                                    }
+                                                    {
+                                                        item.status === "naujas" ?
+                                                            <div className="alert alert-sucess" role="alert">
+                                                                Naujas darbas
+                                                            </div> : <div></div>
+                                                    }
+                                                </td>
+                                                <td>{item.userMail}</td>
+                                                <td>{item.phoneNumber}</td>
+                                                <td>{item.location}</td>
+                                                <td>{item.budget}</td>
+                                                <td><Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button></td>
+                                                <td><Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteRequest(item)}>Pašalinti skelbimą</Button></td>
+                                                <td><AdministratorRequestModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} /></td>
+                                            </tr>
+                                        ))
+                                    }
+                                    </tbody>
+                                </Table>
                             </div>
-
-                        )
-                    })
+                        </div>
+                    </div>
                 }
 
                 {

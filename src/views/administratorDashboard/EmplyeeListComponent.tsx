@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Col, Container, Image, Row} from "react-bootstrap";
+import {Button, Col, Container, Image, Row, Table} from "react-bootstrap";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
 // @ts-ignore
@@ -62,35 +62,49 @@ const EmployeeListComponent = ({employees, setEmployees}: props) => {
             <AdministratorDashboardNavbar profileImage={image} />
             <div style={{marginTop: "2rem"}}>
                 {
-                    isLoading ? <LoadingComponent /> : items.map((item) => {
-                        return (
+                    isLoading ? <LoadingComponent /> :
                             <div style={{marginLeft: "20rem", width: "70%"}}>
                                 <div style={{marginTop: "2rem", border: "1px solid grey", marginBottom: "2rem"}}>
                                     <div>
                                         <Container fluid>
                                             <Row>
-                                                <Col md={9}>
-                                                    <div>
-                                                        <p>{item.nameAndSurname} - pradėjo dirbti {moment(item.createdOn).fromNow()}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p>El. paštas: {item.email}</p>
-                                                        <p>Telefono nr. {item.phoneNumber}</p>
-                                                        <p>Gyvenamoji vieta: {item.location}</p>
-                                                    </div>
-                                                    {item.status === "darbuotojas" ? <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeWorkerAccount(item)}>Panaikinti darbuotojo paskyrą</Button> : <div></div>}
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Image src={worker} fluid />
+                                                <Col md={12}>
+                                                    <Table striped bordered hover>
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Vardas ir pavardė</th>
+                                                            <th>Pradėjo dirbti</th>
+                                                            <th>Statusas</th>
+                                                            <th>El. pašto adresas</th>
+                                                            <th>Telefono nr.</th>
+                                                            <th>Gvenamoji vieta</th>
+                                                            <th>Paskyros panaikinimas</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {
+                                                            items.map((item, index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index + 1}</td>
+                                                                    <td>{item.nameAndSurname}</td>
+                                                                    <td>{moment(item.createdOn).fromNow()}</td>
+                                                                    <td>{item.status}</td>
+                                                                    <td>{item.email}</td>
+                                                                    <td>{item.phoneNumber}</td>
+                                                                    <td>{item.location}</td>
+                                                                    <td>{item.status === "darbuotojas" ? <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeWorkerAccount(item)}>Panaikinti darbuotojo paskyrą</Button> : <div></div>}</td>
+                                                                </tr>
+                                                            ))
+                                                        }
+                                                        </tbody>
+                                                    </Table>
                                                 </Col>
                                             </Row>
                                         </Container>
                                     </div>
                                 </div>
                             </div>
-
-                        )
-                    })
                 }
             </div>
             <div className="center-element" style={{marginTop: "2rem"}}>
