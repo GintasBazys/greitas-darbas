@@ -100,7 +100,8 @@ const UserOffersViewComponent = () => {
                                             </Card.Text>
                                         </Card.Body>
                                         <ListGroup className="list-group-flush">
-                                            <ListGroupItem>{item.nameAndSurname} {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
+                                            {/*@ts-ignore*/}
+                                            <ListGroupItem><Link to={{pathname: "/kitas",  query:{user: item.user}}}>{item.nameAndSurname}</Link> {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
                                             <ListGroupItem>Patirtis: {item.experienceLevel}</ListGroupItem>
                                             <ListGroupItem>{item.price}€/val</ListGroupItem>
                                             <ListGroupItem>{item.phoneNumber}</ListGroupItem>

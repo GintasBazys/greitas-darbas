@@ -1,5 +1,5 @@
 import React from "react";
-import {Button} from "react-bootstrap";
+import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
 // @ts-ignore
@@ -9,6 +9,7 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
+import worker from "../../assets/worker.svg";
 
 interface props {
     employees: boolean,
@@ -63,12 +64,29 @@ const EmployeeListComponent = ({employees, setEmployees}: props) => {
                 {
                     isLoading ? <LoadingComponent /> : items.map((item) => {
                         return (
-                            <div style={{marginLeft: "20rem",borderStyle: "solid", width: "70%"}}>
-                                <div className="center-element" style={{marginTop: "2rem"}}>
-                                <p>{item.email} - pradėjo dirbti {moment(item.createdOn).fromNow()}
-                                    {item.status === "darbuotojas" ? <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeWorkerAccount(item)}>Panaikinti darbuotojo paskyrą</Button> : <div></div>}
-                                </p>
-                            </div>
+                            <div style={{marginLeft: "20rem", width: "70%"}}>
+                                <div style={{marginTop: "2rem", border: "1px solid grey", marginBottom: "2rem"}}>
+                                    <div>
+                                        <Container fluid>
+                                            <Row>
+                                                <Col md={9}>
+                                                    <div>
+                                                        <p>{item.nameAndSurname} - pradėjo dirbti {moment(item.createdOn).fromNow()}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p>El. paštas: {item.email}</p>
+                                                        <p>Telefono nr. {item.phoneNumber}</p>
+                                                        <p>Gyvenamoji vieta: {item.location}</p>
+                                                    </div>
+                                                    {item.status === "darbuotojas" ? <Button style={{marginLeft: "2rem"}} variant="outline-dark" onClick={() => removeWorkerAccount(item)}>Panaikinti darbuotojo paskyrą</Button> : <div></div>}
+                                                </Col>
+                                                <Col md={3}>
+                                                    <Image src={worker} fluid />
+                                                </Col>
+                                            </Row>
+                                        </Container>
+                                    </div>
+                                </div>
                             </div>
 
                         )

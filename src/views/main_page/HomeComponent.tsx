@@ -20,7 +20,7 @@ const HomeComponent = () => {
             <h1>Sveiki atvykę į darbų dalijimosi platformą - Greitas Darbas</h1>
             {/*<img style={{marginTop: "1.5rem"}} src={mainPicture}/>*/}
             <img style={{marginTop: "1.5rem", height: "auto", maxWidth: "100%"}} src={main2} alt="Main picture"/>
-            <h3 style={{textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>Ieškokite įvairių sričių profesionalų, sūlykite savo paslaugas. Visi mokėjimai atliekami tik sistemoje, naudotojai turi būti patvirtinti mūsų darbuotojų</h3>
+            <h3 style={{textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>Ieškokite įvairių sričių profesionalų, sūlykite savo paslaugas. Visi mokėjimai atliekami tik sistemoje.</h3>
             <Button variant="outline-dark" className="btn-lg" onClick={() => handleChangePage()}> Pradeti</Button>
         </div>
         <div>

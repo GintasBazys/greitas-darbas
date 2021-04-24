@@ -36,7 +36,7 @@ const AdministratorPaymentComponent = () => {
 
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(5);
+    const [itemsPerPage] = useState(10);
 
     //atkerta paymentu dali
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -50,10 +50,18 @@ const AdministratorPaymentComponent = () => {
         <div>
             <AdministratorDashboardNavbar profileImage={image} />
             {
-                payments.length > 0 ? <div className="center">
-                    <Payments items={currentItems} loading={loading} />
+                payments.length > 0 ? <div>
+                    <div>
+                        <Payments items={currentItems} loading={loading} />
+                        {/*@ts-ignore*/}
+                        <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
+                        <div style={{marginTop: "2rem", width: "40%"}} className="alert alert-warning" role="alert">
+                            <p>*Succeeded - Sėkmingas mokėjimas</p>
+                            <p>*Processing - Vykdomas mokėjimas</p>
+                            <p>*Payment failed - Nesėkmingas mokėjimas</p>
+                        </div>
+                    </div>
                     {/*@ts-ignore*/}
-                    <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={payments.length} paginate={paginate}/>
                 </div> : <LoadingComponent />
             }
 

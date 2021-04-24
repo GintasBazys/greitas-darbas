@@ -3,16 +3,16 @@ import {
     selectWorkerError,
     sendWorkerError,
     selectWorkerImage,
-    selectWorker,
+    selectWorker, fetchWorkerAsync,
 } from "../../features/worker/workerSlice";
 import history from "../../history";
 import {auth, db, emailProvider} from "../../firebase";
 import {Button, Form, Image, Container, Row, Col} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import * as firebase from "../../firebase";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
-import NotificationComponent from "../main_page/NotificationComponent";
+import {sendError} from "../../features/user/userSlice";
 
 const AdministratorProfileComponent = () => {
     const dispatch = useDispatch();
@@ -87,6 +87,51 @@ const AdministratorProfileComponent = () => {
 
     }
 
+    const [username, setUsername] = useState("");
+    const userId = firebase.auth.currentUser?.uid;
+
+    useEffect(() => {
+        firebase.workerCollection.doc(auth.currentUser?.uid).get()
+            .then((doc) => {
+                //@ts-ignore
+                setUsername(doc.data()?.username);
+            })
+    }, [user])
+
+    const handleUsernameChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+        setUsername(event.target.value);
+    }
+
+    const changeUsername = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        if (username === "") {
+            dispatch(sendError("Darbuotojo vardo laukas negali būti tuščias"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+
+        } else {
+
+            await db.collection("workers").get()
+                .then((snapshot) => {
+                    snapshot.forEach((doc) => {
+                        if(doc.data()?.username === username) {
+                            dispatch(sendError("Darbuotojas tokiu vardu jau egzistuoja"));
+                            setTimeout(() => {
+                                dispatch(sendError(""))
+                            }, 2000);
+                            return
+                        }
+                    })
+                })
+
+            await db.collection("workers").doc(auth.currentUser?.uid).update({
+                username: username
+            })
+            await dispatch(fetchWorkerAsync({uid: userId}));
+        }
+    }
+
     return <div>
         <AdministratorDashboardNavbar profileImage={image}/>
         <Container fluid>
@@ -103,9 +148,15 @@ const AdministratorProfileComponent = () => {
                             <Form.Label>Pakeisti el. pašto adresą</Form.Label>
                             <Form.Control type="email" value={email} onChange={handleEmailChange}/>
                         </Form.Group>
-
                         <div className="text-center">
                             <Button variant="outline-dark" onClick={(e) => changeEmail(e)}>Atnaujinti</Button>
+                        </div>
+                        <Form.Group>
+                            <Form.Label>Pakeisti vartotojo vardą</Form.Label>
+                            <Form.Control type="text" value={username} onChange={handleUsernameChange} />
+                        </Form.Group>
+                        <div className="text-center">
+                            <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeUsername(e)}>Atnaujinti</Button>
                         </div>
                     </Form>
                 </Col>

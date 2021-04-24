@@ -140,7 +140,7 @@ export const logout = () => (dispatch: (arg0: { payload: undefined; type: string
     })
 }
 
-export const signUpWorkerAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
+export const signUpWorkerAsync  = (info: { password: string; phoneNumber: string; nameAndSurname: string; location: string; email: string; username: string }) => (dispatch: (arg0: { payload: object; type: string; }) => void) => {
 
     secondaryApp.auth().createUserWithEmailAndPassword(
         info.email,
@@ -150,7 +150,10 @@ export const signUpWorkerAsync  = (info: { username: string; email: string; pass
             username: info.username,
             email: info.email,
             status: "darbuotojas",
-            createdOn: new Date().toISOString()
+            createdOn: new Date().toISOString(),
+            nameAndSurname: info.nameAndSurname,
+            location: info.location,
+            phoneNumber: info.phoneNumber
         })
             .then(() => {
                 console.log("Document successfully written!");
