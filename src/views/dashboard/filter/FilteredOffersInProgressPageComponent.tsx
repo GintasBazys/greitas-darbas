@@ -63,7 +63,7 @@ const FilteredOffersInProgressPageComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach(async (doc) => {
                         await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Atšaukta rezervacija",
+                            status: "Naudotojo atšaukta rezervacija",
                         })
 
                         await history.go(0);
