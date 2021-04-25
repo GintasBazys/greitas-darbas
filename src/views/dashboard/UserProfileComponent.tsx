@@ -21,12 +21,12 @@ import "filepond/dist/filepond.min.css";
 import * as Pond from 'filepond';
 import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import {updateOffers, updateOffersUsername} from "../../features/offers/offersSlice";
+import {updateOffers, updateOffersName, updateOffersUsername} from "../../features/offers/offersSlice";
 import profileRating from "../../assets/profile_rating.svg";
 import ProviderModalComponent from "./ProviderModalComponent";
 import {activities} from "./registration/activities";
 import {experienceLevels} from "./registration/experienceLevel";
-import {updateRequests, updateRequestsUsername} from "../../features/requests/requestsSlice";
+import {updateRequests, updateRequestsName, updateRequestsUsername} from "../../features/requests/requestsSlice";
 
 const UserProfileComponent = () => {
     const dispatch = useDispatch();
@@ -61,9 +61,15 @@ const UserProfileComponent = () => {
     const [status, setStatus] = useState("");
     const [activity, setActivity] = useState("Klientų aptarnavimas");
     const [experienceLevel, setExperienceLevel] = useState("Pradedantysis");
+    const [name, setName] = useState("");
+    const [nameBeforeChange, setNameBeforeChange] = useState("");
 
     const handleActivityChange = (event: any) => {
         setActivity(event.target.value)
+    }
+
+    const handleNameChange = (event: any) => {
+        setName(event.target.value)
     }
 
     const handleExperienceChange = (event: any) => {
@@ -83,20 +89,13 @@ const UserProfileComponent = () => {
                 setStatus(doc.data()?.status);
                 setActivity(doc.data()?.activity);
                 setExperienceLevel(doc.data()?.experienceLevel);
+                setName(doc.data()?.nameAndSurname);
+                setNameBeforeChange(doc.data()?.nameAndSurname);
             })
     }, [user])
 
 
     const handleImageChange = async (event: any) => {
-        // if (event.target.files && event.target.files[0]) {
-        //     let reader = new FileReader();
-        //     reader.onload = (e) => {
-        //         // @ts-ignore
-        //         image = e.target.result;
-        //         dispatch(fetchPictureAsync(image))
-        //     };
-        //     reader.readAsDataURL(event.target.files[0]);
-        // }
         let urlFromFirebaseStorage: Array<string> = [];
         const imagesRef = await storageRef.child(`/${username}/profilis/`);
 
@@ -307,6 +306,24 @@ const UserProfileComponent = () => {
         }
     }
 
+    const changeName = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        event.preventDefault();
+        if (name === "") {
+            dispatch(sendError("Naudotojo vardo laukas negali būti tuščias"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+
+        } else {
+
+            await db.collection("users").doc(auth.currentUser?.uid).update({
+                nameAndSurname: name
+            })
+            await dispatch(updateOffersName({name: name, nameBeforeChange: nameBeforeChange}));
+            await dispatch(updateRequestsName({name: name, nameBeforeChange: nameBeforeChange}));
+        }
+    }
+
     const [modalShow, setModalShow] = useState(false);
 
     const handleModalShow = () => {
@@ -385,6 +402,13 @@ const UserProfileComponent = () => {
                         </Form.Group>
                         <div className="text-center">
                             <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeUsername(e)}>Atnaujinti</Button>
+                        </div>
+                        <Form.Group>
+                            <Form.Label>Pakeisti vardą ir pavardę</Form.Label>
+                            <Form.Control type="text" value={name} onChange={handleNameChange} />
+                        </Form.Group>
+                        <div className="text-center">
+                            <Button style={{textAlign: "center"}} variant="outline-dark" onClick={(e) => changeName(e)}>Atnaujinti</Button>
                         </div>
                         <Form.Group>
                             <Form.Label>Pakeisti el. pašto adresą</Form.Label>

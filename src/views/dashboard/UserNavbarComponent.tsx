@@ -22,7 +22,7 @@ const UserNavBarComponent = ({profileImage}) => {
                     <Dropdown.Item onClick={() => history.push("/paieska/darbas/mano")}>Mano darbų pasiūlymai</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/paslauga/mano")}>Ginčai</Dropdown.Item>
                 </DropdownButton>
-                <DropdownButton style={{marginLeft: "10rem"}} variant="outline-dark" id="dropdown-basic-button2" title="Pasiūlymų paieška">
+                <DropdownButton style={{marginLeft: "10rem"}} variant="outline-dark" id="dropdown-basic-button2" title="Paslaugų paieška">
                     <Dropdown.Item onClick={() => history.push("/siulymas")}>Kurti paslaugos skelbimą</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/paslauga")}>Paslaugų užsakymas</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/vykdymas")}>Vykdomos paslaugos</Dropdown.Item>

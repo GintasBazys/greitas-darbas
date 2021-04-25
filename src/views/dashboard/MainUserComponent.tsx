@@ -28,7 +28,7 @@ const MainUserComponent = () => {
     }, [])
 
     useEffect(() => {
-        db.collection("offers").where("reservedUser", "==", auth.currentUser?.uid).get()
+        db.collection("reservedOffers").where("reservedUser", "==", auth.currentUser?.uid).get()
             .then((querySnapshot) => {
                 setOffersInProgress(querySnapshot.docs.length)
             })

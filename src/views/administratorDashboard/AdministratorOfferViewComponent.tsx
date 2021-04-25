@@ -74,67 +74,70 @@ const AdministratorOfferViewComponent = () => {
             <AdministratorDashboardNavbar profileImage={image} />
             <div>
                 {
+                    <Container  style={{width: "80%"}} fluid>
                         <div style={{width: "100%"}}>
                             <div style={{marginTop: "2rem", border: "1px solid grey", marginBottom: "2rem"}}>
                                 <div>
 
-                                                <Table striped bordered hover responsive>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Pavadinimas</th>
-                                                        <th>Sukūrimo data</th>
-                                                        <th>Statusas</th>
-                                                        <th>El. pašto adresas</th>
-                                                        <th>Telefono nr.</th>
-                                                        <th>Vietovė</th>
-                                                        <th>Kaina</th>
-                                                        <th>Informacijos peržiūra</th>
-                                                        <th>Pasiūlymo panaikinimas</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {
-                                                        items.map((item, index) => (
-                                                            <tr key={index}>
-                                                                <td>{index + 1}</td>
-                                                                <td>{item.title}</td>
-                                                                <td>{moment(item.createdOn).fromNow()}</td>
-                                                                <td>
-                                                                    {
-                                                                    item.status === "rezervuotas" ?
-                                                                        <div className="alert alert-danger" role="alert">
-                                                                            Paslauga yra rezervuota
-                                                                        </div> : <div></div>
-                                                                }
-                                                                    {
-                                                                        item.status !== "naujas" && item.status !== "rezervuotas" ?
-                                                                            <div className="alert alert-danger" role="alert">
-                                                                                Paslauga yra vykdoma
-                                                                            </div> : <div></div>
-                                                                    }
-                                                                    {
-                                                                        item.status === "naujas" ?
-                                                                            <div className="alert alert-sucess" role="alert">
-                                                                                Nevykdoma paslauga
-                                                                            </div> : <div></div>
-                                                                    }
-                                                                </td>
-                                                                <td>{item.userMail}</td>
-                                                                <td>{item.phoneNumber}</td>
-                                                                <td>{item.location}</td>
-                                                                <td>{item.price}</td>
-                                                                <td><Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow(item)}>Peržiūrėti informaciją</Button></td>
-                                                                <td><Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button></td>
-                                                                <td><AdministratorOfferModalComponent show={modalShow} onHide={() => handleModalShow(item)} item={item} /></td>
-                                                            </tr>
-                                                        ))
-                                                    }
-                                                    </tbody>
-                                                </Table>
+                                    <Table striped bordered hover responsive>
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Pavadinimas</th>
+                                            <th>Sukūrimo data</th>
+                                            <th>Statusas</th>
+                                            <th>El. pašto adresas</th>
+                                            <th>Telefono nr.</th>
+                                            <th>Vietovė</th>
+                                            <th>Kaina</th>
+                                            <th>Informacijos peržiūra</th>
+                                            <th>Pasiūlymo panaikinimas</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            items.map((item, index) => (
+                                                <tr key={index}>
+                                                    <td>{index + 1}</td>
+                                                    <td>{item.title}</td>
+                                                    <td>{moment(item.createdOn).fromNow()}</td>
+                                                    <td>
+                                                        {
+                                                            item.status === "rezervuotas" ?
+                                                                <div>
+                                                                    Paslauga yra rezervuota
+                                                                </div> : <div></div>
+                                                        }
+                                                        {
+                                                            item.status !== "naujas" && item.status !== "rezervuotas" ?
+                                                                <div>
+                                                                    Paslauga yra vykdoma
+                                                                </div> : <div></div>
+                                                        }
+                                                        {
+                                                            item.status === "naujas" ?
+                                                                <div>
+                                                                    Nevykdoma paslauga
+                                                                </div> : <div></div>
+                                                        }
+                                                    </td>
+                                                    <td>{item.userMail}</td>
+                                                    <td>{item.phoneNumber}</td>
+                                                    <td>{item.location}</td>
+                                                    <td>{item.price}</td>
+                                                    <td><Button variant="outline-dark" onClick={() => handleModalShow(item)}>Peržiūrėti informaciją</Button></td>
+                                                    <td><Button variant="outline-danger" onClick={() => deleteOffer(item)}>Pašalinti pasiūlymą</Button></td>
+                                                    <td><AdministratorOfferModalComponent show={modalShow} onHide={() => handleModalShow(item)} item={item} /></td>
+                                                </tr>
+                                            ))
+                                        }
+                                        </tbody>
+                                    </Table>
                                 </div>
                             </div>
                         </div>
+                    </Container>
+
                 }
 
                 {

@@ -76,6 +76,17 @@ export const updateRequestsUsername = (info: {username: string, usernameBeforeCh
         })
 }
 
+export const updateRequestsName = (info: {name: string, nameBeforeChange: string}) => async (dispatch: any) => {
+    await firebase.requestCollection.where("nameAndSurname", "==", info.nameBeforeChange).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.requestCollection.doc(doc.id).update({
+                    nameAndSurname: info.name
+                })
+            })
+        })
+}
+
 export const updateRequest = (info: {date: string; address: string; activity: string; phoneNumber: string; budget: string; isRemote: boolean; description: string; location: string; title: string; previousTitle: any }) => async (dispatch: any) => {
     await firebase.requestCollection.where("title", "==", info.previousTitle).limit(1).get()
         .then((querySnapshot) => {

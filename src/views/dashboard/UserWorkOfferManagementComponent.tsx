@@ -35,7 +35,7 @@ const UserWorkOfferManagementComponent = () => {
     const [description, setDescription] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [location, setLocation] = useState("");
-    const [price, setPrice] = useState("");
+    const [price, setPrice] = useState(0);
     const [isRemote, setIsRemote] = useState(false);
     const [userRating, setUserRating] = useState(0);
     const [showOffers, setShowOffers] = useState(false);
@@ -83,23 +83,29 @@ const UserWorkOfferManagementComponent = () => {
     }
 
     const handlePhoneNumberChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        if(isNaN(Number(event.target.value))) {
-            dispatch(sendError("Iveskite tik skaičius"));
-            setTimeout(() => {
-                dispatch(sendError(""))
-            }, 2000);
-        }else{
-            setPhoneNumber(event.target.value)
-        }
-
+            if(isNaN(Number(event.target.value))) {
+                dispatch(sendError("Iveskite tik skaičius"));
+                setTimeout(() => {
+                    dispatch(sendError(""))
+                }, 2000);
+            }else{
+                setPhoneNumber(event.target.value)
+            }
     }
 
     const handleLocationChange = (event: any) => {
         setLocation(event.target.value)
     }
 
-    const handlePriceChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setPrice(event.target.value)
+    const handlePriceChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
+        if(isNaN(Number(event.target.value))) {
+            dispatch(sendError("Iveskite tik skaičius"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+        }else{
+            setPrice(event.target.value)
+        }
     }
 
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
@@ -122,7 +128,7 @@ const UserWorkOfferManagementComponent = () => {
         //     })
         // }
 
-         if(description !== "" && phoneNumber !== "" && price !== "" && title !== "") {
+         if(description !== "" && phoneNumber !== "" && price !== 0 && title !== "") {
 
             let urlsFromFirebaseStorage: Array<string> = [];
             let urls = files.map(async (file: any) => {
@@ -196,7 +202,7 @@ const UserWorkOfferManagementComponent = () => {
                                     <div>
                                         <Button disabled={connectedId} variant="outline-dark"  onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
                                         <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
-                                        <p>Paskyrą kurkite būtinai su el. paštu, kurį naudojote registracijos metu</p>
+                                        <p>Paskyrą būtinai kurkite su el. paštu, kurį naudojote registracijos metu</p>
                                         </div>
                                     </div>
                             }
@@ -243,7 +249,8 @@ const UserWorkOfferManagementComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="price">
                                 <Form.Label>Valandinė kaina</Form.Label>
-                                <Form.Control type="number" disabled={!connectedId || status} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
+                                {/*@ts-ignore*/}
+                                <Form.Control type="text" disabled={!connectedId || status} placeholder="Įveskite paslaugos kainą naudojant valandinį tarifą" value={price} onChange={handlePriceChange}/>
                             </Form.Group>
                             <Form.Group controlId="checkbox">
                                 <Form.Check type="checkbox" label="Paslauga teikiama nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}

@@ -2,15 +2,13 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
-import {Link} from "react-router-dom";
-import {Button, Image, Table} from "react-bootstrap";
+import {Button, Container, Image, Table} from "react-bootstrap";
 import star from "../../assets/star.svg";
 import {usePagination} from "use-pagination-firestore";
 import {db, storageRef} from "../../firebase";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import AdministratorRequestModalComponent from "./AdministratorRequestModalComponent";
-import AdministratorOfferModalComponent from "./AdministratorOfferModalComponent";
 
 const AdministratorRequestsViewComponent = () => {
     const image = useSelector(selectWorkerImage);
@@ -54,11 +52,12 @@ const AdministratorRequestsViewComponent = () => {
             <AdministratorDashboardNavbar profileImage={image} />
             <div>
                 {
+                    <Container  style={{width: "80%"}} fluid>
                     <div style={{width: "100%"}}>
                         <div style={{marginTop: "2rem", border: "1px solid grey", marginBottom: "2rem"}}>
                             <div>
 
-                                <Table striped bordered hover responsive>
+                                <Table striped bordered hover>
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -83,19 +82,19 @@ const AdministratorRequestsViewComponent = () => {
                                                 <td>
                                                     {
                                                         item.status === "rezervuotas" ?
-                                                            <div className="alert alert-danger" role="alert">
+                                                            <div>
                                                                 Darbas yra rezervuotas
                                                             </div> : <div></div>
                                                     }
                                                     {
                                                         item.status !== "naujas" && item.status !== "rezervuotas" ?
-                                                            <div className="alert alert-danger" role="alert">
+                                                            <div>
                                                                 Darbas yra vykdomas
                                                             </div> : <div></div>
                                                     }
                                                     {
                                                         item.status === "naujas" ?
-                                                            <div className="alert alert-sucess" role="alert">
+                                                            <div>
                                                                 Naujas darbas
                                                             </div> : <div></div>
                                                     }
@@ -104,8 +103,8 @@ const AdministratorRequestsViewComponent = () => {
                                                 <td>{item.phoneNumber}</td>
                                                 <td>{item.location}</td>
                                                 <td>{item.budget}</td>
-                                                <td><Button style={{marginLeft: "2rem", marginRight: "2rem"}} variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button></td>
-                                                <td><Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => deleteRequest(item)}>Pašalinti skelbimą</Button></td>
+                                                <td><Button variant="outline-dark" onClick={() => handleModalShow()}>Peržiūrėti informaciją</Button></td>
+                                                <td><Button onClick={() => deleteRequest(item)}>Pašalinti skelbimą</Button></td>
                                                 <td><AdministratorRequestModalComponent show={modalShow} onHide={() => handleModalShow()} item={item} /></td>
                                             </tr>
                                         ))
@@ -115,6 +114,7 @@ const AdministratorRequestsViewComponent = () => {
                             </div>
                         </div>
                     </div>
+                    </Container>
                 }
 
                 {

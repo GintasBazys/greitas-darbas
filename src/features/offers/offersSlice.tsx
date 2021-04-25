@@ -25,7 +25,7 @@ export const offersSlice = createSlice( {
     }
 })
 
-export const addOffer = (info: { activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; phoneNumber: string; experienceLevel: string; price: string; nameAndSurname: string; userMail: string; offerImages: Array<string>; location: string; user: string | undefined; username: string }) => async (dispatch: any) => {
+export const addOffer = (info: { activity: string; isRemote: boolean; description: string; profileImage: string; title: string; userRating: number; phoneNumber: string; experienceLevel: string; price: number; nameAndSurname: string; userMail: string; offerImages: Array<string>; location: string; user: string | undefined; username: string }) => async (dispatch: any) => {
     await firebase.offersCollection.add({
         user: info.user,
         userMail: info.userMail,
@@ -88,6 +88,17 @@ export const updateOffersUsername = (info: {username: string, usernameBeforeChan
             querySnapshot.forEach((doc) => {
                 firebase.offersCollection.doc(doc.id).update({
                     username: info.username
+                })
+            })
+        })
+}
+
+export const updateOffersName = (info: {name: string, nameBeforeChange: string}) => async (dispatch: any) => {
+    await firebase.offersCollection.where("nameAndSurname", "==", info.nameBeforeChange).get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                firebase.offersCollection.doc(doc.id).update({
+                    nameAndSurname: info.name
                 })
             })
         })

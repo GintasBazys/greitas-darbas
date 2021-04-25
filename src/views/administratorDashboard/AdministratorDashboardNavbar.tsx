@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Navbar, NavDropdown, Image, DropdownButton, Dropdown} from "react-bootstrap";
+import {Navbar, Image, DropdownButton, Dropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectWorker, logout} from "../../features/worker/workerSlice";
@@ -30,17 +30,13 @@ const AdministratorDashboardNavbar = ({profileImage}) => {
                     <Dropdown.Item onClick={() => history.push("/administracija/mokejimai")}>Mokėjimai</Dropdown.Item>
                     <Dropdown.Item onClick={() => history.push("/administracija/ataskaitos")}>Ataskaitos</Dropdown.Item>
                 </DropdownButton>
-                <NavDropdown
-                    style={{marginLeft: "10rem"}} title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
-                    <span className="dashboard-user-margin">{user}</span>
+                <div style={{marginLeft: "10rem"}}>
+                    <Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
                 </div>
-                }
-                    id="basic-nav-dropdown">
-                    <Link to="/administracija/profilis" className="dropdown-menu-item">Profilis</Link>
-                    <a className="dropdown-menu-item" onClick={() => dispatch(logout())}>
-                        Atsijungti
-                    </a>
-                </NavDropdown>
+                <DropdownButton variant="outline-success" id="dropdown-basic-button4" title="Profilis">
+                    <Dropdown.Item onClick={() => history.push("/administracija/profilis")}>Profilis</Dropdown.Item>
+                    <Dropdown.Item onClick={() => dispatch(logout())}>Atsijungti</Dropdown.Item>
+                </DropdownButton>
             </Navbar>
         </div>
     )

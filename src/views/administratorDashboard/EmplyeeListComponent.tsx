@@ -9,7 +9,6 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
-import worker from "../../assets/worker.svg";
 
 interface props {
     employees: boolean,

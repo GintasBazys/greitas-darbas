@@ -1,13 +1,10 @@
-import React, {useState} from "react";
+import React from "react";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {Button, Col, Container, Image, Row} from "react-bootstrap";
-import adminUserLink from "../../assets/admin_user_link.svg";
-import UserListComponent from "./UserListComponent";
-import userControlImage from "../../assets/admin_user_control.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 
@@ -91,7 +88,7 @@ const AdministratorClientManagerComponent = () => {
                                                             </div>
                                                             <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => confirmStatus(item)}>Patvirtinti</Button>
                                                             <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => denyStatus(item)}>Atmesti prašymą</Button>
-                                                            <a href={`mailto:${item.userMail}`} className="btn btn-primary">Susisiekti</a>
+                                                            <a href={`mailto:${item.email}`} className="btn btn-primary">Susisiekti</a>
                                                         </Col>
                                                         <Col md={3}>
                                                             <Image src={item.image} fluid />

@@ -95,7 +95,7 @@ const AdministratorUserManagementComponent = () => {
                                                             </div>
                                                             <Button style={{marginRight: "2rem"}} variant="outline-dark" onClick={() => confirmStatus(item)}>Patvirtinti</Button>
                                                             <Button variant="outline-danger" style={{marginRight: "2rem"}} onClick={() => denyStatus(item)}>Atmesti prašymą</Button>
-                                                            <a href={`mailto:${item.userMail}`} className="btn btn-primary">Susisiekti</a>
+                                                            <a href={`mailto:${item.email}`} className="btn btn-primary">Susisiekti</a>
                                                         </Col>
                                                         <Col md={3}>
                                                             <Image src={item.image} fluid />
