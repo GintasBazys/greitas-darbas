@@ -128,7 +128,7 @@ const UserRequestsInProgressComponent = () => {
                     {
                         items.map((item) => {
                             return (
-                                <div>
+                                <div style={{display: "flex", flexDirection: "row"}}>
                                     {
                                         item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ?
                                             <Card style={{ marginLeft: "2rem", width: "18rem" }}>

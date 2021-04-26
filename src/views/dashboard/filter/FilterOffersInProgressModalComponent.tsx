@@ -1,13 +1,9 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {experienceLevels} from "../registration/experienceLevel";
-import {activities} from "../registration/activities";
 import {locations} from "../locations";
-import FilteredOffersInProgressPageComponent from "./FilteredOffersInProgressPageComponent";
 import history from "../../../history";
 import store from "../../../app/store";
 import {
-    selectExperience,
     setFilteredCategory,
     setFilteredExperience,
     setFilteredLocation,
@@ -15,7 +11,6 @@ import {
     setFilteredRating,
     setFilteredStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
-import {useSelector} from "react-redux";
 
 interface Props {
     show: boolean,
@@ -31,15 +26,6 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
     const [location, setLocation] = useState("Akmenė");
     const [status, setStatus] = useState("rezervuotas");
 
-    const handleExperienceChange = (event: any) => {
-        setExperience(event.target.value)
-    }
-    const handleCategoryChange = (event: any) => {
-        setCategory(event.target.value)
-    }
-    const handleRatingChange = (event: any) => {
-        setRating(event.target.value)
-    }
     const handlePriceChange = (event: any) => {
         setPrice(event.target.value)
     }
@@ -100,6 +86,9 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
                                 <option>Vykdomas</option>
                                 <option>Atliktas</option>
                                 <option>Atidėtas</option>
+                                <option>Laukiama mokėjimo</option>
+                                <option>Atšauktas naudotojo</option>
+                                <option>Atšauktas teikėjo</option>
                             </select>
                         </Form.Group>
                         <div className="center-element">

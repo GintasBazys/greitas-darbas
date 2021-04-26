@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {selectError, selectImage, selectUser, selectUserEmail} from "../../features/user/userSlice";
+import {selectError, selectImage, selectUser, selectUserEmail, sendError} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
@@ -20,7 +20,7 @@ const UserSearchWorkerFormComponent = () => {
     const userMail = useSelector(selectUserEmail);
     const dispatch = useDispatch();
 
-    const [phoneNumber, setPhoneNumber] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("+3706");
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [budget, setBudget] = useState(0);
@@ -87,29 +87,38 @@ const UserSearchWorkerFormComponent = () => {
     }
 
     const createRequest = async () => {
-        await dispatch(addRequest({
-            user: auth.currentUser?.uid,
-            username: username,
-            userMail: userMail,
-            title: title,
-            description: description,
-            phoneNumber: phoneNumber,
-            budget: budget,
-            isRemote: isRemote,
-            location: location,
-            activity: type,
-            userRating: userRating,
-            profileImage: profileImage,
-            term: reservedTimeDay.toISOString(),
-            nameAndSurname: nameAndSurname,
-            address: address,
-            reservedUserNameAndSurname: "",
-            reservedUserPhoneNumber: "",
-            paymentStatus: "Mokėjimas neatliktas",
-            reservedUser: "",
-            reservedUserEmail: ""
-        }));
-        await history.go(0);
+        if(title !== "" && description !== "" && budget > 0 && reservedTimeDay.toISOString() !== "" && address !== "" && phoneNumber !== "") {
+            await dispatch(addRequest({
+                user: auth.currentUser?.uid,
+                username: username,
+                userMail: userMail,
+                title: title,
+                description: description,
+                phoneNumber: phoneNumber,
+                budget: budget,
+                isRemote: isRemote,
+                location: location,
+                activity: type,
+                userRating: userRating,
+                profileImage: profileImage,
+                term: reservedTimeDay.toISOString(),
+                nameAndSurname: nameAndSurname,
+                address: address,
+                reservedUserNameAndSurname: "",
+                reservedUserPhoneNumber: "",
+                paymentStatus: "Mokėjimas neatliktas",
+                reservedUser: "",
+                reservedUserEmail: ""
+            }));
+            await history.go(0);
+        }
+        else {
+            dispatch(sendError("Nepalikite tuščių laukų"))
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+        }
+
 
     }
     const [reservedTimeDay, setReservedTimeDay] = useState(new Date());
@@ -161,7 +170,7 @@ const UserSearchWorkerFormComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
-                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite savo siūlomą darbą" value={description} onChange={handleDescriptionChange}/>
+                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite darbą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>

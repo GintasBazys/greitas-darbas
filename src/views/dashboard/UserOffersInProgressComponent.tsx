@@ -202,7 +202,7 @@ const UserOffersInProgressComponent = () => {
                                                         <div style={{display: "-webkit-box", "-webkit-line-clamp": "2", "-webkit-box-orient": "vertical", overflow: "hidden", textOverflow: "elipsis"}}>{item.description}</div>
                                                     </Card.Text>
                                                     <ListGroup className="list-group-flush">
-                                                        <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
+                                                        <ListGroupItem>Užsakovas: {item.nameAndSurname}</ListGroupItem>
                                                         <ListGroupItem>Vykdytojas: {item.userMail}</ListGroupItem>
                                                         <ListGroupItem>Paslaugos vykdytojo nr. {item.phoneNumber}</ListGroupItem>
                                                         <ListGroupItem>Paslaugos užsakovo nr. {item.reservedUserPhoneNumber}</ListGroupItem>
