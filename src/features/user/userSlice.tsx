@@ -13,7 +13,8 @@ export const userSlice = createSlice( {
             checkedRemember: true,
             email: auth.currentUser
         },
-        errorMessage: ""
+        errorMessage: "",
+        modalErrorMessage: ""
     },
     reducers: {
         changeRemember: (state, action) => {
@@ -26,6 +27,9 @@ export const userSlice = createSlice( {
         },
         sendError: (state, action) => {
             state.errorMessage = action.payload;
+        },
+        sendModalError: (state, action) => {
+            state.modalErrorMessage = action.payload;
         },
         fetchUser: (state, action) => {
             state.userProfile.name = action.payload.username;
@@ -45,7 +49,7 @@ export const userSlice = createSlice( {
     }
 })
 
-export const {signIn, sendError, changeRemember, fetchUser, setEmptyProfile, fetchPicture, fetchEmail} = userSlice.actions;
+export const {signIn, sendError, sendModalError, changeRemember, fetchUser, setEmptyProfile, fetchPicture, fetchEmail} = userSlice.actions;
 
 export const signUpAsync  = (info: { username: string; email: string; password: string;}) => (dispatch: (arg0: { payload: any; type: string; }) => void) => {
 
@@ -223,6 +227,7 @@ export const logout = () => (dispatch: (arg0: { payload: undefined; type: string
 
 export const selectCheckedUser = (state: { user: { userProfile: {checkedRemember: boolean}; }; }) => state.user.userProfile.checkedRemember;
 export  const selectError = (state: { user: { errorMessage: string; }; }) => state.user.errorMessage;
+export  const selectModalError = (state: { user: { modalErrorMessage: string; }; }) => state.user.modalErrorMessage;
 export const selectImage = (state: { user: { userProfile: { image: string; }; }; }) => state.user.userProfile.image;
 export const selectUser = (state: {user: {userProfile: {name: string};}; }) => state.user.userProfile.name;
 export const selectUserEmail = (state: {user: {userProfile: {email: string};}; }) => state.user.userProfile.email;

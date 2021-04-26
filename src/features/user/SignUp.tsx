@@ -1,13 +1,14 @@
 import React, { useState} from "react";
 
 import {useSelector, useDispatch} from "react-redux";
-import {signUpAsync, selectError, sendError} from "./userSlice";
+import {signUpAsync, sendModalError, selectModalError} from "./userSlice";
 import NotificationComponent from "../../views/main_page/NotificationComponent";
 import {Button, Form} from "react-bootstrap";
 import {db} from "../../firebase";
+import ModalNotificationComponent from "../../views/main_page/ModalNotificationComponent";
 
 const SignUp = () => {
-    let errorMessage = useSelector(selectError);
+    let errorMessage = useSelector(selectModalError);
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("")
@@ -26,9 +27,11 @@ const SignUp = () => {
         event.preventDefault();
 
         if(username === "" || password === "" || email === ""){
+            dispatch(sendModalError("laukai negali būti tušti"));
             setTimeout(() => {
-                dispatch(sendError("laukai negali būti tušti"))
+                dispatch(sendModalError(""))
             }, 2000);
+
         }
         if(username !== "" || password !== "" || email !== "") {
             let isResolved = false;
@@ -46,9 +49,9 @@ const SignUp = () => {
                 }).catch((error) => {
                 });
             if(isResolved) {
-                dispatch(sendError("vartotojas tokiu vardu jau egzistuoja"));
+                dispatch(sendModalError("vartotojas tokiu vardu jau egzistuoja"));
                 setTimeout(() => {
-                    dispatch(sendError(""))
+                    dispatch(sendModalError(""))
                 }, 5000);
             } else {
                 dispatch(signUpAsync({username: username, email: email, password: password}))
@@ -63,7 +66,7 @@ const SignUp = () => {
 
     return (
         <div>
-            <NotificationComponent message={errorMessage} />
+            <ModalNotificationComponent message={errorMessage} />
             <Form>
                 <Form.Group controlId="username">
                     <Form.Label>Vartotojo vardas</Form.Label>
