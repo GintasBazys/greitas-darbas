@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
@@ -15,6 +15,7 @@ import {setRequest} from "../../features/requests/requestsSlice";
 import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import FilterRequestsModalComponent from "./filter/FilterRequestsModalComponent";
+import axios from "axios";
 
 const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);
@@ -74,12 +75,53 @@ const UserWorkforceViewComponent = () => {
     const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setSearch(event.target.value);
     }
+    const userMail = useSelector(selectUserEmail);
+
+    const createConnectedAccount = () => {
+        const confirm = window.confirm("Patvirtinti mokėjimo paskyros sukūrimą? Būsite nukreiptas į partnerių puslapį");
+        if (confirm) {
+            axios.post("http://localhost:8080/stripe/connected", {
+                customer: userMail
+            })
+                .then(async (resp) => {
+                    console.log(resp.data);
+                    await db.collection("users").doc(auth.currentUser?.uid).update({
+                        connectedAccount: resp.data.id
+                    })
+                    window.location.href = `${resp.data.link}`;
+                })
+        }
+    }
+    const [connectedId, setConnectedId] = useState("");
+
+    useEffect(() => {
+        db.collection("users").doc(auth.currentUser?.uid).get()
+            .then((doc) => {
+                setConnectedId(doc.data()?.connectedAccount)
+            })
+    }, [])
 
     moment.locale("lt")
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
             <div>
+                <div className="center-element">
+                    {
+                        connectedId ?
+                            <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
+                                <p>Mokėjimo paskyra jau sukurta</p>
+                            </div> :
+
+                            <div style={{marginTop: "2rem"}}>
+                                {/*@ts-ignore*/}
+                                <Button className="center-element" disabled={connectedId} variant="outline-dark"  onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
+                                <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
+                                    <p>Paskyrą būtinai kurkite su el. paštu, kurį naudojote registracijos metu</p>
+                                </div>
+                            </div>
+                    }
+                </div>
                 <div style={{marginTop: "2rem"}}  className="center-element">
                     <Form.Group>
                         <Form.Label>Ieškoti</Form.Label>

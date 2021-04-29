@@ -3,6 +3,8 @@ import LoadingComponent from "../LoadingComponent";
 import {Button, Card} from "react-bootstrap";
 import mail from "../../assets/mail.svg";
 import money from "../../assets/money.svg";
+// @ts-ignore
+import moment from "moment/min/moment-with-locales";
 
 interface Props {
     items: any,
@@ -28,9 +30,11 @@ const Payments = ({items, loading}: Props) => {
                                     <Card.Body>
                                         <Card.Title>Mokėta: {payment.amount/ 100} {payment.currency}</Card.Title>
                                         <Card.Text>
-                                            mokėjimo statusas: {payment.status}
+                                            Mokėjimo statusas: {payment.status}
                                         </Card.Text>
-                                        <Button variant="outline-dark">Daugiau informacijos</Button>
+                                        <Card.Text>
+                                            Mokėjimo data: {moment(new Date(payment.created * 1000)).format("YYYY-MM-DD")}
+                                        </Card.Text>
                                     </Card.Body>
                                 </Card>
                             </div>

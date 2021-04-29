@@ -57,7 +57,7 @@ const RequestsProgressModalComponent = (props: Props) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title-vcenter">
-                    Įvertinti progresą
+                    Įvertinti darbą
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>

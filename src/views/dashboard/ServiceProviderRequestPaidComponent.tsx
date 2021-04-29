@@ -110,7 +110,7 @@ const ServiceProviderRequestPaidComponent = () => {
                             reservedRequest.status !== "Atliktas" ?
                                 <div style={{marginTop: "2rem"}}>
                                     <div className="center-element">
-                                        <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
+                                        <Button onClick={() => handleProgressModalShow()} style={{marginRight: "2rem"}} variant="outline-dark">Keisti paslaugos vertinimą</Button>
                                         <RequestsProgressModalComponent title={reservedRequest.title} show={progressModalShow} onHide={() => handleProgressModalShow()} />
                                         <Button onClick={() => handleReviewModalShow()} variant="outline-dark">Palikti atsiliepimą</Button>
                                         <RequestsReviewModalComponent title={reservedRequest.title} show={reviewModalShow} onHide={() => handleReviewModalShow()} />

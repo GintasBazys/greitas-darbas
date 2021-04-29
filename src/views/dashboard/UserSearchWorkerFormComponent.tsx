@@ -32,18 +32,15 @@ const UserSearchWorkerFormComponent = () => {
     const [userRating, setUserRating] = useState(0);
     const [profileImage, setProfileImage] = useState("");
 
-    const [connectedId, setConnectedId] = useState(false);
     const [nameAndSurname, setNameAndSurname] = useState("");
 
     useEffect( () => {
         db.collection("users").doc(auth.currentUser?.uid).get()
             .then((doc) => {
                 setUserRating(doc.data()?.rating);
-                setProfileImage(doc.data()?.image[0]);
+                setProfileImage(doc.data()?.image);
+                console.log(profileImage)
                 setNameAndSurname(doc.data()?.nameAndSurname);
-                if(doc.data()?.connectedAccount != "") {
-                    setConnectedId(true);
-                }
             })
     }, [])
 
@@ -73,7 +70,14 @@ const UserSearchWorkerFormComponent = () => {
         setDescription(event.target.value)
     }
     const handleBudgetChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
-        setBudget(event.target.value)
+        if(isNaN(Number(event.target.value))) {
+            dispatch(sendError("Iveskite tik skaičius"));
+            setTimeout(() => {
+                dispatch(sendError(""))
+            }, 2000);
+        }else{
+            setBudget(event.target.value)
+        }
     }
     const handleEstimatedTimeChange = (event: { target: { value: React.SetStateAction<number>; }; }) => {
         setEstimatedTime(event.target.value)
@@ -87,7 +91,8 @@ const UserSearchWorkerFormComponent = () => {
     }
 
     const createRequest = async () => {
-        if(title !== "" && description !== "" && budget > 0 && reservedTimeDay.toISOString() !== "" && address !== "" && phoneNumber !== "") {
+        if(title !== "" && description !== "" && budget > 0 && reservedTimeDay.toISOString() !== "" && address !== "" && phoneNumber !== "" && phoneNumber.includes("+3706", 0)) {
+
             await dispatch(addRequest({
                 user: auth.currentUser?.uid,
                 username: username,
@@ -113,7 +118,7 @@ const UserSearchWorkerFormComponent = () => {
             await history.go(0);
         }
         else {
-            dispatch(sendError("Nepalikite tuščių laukų"))
+            dispatch(sendError("Nepalikite tuščių laukų ar klaidingos informacijos"))
             setTimeout(() => {
                 dispatch(sendError(""))
             }, 2000);
@@ -135,21 +140,6 @@ const UserSearchWorkerFormComponent = () => {
                 <Row>
                     <Col md={2}>
                         <div style={{marginTop: "5rem"}}>
-                            {
-                                connectedId ?
-                                    <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
-                                        <p>Mokėjimo paskyra jau sukurta</p>
-                                    </div> :
-
-                                    <div>
-                                        <Button disabled={connectedId} variant="outline-dark"  onClick={() => createConnectedAccount()}><span>Sukurti mokėjimų paskyrą</span></Button>
-                                        <div className="alert alert-danger" role="alert" style={{marginTop: "2rem"}}>
-                                            <p>Paskyrą kurkite būtinai su el. paštu, kurį naudojote registracijos metu</p>
-                                        </div>
-                                    </div>
-                            }
-
-
                         </div>
 
                         <Link to="/profilis"><h1 style={{marginTop: "10rem"}}>Profilis</h1><Image src={image} fluid alt="profilio nuotrauka"/></Link>
@@ -160,7 +150,7 @@ const UserSearchWorkerFormComponent = () => {
                         <Form style={{width:"75%"}}>
                             <Form.Group controlId="title">
                                 <Form.Label>Pavadinimas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
+                                <Form.Control type="text" placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="activity">
                                 <label htmlFor="location">Veikla:</label>
@@ -170,25 +160,25 @@ const UserSearchWorkerFormComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="textarea" >
                                 <Form.Label>Aprašymas</Form.Label>
-                                <Form.Control as="textarea" rows={3} disabled={!connectedId} placeholder="Aprašykite darbą" value={description} onChange={handleDescriptionChange}/>
+                                <Form.Control as="textarea" rows={3} placeholder="Aprašykite darbą" value={description} onChange={handleDescriptionChange}/>
                             </Form.Group>
                             <Form.Group controlId="tel">
                                 <Form.Label style={{marginRight: "2rem"}}>Telefono nr. (3706xxxxxxx)</Form.Label>
-                                <Form.Control type="tel" disabled={!connectedId} value={phoneNumber} onChange={handlePhoneNumberChange}/>
+                                <Form.Control type="tel" value={phoneNumber} onChange={handlePhoneNumberChange}/>
                             </Form.Group>
                             <Form.Group controlId="budget">
                                 <Form.Label>Biudžetas</Form.Label>
                                 {/*@ts-ignore*/}
-                                <Form.Control type="number" disabled={!connectedId} placeholder="Įveskite biudžeto sumą" value={budget} onChange={handleBudgetChange}/>
+                                <Form.Control type="text" placeholder="Įveskite biudžeto sumą" value={budget} onChange={handleBudgetChange}/>
                             </Form.Group>
                             <Form.Group controlId="Select1">
                                 <label htmlFor="location" style={{marginRight: "1rem"}}>Vietovė:</label>
-                                <select name="location" disabled={!connectedId} value={location} onChange={handleLocationChange} required>
+                                <select name="location" value={location} onChange={handleLocationChange} required>
                                     {locations.map((item: React.ReactNode) => <option>{item}</option>)}
                                 </select>
                             </Form.Group>
                             <Form.Group controlId="checkbox">
-                                <Form.Check type="checkbox" label="Vykdymas nuotoliniu būdu?" disabled={!connectedId} checked={isRemote}
+                                <Form.Check type="checkbox" label="Vykdymas nuotoliniu būdu?" checked={isRemote}
                                             onChange={() => setIsRemote(!isRemote)}/>
                             </Form.Group>
                             <Form.Group>
@@ -199,7 +189,7 @@ const UserSearchWorkerFormComponent = () => {
                             </Form.Group>
                             <Form.Group controlId="address">
                                 <Form.Label>Adresas</Form.Label>
-                                <Form.Control type="text" disabled={!connectedId} placeholder="Įveskite tikslų adresą" value={address} onChange={handleAddressChange}/>
+                                <Form.Control type="text" placeholder="Įveskite tikslų adresą" value={address} onChange={handleAddressChange}/>
                             </Form.Group>
                             <div className="center-element">
                                 <Button variant="outline-dark" onClick={createRequest}>Paskelbti</Button>

@@ -5,9 +5,10 @@ import {auth, db} from "../../firebase";
 // @ts-ignore
 import {v4 as uuid} from "uuid";
 import history from "../../history";
-import {useSelector} from "react-redux";
-import {selectUserEmail} from "../../features/user/userSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {selectModalError, selectUserEmail, sendModalError} from "../../features/user/userSlice";
 import {selectRequest} from "../../features/requests/requestsSlice";
+import ModalNotificationComponent from "../main_page/ModalNotificationComponent";
 
 interface Props {
     show: boolean,
@@ -29,34 +30,46 @@ const UserRequestModalComponent = (props: Props) => {
     const activity = request.activity;
 
     const userEmail = useSelector(selectUserEmail);
+    const [connectedId, setConnectedId] = useState("");
+    const dispatch = useDispatch();
+
 
     const confirmRequestReservation = async () => {
         const confirm = window.confirm("Patvirtinti?");
         if (confirm) {
-            let reservedUserName = "";
-            let reservedUserPhone = "";
-            await db.collection("users").doc(auth.currentUser?.uid).get()
-                .then((doc) => {
-                    reservedUserName = doc.data()?.nameAndSurname;
-                    reservedUserPhone = doc.data()?.phoneNumber;
-                })
-
-            await db.collection("requests").where("title", "==", title).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach(async (doc) => {
-                        await db.collection("requests").doc(doc.id).update({
-                            status: "rezervuotas",
-                            reservedUserNameAndSurname: reservedUserName,
-                            reservedUserPhoneNumber: reservedUserPhone,
-                            paymentStatus: "Mokėjimas neatliktas",
-                            reservedUser: auth.currentUser?.uid
-                        })
-                        await history.go(0);
+            if(connectedId === "") {
+                dispatch(sendModalError("Neturite mokėjimų paskyros"));
+                setTimeout(() => {
+                    dispatch(sendModalError(""))
+                }, 2000);
+            } else{
+                let reservedUserName = "";
+                let reservedUserPhone = "";
+                await db.collection("users").doc(auth.currentUser?.uid).get()
+                    .then((doc) => {
+                        reservedUserName = doc.data()?.nameAndSurname;
+                        reservedUserPhone = doc.data()?.phoneNumber;
+                        setConnectedId(doc.data()?.connectedId);
                     })
-                })
+                await db.collection("requests").where("title", "==", title).limit(1).get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach(async (doc) => {
+                            await db.collection("requests").doc(doc.id).update({
+                                status: "rezervuotas",
+                                reservedUserNameAndSurname: reservedUserName,
+                                reservedUserPhoneNumber: reservedUserPhone,
+                                paymentStatus: "Mokėjimas neatliktas",
+                                reservedUser: auth.currentUser?.uid
+                            })
+                            await history.go(0);
+                        })
+                    })
+            }
+
 
         }
     }
+    const errorMessage = useSelector(selectModalError);
 
     return (
         <Modal
@@ -73,6 +86,7 @@ const UserRequestModalComponent = (props: Props) => {
                     Peržiūrėti informaciją
                 </Modal.Title>
             </Modal.Header>
+            <ModalNotificationComponent message={errorMessage} />
             <Modal.Body>
                 <Form>
                     <Form.Group controlId="title">

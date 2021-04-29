@@ -92,7 +92,7 @@ const OfferPaidComponent = () => {
                         </Card>
                         <div style={{marginTop: "2rem"}}>
                             <div className="center-element">
-                                <Button onClick={() => handleProgressModalShow(reservedOffer)} style={{marginRight: "2rem"}} variant="outline-dark">Keisti progreso vertinimą</Button>
+                                <Button onClick={() => handleProgressModalShow(reservedOffer)} style={{marginRight: "2rem"}} variant="outline-dark">Keisti paslaugos vertinimą</Button>
                                 <OfferProgressModalComponent show={progressModalShow} onHide={() => handleProgressModalShow(reservedOffer)} />
                                 <Button onClick={() => handleReviewModalShow(reservedOffer)} variant="outline-dark">Palikti atsiliepimą</Button>
                                 <OfferReviewModalComponent show={reviewModalShow} onHide={() => handleReviewModalShow(reservedOffer)} />
