@@ -12,7 +12,7 @@ const RequestsStatisticsComponent = (items: any) => {
     items.forEach((item: any) => {
         const itemData = [
             item.title,
-            item.activityType,
+            item.activity,
             item.location,
             item.status,
             format(new Date(item.createdOn), "yyyy-MM-dd")
@@ -22,13 +22,13 @@ const RequestsStatisticsComponent = (items: any) => {
 
     // @ts-ignore
     doc.autoTable(tableColumn, tableRows, { startY: 20, pageBreak: "auto", rowPageBreak: "auto" });
-    const date = Date().split(" ");
+    const date =  Date().split(" ");
 
     const dateStr = date[4];
 
-    doc.text("Pasiulymai", 14, 15);
+    doc.text("Darbai", 14, 15);
 
-    doc.save(`pasiulymai${dateStr}.pdf`);
+    doc.save(`darbai${dateStr}.pdf`);
 }
 
 export default RequestsStatisticsComponent;

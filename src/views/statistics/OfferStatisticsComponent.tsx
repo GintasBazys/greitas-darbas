@@ -14,7 +14,7 @@ const OfferStatisticsComponent = (items: any) => {
     items.forEach((item: any) => {
         const itemData = [
             item.title,
-            item.activityType,
+            item.activity,
             item.location,
             item.status,
             format(new Date(item.createdOn), "yyyy-MM-dd")

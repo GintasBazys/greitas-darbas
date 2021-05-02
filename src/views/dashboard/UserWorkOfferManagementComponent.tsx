@@ -226,7 +226,7 @@ const UserWorkOfferManagementComponent = () => {
                                 <Form.Control type="text"  disabled={!connectedId || status} placeholder="Įveskite paslaugos pavadinimą" value={title} onChange={handleTitleChange}/>
                             </Form.Group>
                             <Form.Group controlId="activity">
-                                <Form.Label>Paslaugos rūšis. Keiskite informaciją profilio puslapyje</Form.Label>
+                                <Form.Label>Paslaugos tipas. Keiskite informaciją profilio puslapyje</Form.Label>
                                 <Form.Control type="text" disabled={true} value={activity} />
                             </Form.Group>
                             <Form.Group controlId="experience">

@@ -1,21 +1,22 @@
 import React from "react";
 import jsPDF from "jspdf";
 import {format} from "date-fns";
+// @ts-ignore
+import moment from "moment/min/moment-with-locales";
 
 const UserStatisticsComponent = (items: any) => {
     const doc = new jsPDF();
     // const tableColumn = ["Pavadinimas", "Veikla", "Vietovė", "Statusas", "Mokėjimo statusas",
     //     "Telefono nr.", "Valandinė kaina", "Paslaugos teikėjo paštas", "Sukūrimo data"];
-    const tableColumn = ["Pavadinimas", "Veikla", "Vieta", "Statusas", "Data"];
+    const tableColumn = ["El. pašto adresas", "Telefono nr.", "Gyvenamoji vieta", "Gimimo metai"];
     const tableRows: any[][] = [];
 
     items.forEach((item: any) => {
         const itemData = [
-            item.title,
-            item.activityType,
+            item.email,
+            item.phoneNumber,
             item.location,
-            item.status,
-            format(new Date(item.createdOn), "yyyy-MM-dd")
+            moment(item.dateOfBirth).format('MM/DD/YYYY')
         ];
         tableRows.push(itemData);
     });
@@ -26,9 +27,9 @@ const UserStatisticsComponent = (items: any) => {
 
     const dateStr = date[4];
 
-    doc.text("Pasiulymai", 14, 15);
+    doc.text("Naudotojai", 14, 15);
 
-    doc.save(`pasiulymai${dateStr}.pdf`);
+    doc.save(`naudotojai${dateStr}.pdf`);
 }
 
 export default UserStatisticsComponent;

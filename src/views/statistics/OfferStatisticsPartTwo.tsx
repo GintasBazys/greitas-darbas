@@ -8,16 +8,16 @@ const OfferStatisticsPartTwo = (items: any) => {
     const doc = new jsPDF();
     // const tableColumn = ["Pavadinimas", "Veikla", "Vietovė", "Statusas", "Mokėjimo statusas",
     //     "Telefono nr.", "Valandinė kaina", "Paslaugos teikėjo paštas", "Sukūrimo data"];
-    const tableColumn = ["Mokejimo statusas", "Telefono nr.", "Valandine kaina", "Paslaugos teikejo pastas"];
+    const tableColumn = ["Patirtis", "Telefono nr.", "Valandine kaina", "Paslaugos teikejo pastas", "Reitingas"];
     const tableRows: any[][] = [];
 
     items.forEach((item: any) => {
         const itemData = [
-            item.paymentStatus,
+            item.experienceLevel,
             item.phoneNumber,
             item.price,
             item.userMail,
-            format(new Date(item.createdOn), "yyyy-MM-dd")
+            item.userRating,
         ];
         tableRows.push(itemData);
     });
@@ -26,7 +26,7 @@ const OfferStatisticsPartTwo = (items: any) => {
     doc.autoTable(tableColumn, tableRows, { startY: 20, pageBreak: "auto", rowPageBreak: "auto" });
     const date = Date().split(" ");
 
-    const dateStr = date[4];
+    const dateStr = date[5];
 
     doc.text("Pasiulymai", 14, 15);
 
