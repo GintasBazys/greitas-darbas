@@ -62,6 +62,7 @@ const UserMyOffersComponent = () => {
             //history.go(0);
         }
     }
+    moment.locale("lt");
 
     return (
         <div>

@@ -128,7 +128,7 @@ const UserWorkOfferManagementComponent = () => {
         //     })
         // }
 
-         if(description !== "" && phoneNumber !== "" && price !== 0 && title !== "") {
+         if(description !== "" && phoneNumber !== "" && price !== 0 && title !== "" && phoneNumber.includes("+3706", 0)) {
 
             let urlsFromFirebaseStorage: Array<string> = [];
             let urls = files.map(async (file: any) => {
