@@ -71,7 +71,7 @@ const UserWorkOfferManagementComponent = () => {
     }, [])
 
     const handleDescriptionChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        if(event.target.value.length <= 500) {
+        if(event.target.value.length >= 500) {
             dispatch(sendError("Ne daugiau 500 simboliu"));
             setTimeout(() => {
                 dispatch(sendError(""))

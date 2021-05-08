@@ -97,7 +97,7 @@ const RequestCompleteModalComponent = (props: Props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Galutinis progreso vertinimas: {userRating}</p>
+                <p>Galutinis vertinimas: {userRating}</p>
                 <Button variant="outline-dark" onClick={completeOffer}>Patvirtinti</Button>
             </Modal.Body>
             <Modal.Footer>

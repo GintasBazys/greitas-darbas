@@ -102,7 +102,7 @@ const CompletedRequestModalComponent = (props: Props) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Galutinis progreso vertinimas: {userRating}</p>
+                <p>Galutinis vertinimas: {userRating}</p>
                 <p>Mokėtina suma: {props.reservedRequest.budget}€</p>
                 <RequestStripe connectedId={connectedAccount} userMail={props.reservedRequest.userMail} reservedUserEmail={props.reservedRequest.reservedUserEmail} budget={props.reservedRequest.budget} title={props.reservedRequest.title}/>
             </Modal.Body>
