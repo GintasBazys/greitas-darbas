@@ -51,6 +51,11 @@ import FilteredOffersInProgressPageComponent from "./views/dashboard/filter/Filt
 import FilteredOffersPageComponent from "./views/dashboard/filter/FilteredOffersPageComponent";
 import SearchOffersComponent from "./views/dashboard/filter/SearchOffersComponent";
 import UserReceivedMessagesComponent from "./views/dashboard/UserReceivedMessagesComponent";
+import SearchWorkComponent from "./views/dashboard/filter/SearchWorkComponent";
+import FilteredRequestsPageComponent from "./views/dashboard/filter/FilteredRequestsPageComponent";
+import UserHelpPageComponent from "./views/dashboard/UserHelpPageComponent";
+import FilteredRequestsInProgressPageComponent from "./views/dashboard/filter/FilteredRequestsInProgressPageComponent";
+import SearchOffersInProgressComponent from "./views/dashboard/filter/SearcOffersInProgressComponent";
 
 function App() {
   return <Router history={history}>
@@ -59,6 +64,7 @@ function App() {
       <Route exact path="/prisijungti" component={Login} />
       <Route path="/darbuotojas/prisijungimas" component={WorkerLogin} />
       <PrivateRoute exact path="/pradzia" component={DashboardComponent} />
+      <PrivateRoute exact path="/naudotojas/pagalba" component={UserHelpPageComponent} />
       <PrivateRoute exact path="/pradzia/profilis" component={UserUnconfirmedProfileComponent} />
       <PrivateRoute exact path="/nepatvirtintas" component={UnconfirmedStatusComponent} />
       <PrivateRoute exact path="/pradzia/darbuotojas" component={WorkerRegistrationComponent} />
@@ -81,9 +87,13 @@ function App() {
       <PrivateRoute exact path="/siulymas" component={UserWorkOfferManagementComponent} />
       <PrivateRoute exact path="/paslauga" component={UserOffersViewComponent} />
       <PrivateRoute exact path="/paslauga/mano" component={UserMyOffersComponent} />
+      <PrivateRoute exact path="/darbas/paieska" component={SearchWorkComponent} />
+      <PrivateRoute exact path="/darbas/filtravimas" component={FilteredRequestsPageComponent} />
       <PrivateRoute exact path="/paslauga/progresas/filtravimas" component={FilteredOffersInProgressPageComponent}/>
+      <PrivateRoute exact path="/darbas/progresas/filtravimas" component={FilteredRequestsInProgressPageComponent} />
       <PrivateRoute exact path="/paslauga/filtravimas" component={FilteredOffersPageComponent}/>
       <PrivateRoute exact path="/paslauga/paieska" component={SearchOffersComponent}/>
+      <PrivateRoute exact path="/paslauga/vykdymas/paieska" component={SearchOffersInProgressComponent}/>
       <PrivateRoute exact path="/mokejimai" component={UserPaymentComponent} />
       <PrivateRoute exact path="/paieska/siulymai" component={UserWorkforceViewComponent} />
       <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />

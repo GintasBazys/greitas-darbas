@@ -33,6 +33,13 @@ const UserRequestModalComponent = (props: Props) => {
     const [connectedId, setConnectedId] = useState("");
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        db.collection("users").doc(auth.currentUser?.uid).get()
+            .then((doc) => {
+                setConnectedId(doc.data()?.connectedAccount)
+            })
+    }, [])
+
 
     const confirmRequestReservation = async () => {
         const confirm = window.confirm("Patvirtinti?");

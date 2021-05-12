@@ -10,11 +10,7 @@ import {
 } from "../../../features/filter/offersInProgressFilterSlice";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../../firebase";
-import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
-import searchIcon from "../../../assets/search.svg";
-import FilterOffersModalComponent from "./FilterOffersModalComponent";
-import star from "../../../assets/star.svg";
-import UserOfferModalComponent from "../UserOfferModalComponent";
+import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import workInProgress from "../../../assets/work_in_progress.svg";
 import {Link} from "react-router-dom";
 import history from "../../../history";
@@ -23,7 +19,6 @@ import {setReservedOffer} from "../../../features/offers/offersSlice";
 import PaymentModalComponent from "../PaymentModalComponent";
 import CompletedOfferModalComponent from "../CompletedOfferModalComponent";
 import moment from "moment";
-import FilterOffersInProgressModalComponent from "./FilterOffersInProgressModalComponent";
 
 const FilteredOffersInProgressPageComponent = () => {
 
@@ -44,7 +39,7 @@ const FilteredOffersInProgressPageComponent = () => {
         getNext,
     } = usePagination(
         db.collection("reservedOffers").where("location", "==", location).where("status", "==", "rezervuotas").orderBy("price", "desc"), {
-            limit: 20
+            limit: 5
         }
     );
 
@@ -430,7 +425,7 @@ const FilteredOffersInProgressPageComponent = () => {
                 </div>
 
                 {
-                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Nėra vykdomų pasiūlymų<Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                    items.length === 0 ? <div style={{marginTop: "2rem"}} className="center-element">Nėra vykdomų pasiūlymų<Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
                         <div className="center-element" style={{marginTop: "2rem"}}>
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>

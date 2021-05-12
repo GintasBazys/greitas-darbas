@@ -16,6 +16,7 @@ import searchIcon from "../../assets/search.svg";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import FilterRequestsModalComponent from "./filter/FilterRequestsModalComponent";
 import axios from "axios";
+import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
 
 const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);
@@ -101,6 +102,13 @@ const UserWorkforceViewComponent = () => {
             })
     }, [])
 
+    const searchWork = async () => {
+        await store.dispatch(setFilteredSearch(search));
+        await history.push("/darbas/paieska");
+    }
+
+
+
     moment.locale("lt")
     return (
         <div>
@@ -127,7 +135,7 @@ const UserWorkforceViewComponent = () => {
                         <Form.Label>Ieškoti</Form.Label>
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
-                            <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
+                            <Button variant="outline-dark" style={{marginRight: "2rem"}} onClick={searchWork}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti skelbimus</Button>
                             <FilterRequestsModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>

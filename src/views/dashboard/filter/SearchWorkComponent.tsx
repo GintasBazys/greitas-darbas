@@ -1,29 +1,23 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../../features/user/userSlice";
-import {
-    selectCategory,
-    selectLocation,
-    selectPrice, selectRating
-} from "../../../features/filter/offersInProgressFilterSlice";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../../firebase";
 import store from "../../../app/store";
+import {setOffer} from "../../../features/offers/offersSlice";
 import UserNavBarComponent from "../UserNavbarComponent";
 import {Button, Card, Image, ListGroup, ListGroupItem} from "react-bootstrap";
 import star from "../../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
+import {selectSearch} from "../../../features/filter/offersInProgressFilterSlice";
 import UserRequestModalComponent from "../UserRequestModalComponent";
-import { setRequest } from "../../../features/requests/requestsSlice";
 
-const FilteredRequestsPageComponent = () => {
+const SearchWorkComponent = () => {
     const image = useSelector(selectImage);
+    const search = useSelector(selectSearch);
+    console.log(search);
 
-    const category = useSelector(selectCategory);
-    const price = useSelector(selectPrice);
-    const location = useSelector(selectLocation);
-    const rating = useSelector(selectRating);
     let {
         items,
         isLoading,
@@ -32,7 +26,7 @@ const FilteredRequestsPageComponent = () => {
         getPrev,
         getNext,
     } = usePagination(
-        db.collection("requests").where("location", "==", location).where("activity", "==", category).where("userRating", "<=", 10).orderBy("userRating").orderBy("budget", "desc"), {
+        db.collection("requests").where("status", "==", "naujas").where("title", ">=", search).where("title", "<=", search+ "\uf8ff"), {
             limit: 5
         }
     );
@@ -40,7 +34,7 @@ const FilteredRequestsPageComponent = () => {
 
     const [modalShow, setModalShow] = useState(false);
     const handleModalShow = async (item: any) => {
-        await store.dispatch(setRequest(item));
+        await store.dispatch(setOffer(item));
         await setModalShow(!modalShow);
 
     }
@@ -54,6 +48,7 @@ const FilteredRequestsPageComponent = () => {
                     {
                         items.map((item) => {
                             return (
+
                                 <Card style={{ marginLeft: "2rem", width: "18rem" }}>
                                     <Card.Img variant="top" src={item.profileImage} style={{maxWidth: "100%", height: "400px"}}/>
                                     <Card.Body>
@@ -90,7 +85,7 @@ const FilteredRequestsPageComponent = () => {
                 </div>
 
                 {
-                    items.length === 0 ? <div style={{marginTop: "2rem"}} className="center-element">Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
                         <div className="center-element" style={{marginTop: "2rem"}}>
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
@@ -103,4 +98,4 @@ const FilteredRequestsPageComponent = () => {
     )
 }
 
-export default FilteredRequestsPageComponent;
+export default SearchWorkComponent;

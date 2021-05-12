@@ -11,6 +11,8 @@ import {
     setFilteredRating,
     setFilteredStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
+import {activities2} from "../registration/activities2";
+import {experienceLevels2} from "../registration/experienceLevel2";
 
 interface Props {
     show: boolean,
@@ -34,6 +36,16 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
     }
     const handleStatusChange = (event: any) => {
         setStatus(event.target.value)
+    }
+    const handleCategoryChange = (event: any) => {
+        setCategory(event.target.value)
+    }
+
+    const handleRatingChange = (event: any) => {
+        setRating(event.target.value)
+    }
+    const handleExperienceChange = (event: any) => {
+        setExperience(event.target.value)
     }
 
 
@@ -66,6 +78,29 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
             <Modal.Body>
                 <div>
                     <Form>
+                        <Form.Group controlId="activity">
+                            <label style={{marginRight: "1rem"}} htmlFor="location">Veikla:</label>
+                            <select name="activity" value={category} onChange={handleCategoryChange} required>
+                                {activities2.map((item: React.ReactNode) => <option>{item}</option>)}
+                            </select>
+                        </Form.Group>
+                        <Form.Group controlId="experience">
+                            <label style={{marginRight: "1rem"}} htmlFor="location">Patirtis:</label>
+                            <select name="experience" value={experience} onChange={handleExperienceChange} required>
+                                {experienceLevels2.map((item: React.ReactNode) => <option>{item}</option>)}
+                            </select>
+                        </Form.Group>
+                        <Form.Group controlId="rating">
+                            <label style={{marginRight: "1rem"}} htmlFor="rating">Reitingas:</label>
+                            <select name="rating" value={rating} onChange={handleRatingChange} required>
+                                <option>-</option>
+                                <option>-</option>
+                                <option>Mažesnis nei 5</option>
+                                <option>Didesnis nei 5</option>
+                                <option>Didesnis nei 8</option>
+                                <option>Bet koks vertinimas</option>
+                            </select>
+                        </Form.Group>
                         <Form.Group controlId="price">
                             <label style={{marginRight: "1rem"}} htmlFor="price">Kaina:</label>
                             <select name="location" value={price} onChange={handlePriceChange} required>

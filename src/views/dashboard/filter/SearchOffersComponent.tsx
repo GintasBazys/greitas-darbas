@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../../features/user/userSlice";
 import {usePagination} from "use-pagination-firestore";
-import {auth, db} from "../../../firebase";
+import {db} from "../../../firebase";
 import store from "../../../app/store";
 import {setOffer} from "../../../features/offers/offersSlice";
 import UserNavBarComponent from "../UserNavbarComponent";
@@ -87,7 +87,7 @@ const SearchOffersComponent = () => {
                 </div>
 
                 {
-                    items.length === 0 ? <div style={{marginTop: "2rem"}}>Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
+                    items.length === 0 ? <div style={{marginTop: "2rem"}} className="center-element">Daugiau skelbimų nėra <Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
                         <div className="center-element" style={{marginTop: "2rem"}}>
                             <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
                             <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>

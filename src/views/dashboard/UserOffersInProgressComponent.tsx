@@ -19,6 +19,7 @@ import PaymentModalComponent from "./PaymentModalComponent";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import FilterOffersInProgressModalComponent from "./filter/FilterOffersInProgressModalComponent";
+import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
 
 const UserOffersInProgressComponent = () => {
     const image = useSelector(selectImage);
@@ -147,6 +148,10 @@ const UserOffersInProgressComponent = () => {
     const filter = () => {
         setFilterModalShow(!filterModalShow);
     }
+    const searchOffersInProgress = async () => {
+        await store.dispatch(setFilteredSearch(search));
+        await history.push("/paslauga/vykdymas/paieska");
+    }
 
     const cancelReservationByProvider = async (item: any) => {
         const confirmation = window.confirm("Atšaukti vykdymą");
@@ -174,7 +179,7 @@ const UserOffersInProgressComponent = () => {
                         <Form.Label>Ieškoti</Form.Label>
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
-                            <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
+                            <Button variant="outline-dark" style={{marginRight: "2rem"}} onClick={searchOffersInProgress}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti pasiūlymus</Button>
                             <FilterOffersInProgressModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>

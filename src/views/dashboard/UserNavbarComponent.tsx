@@ -39,6 +39,7 @@ const UserNavBarComponent = ({profileImage}) => {
                 </div>
                 <DropdownButton variant="outline-success" id="dropdown-basic-button4" title="Profilis">
                     <Dropdown.Item onClick={() => history.push("/profilis")}>Profilis</Dropdown.Item>
+                    <Dropdown.Item onClick={() => history.push("/naudotojas/pagalba")}>Pagalba</Dropdown.Item>
                     <Dropdown.Item onClick={() => dispatch(logout())}>Atsijungti</Dropdown.Item>
                 </DropdownButton>
             </Navbar>

@@ -2,13 +2,11 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../../features/user/userSlice";
 import {usePagination} from "use-pagination-firestore";
-import {auth, db} from "../../../firebase";
+import {db} from "../../../firebase";
 import store from "../../../app/store";
 import {setOffer} from "../../../features/offers/offersSlice";
 import UserNavBarComponent from "../UserNavbarComponent";
 import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
-import searchIcon from "../../../assets/search.svg";
-import FilterOffersModalComponent from "./FilterOffersModalComponent";
 import star from "../../../assets/star.svg";
 import UserOfferModalComponent from "../UserOfferModalComponent";
 // @ts-ignore
@@ -22,7 +20,6 @@ import {
 
 const FilteredOffersPageComponent = () => {
     const image = useSelector(selectImage);
-    //.where("status", "==", "naujas").where("status", "==", "atnaujintas")
 
     const experience = useSelector(selectExperience);
     const category = useSelector(selectCategory);
