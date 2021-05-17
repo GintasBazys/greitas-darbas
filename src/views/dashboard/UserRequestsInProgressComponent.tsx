@@ -18,6 +18,7 @@ import workInProgress from "../../assets/work_in_progress.svg";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
 import FilterRequestsInProgressModalComponent from "./filter/FilterRequestsInProgressModalComponent";
+import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
 
 
 const UserRequestsInProgressComponent = () => {
@@ -105,6 +106,11 @@ const UserRequestsInProgressComponent = () => {
         }
     }
 
+    const searchRequestsInProgress = async () => {
+        await store.dispatch(setFilteredSearch(search));
+        await history.push("/darbas/vykdymas/paieska");
+    }
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
@@ -115,7 +121,7 @@ const UserRequestsInProgressComponent = () => {
                         <Form.Label>Ieškoti</Form.Label>
                         <Form.Control type="text" placeholder="..." value={search} onChange={handleSearchChange} />
                         <div className="center-element">
-                            <Button variant="outline-dark" style={{marginRight: "2rem"}}><Image src={searchIcon} fluid /> Ieškoti</Button>
+                            <Button variant="outline-dark" style={{marginRight: "2rem"}} onClick={searchRequestsInProgress}><Image src={searchIcon} fluid /> Ieškoti</Button>
                             <Button variant="outline-dark" onClick={filter}>Filtruoti skelbimus</Button>
                             <FilterRequestsInProgressModalComponent show={filterModalShow} onHide={() => filter()} />
                         </div>

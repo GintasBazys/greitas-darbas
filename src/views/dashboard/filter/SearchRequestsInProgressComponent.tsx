@@ -4,33 +4,33 @@ import {selectImage} from "../../../features/user/userSlice";
 import {selectSearch} from "../../../features/filter/offersInProgressFilterSlice";
 import {auth, db} from "../../../firebase";
 import UserNavBarComponent from "../UserNavbarComponent";
+import ReservedOffers from "./ReservedOffers";
 import PaymentPaginationComponent from "../../administratorDashboard/PaymentPaginationComponent";
 import LoadingComponent from "../../LoadingComponent";
-import ReservedOffers from "./ReservedOffers";
+import ReservedRequests from "./ReservedRequests";
 
-
-const SearchOffersInProgressComponent = () => {
+const SearchRequestsInProgressComponent = () => {
     const image = useSelector(selectImage);
     const search = useSelector(selectSearch);
     const [items, setItems]: any = useState([]);
 
-    const offersRef = db.collection("reservedOffers");
+    const requestsRef = db.collection("requests");
 
     async function getIsUserOReservedUser() {
-        const isUser = offersRef.where("user", "==", auth.currentUser?.uid).where("title", ">=", search).where("title", "<=", search+ "\uf8ff").get();
-        const isReserved = offersRef.where("reservedUser", "==", auth.currentUser?.uid).where("title", ">=", search).where("title", "<=", search+ "\uf8ff").get();
+        const isUser = requestsRef.where("user", "==", auth.currentUser?.uid).where("title", ">=", search).where("title", "<=", search+ "\uf8ff").get();
+        const isReserved = requestsRef.where("reservedUser", "==", auth.currentUser?.uid).where("title", ">=", search).where("title", "<=", search+ "\uf8ff").get();
 
-        const [userQuerySnapshot, reservedUserQuerySnapshot] = await Promise.all([
+        const [requestQuerySnapshot, reservedRequestQuerySnapshot] = await Promise.all([
             isUser,
             isReserved
         ]);
 
-        const userArray = userQuerySnapshot.docs;
-        const reservedUserArray = reservedUserQuerySnapshot.docs;
+        const requestArray = requestQuerySnapshot.docs;
+        const reservedRequestArray = reservedRequestQuerySnapshot.docs;
 
-        const usersArray = userArray.concat(reservedUserArray);
+        const requestsArray = requestArray.concat(reservedRequestArray);
 
-        return usersArray;
+        return requestsArray;
     }
 
     getIsUserOReservedUser().then(result => {
@@ -62,7 +62,7 @@ const SearchOffersInProgressComponent = () => {
             {
                 items.length > 0 ? <div>
                     <div>
-                        <ReservedOffers items={currentItems} loading={loading} />
+                        <ReservedRequests items={currentItems} loading={loading} />
                         {/*@ts-ignore*/}
                         <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={items.length} paginate={paginate}/>
                     </div>
@@ -73,4 +73,4 @@ const SearchOffersInProgressComponent = () => {
     )
 }
 
-export default SearchOffersInProgressComponent;
+export default SearchRequestsInProgressComponent;

@@ -56,6 +56,7 @@ import FilteredRequestsPageComponent from "./views/dashboard/filter/FilteredRequ
 import UserHelpPageComponent from "./views/dashboard/UserHelpPageComponent";
 import FilteredRequestsInProgressPageComponent from "./views/dashboard/filter/FilteredRequestsInProgressPageComponent";
 import SearchOffersInProgressComponent from "./views/dashboard/filter/SearcOffersInProgressComponent";
+import SearchRequestsInProgressComponent from "./views/dashboard/filter/SearchRequestsInProgressComponent";
 
 function App() {
   return <Router history={history}>
@@ -94,6 +95,7 @@ function App() {
       <PrivateRoute exact path="/paslauga/filtravimas" component={FilteredOffersPageComponent}/>
       <PrivateRoute exact path="/paslauga/paieska" component={SearchOffersComponent}/>
       <PrivateRoute exact path="/paslauga/vykdymas/paieska" component={SearchOffersInProgressComponent}/>
+      <PrivateRoute exact path="/darbas/vykdymas/paieska" component={SearchRequestsInProgressComponent} />
       <PrivateRoute exact path="/mokejimai" component={UserPaymentComponent} />
       <PrivateRoute exact path="/paieska/siulymai" component={UserWorkforceViewComponent} />
       <PrivateRoute exact path="/paieska/kurimas" component={UserSearchWorkerFormComponent} />
