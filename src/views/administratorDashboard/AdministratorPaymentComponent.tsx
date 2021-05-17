@@ -38,7 +38,6 @@ const AdministratorPaymentComponent = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
 
-    //atkerta paymentu dali
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     // @ts-ignore
