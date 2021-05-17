@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from "react";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {useSelector} from "react-redux";
-import {selectImage, selectUserEmail} from "../../features/user/userSlice";
+import {selectImage} from "../../features/user/userSlice";
 import {auth, db} from "../../firebase";
-import {Button, Card} from "react-bootstrap";
-import mail from "../../assets/mail.svg";
+import {Button} from "react-bootstrap";
+import PaymentPaginationComponent from "../administratorDashboard/PaymentPaginationComponent";
+import SentMessages from "./SentMessages";
 
 const UserReceivedMessagesComponent = () => {
 
     const image = useSelector(selectImage);
 
-    const userEmail = useSelector(selectUserEmail);
     const [sentMessages, setSentMessages] = useState([]);
 
     useEffect(() => {
@@ -20,29 +20,25 @@ const UserReceivedMessagesComponent = () => {
             })
     }, [])
 
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    // @ts-ignore
+    const currentItems = sentMessages.slice(indexOfFirstItem, indexOfLastItem);
+
+    const paginate = (pageNumber: React.SetStateAction<number>) => {setCurrentPage(pageNumber)}
+
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
             {
                 <React.Fragment>
-                    <div style={{display: "flex"}}>
-                        {
-                            sentMessages.slice(0, 10).map((message: any) => (
-                                <div>
-                                    <Card style={{ width: '18rem', marginLeft: "5px"}}>
-                                        <Card.Img variant="top" src={mail} />
-                                        <Card.Body>
-                                            <Card.Title>{message.receiver}</Card.Title>
-                                            <Card.Text>
-                                                {message?.message}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
-                                </div>
-
-                            ))
-                        }
-                    </div>
+                    <SentMessages items={currentItems} loading={loading} />
+                    {/*@ts-ignore*/}
+                    <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={sentMessages.length} paginate={paginate}/>
                     <div style={{display: "flex", marginTop: "2rem", justifyContent: "center"}}>
                         <Button variant="outline-dark">Peržiūrėti visas žinutes</Button>
                     </div>

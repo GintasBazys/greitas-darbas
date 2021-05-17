@@ -4,7 +4,6 @@ import {selectImage} from "../../../features/user/userSlice";
 import {selectSearch} from "../../../features/filter/offersInProgressFilterSlice";
 import {auth, db} from "../../../firebase";
 import UserNavBarComponent from "../UserNavbarComponent";
-import ReservedOffers from "./ReservedOffers";
 import PaymentPaginationComponent from "../../administratorDashboard/PaymentPaginationComponent";
 import LoadingComponent from "../../LoadingComponent";
 import ReservedRequests from "./ReservedRequests";

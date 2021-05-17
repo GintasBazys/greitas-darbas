@@ -5,7 +5,6 @@ import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import axios from "axios";
 import PaymentPaginationComponent from "./PaymentPaginationComponent";
 import Payments from "./Payments";
-import Stripe from "../../Stripe";
 import LoadingComponent from "../LoadingComponent";
 
 const AdministratorPaymentComponent = () => {

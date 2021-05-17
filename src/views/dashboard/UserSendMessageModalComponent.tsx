@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {auth, db} from "../../firebase";
+import {db} from "../../firebase";
 import {Button, Form, Modal} from "react-bootstrap";
 import * as firebase from "../../firebase";
 import {selectUserEmail} from "../../features/user/userSlice";
@@ -21,7 +21,7 @@ const UserSendMessageModalComponent = (props: Props) => {
     console.log(props.sender)
 
     useEffect(() => {
-        db.collection("users").where("email", "==", props.sender).limit(1).get()
+        db.collection("users").where("email", "==", props.receiver).limit(1).get()
             .then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
 
@@ -56,6 +56,7 @@ const UserSendMessageModalComponent = (props: Props) => {
 
                 await firebase.usersCollection.doc(id).get()
                     .then((doc) => {
+                        console.log(doc.data())
                         sentMessages = doc.data()?.receivedMessages;
                     });
 

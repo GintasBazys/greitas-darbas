@@ -10,6 +10,9 @@ import {Button, Form, Modal} from "react-bootstrap";
 import {activities2} from "../registration/activities2";
 import {experienceLevels2} from "../registration/experienceLevel2";
 import {locations2} from "../locations2";
+import ModalNotificationComponent from "../../main_page/ModalNotificationComponent";
+import {selectModalError, sendModalError} from "../../../features/user/userSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 interface Props {
     show: boolean,
@@ -34,15 +37,22 @@ const FilterRequestsModalComponent = (props: Props) => {
     const handleLocationChange = (event: any) => {
         setLocation(event.target.value)
     }
+    const dispatch = useDispatch();
+    const error = useSelector(selectModalError);
 
     const filter = async () => {
-        await store.dispatch(setFilteredCategory(category));
-        await store.dispatch(setFilteredPrice(budget));
-        await store.dispatch(setFilteredLocation(location));
-        await store.dispatch(setFilteredRating(rating));
-        await history.push("/darbas/filtravimas");
-
-
+        if(category !== "-" && budget !== "-" && location !== "-" && rating !== "-") {
+            await store.dispatch(setFilteredCategory(category));
+            await store.dispatch(setFilteredPrice(budget));
+            await store.dispatch(setFilteredLocation(location));
+            await store.dispatch(setFilteredRating(rating));
+            await history.push("/darbas/filtravimas");
+        } else {
+                dispatch(sendModalError("Nepasirinkote visų kriterijų"));
+                setTimeout(() => {
+                    dispatch(sendModalError(""))
+                }, 2000);
+            }
     }
 
     return (
@@ -63,6 +73,7 @@ const FilterRequestsModalComponent = (props: Props) => {
             <Modal.Body>
                 <div>
                     <Form>
+                        <ModalNotificationComponent message={error} />
                         <Form.Group controlId="activity">
                             <label style={{marginRight: "1rem"}} htmlFor="location">Veikla:</label>
                             <select name="activity" value={category} onChange={handleCategoryChange} required>
