@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../../features/user/userSlice";
 import UserNavBarComponent from "../UserNavbarComponent";
@@ -6,432 +6,97 @@ import {
     selectCategory,
     selectExperience,
     selectLocation,
-    selectPrice, selectRating, selectStatus
+    selectPrice, selectStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
-import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../../firebase";
-import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
-import workInProgress from "../../../assets/work_in_progress.svg";
-import {Link} from "react-router-dom";
-import history from "../../../history";
-import store from "../../../app/store";
-import {setReservedOffer} from "../../../features/offers/offersSlice";
-import PaymentModalComponent from "../PaymentModalComponent";
-import CompletedOfferModalComponent from "../CompletedOfferModalComponent";
-import moment from "moment";
+import FilterOffersInProgressPagination from "./FilterOffersInProgressPagination";
+import PaymentPaginationComponent from "../../administratorDashboard/PaymentPaginationComponent";
 
 const FilteredOffersInProgressPageComponent = () => {
 
     const image = useSelector(selectImage);
-    const experience = useSelector(selectExperience);
     const category = useSelector(selectCategory);
     const price = useSelector(selectPrice);
     const location = useSelector(selectLocation);
-    const rating = useSelector(selectRating);
     const status = useSelector(selectStatus);
+    const experience = useSelector(selectExperience);
 
-    let {
-        items,
-        isLoading,
-        isStart,
-        isEnd,
-        getPrev,
-        getNext,
-    } = usePagination(
-        db.collection("reservedOffers").where("location", "==", location).where("status", "==", "rezervuotas").orderBy("price", "desc"), {
-            limit: 5
-        }
-    );
+    const [items, setItems]: any = useState([]);
 
-    const [paymentModalShow, setPaymentModalShow] = useState(false);
+    const offersRef = db.collection("reservedOffers");
 
+    async function getIsUserOReservedUser(price: any, sorting: any) {
+        // @ts-ignore
+        const isUser = offersRef.where("user", "==", auth.currentUser?.uid).where("activity", "==", category).where("location", "==", location).where("status", "==", status).orderBy("price", `${sorting}`).get();
+        // @ts-ignore
+        const isReserved = offersRef.where("reservedUser", "==", auth.currentUser?.uid).where("activity", "==", category).where("location", "==", location).where("status", "==", status).orderBy("price", `${sorting}`).get();
 
-    const handlePaymentModalShow = () => {
-        setPaymentModalShow(!paymentModalShow);
+        const [userQuerySnapshot, reservedUserQuerySnapshot] = await Promise.all([
+            isUser,
+            isReserved
+        ]);
+
+        const userArray = userQuerySnapshot.docs;
+        const reservedUserArray = reservedUserQuerySnapshot.docs;
+
+        const usersArray = userArray.concat(reservedUserArray);
+
+        return usersArray;
     }
 
-    const cancelReservationWithoutPay = async (item: any) => {
-        const confirmation = window.confirm("Atšaukti rezervaciją");
-        if (confirmation) {
+    useEffect(() => {
+        const itemst: any[] = [];
+        if (price === "Kaina (mažėjančiai)") {
+            const sorting = "desc";
+            getIsUserOReservedUser(price, sorting).then(result => {
+                const items: any[] = [];
 
-            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach(async (doc) => {
-                        await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Naudotojo atšaukta rezervacija",
-                        })
-
-                        await history.go(0);
-                    })
+                // @ts-ignore
+                result.forEach((doc):any => {
+                    console.log(doc.data());
+                    const item = doc.data();
+                    items.push(item);
                 })
+                // @ts-ignore
+                setItems(items);
+            });
         }
-    }
 
-    const confirmReservation = async (item: any) => {
-        const confirmation = window.confirm("Patvirtinti rezervaciją");
-        if (confirmation) {
+        else if(price === "Kaina (didėjančiai)") {
+            const sorting = "asc";
+            getIsUserOReservedUser(price, sorting).then(result => {
+                const items: any[] = [];
 
-            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach(async (doc) => {
-                        await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Patvirtinta",
-                        })
-
-                        await history.go(0);
-                    })
+                // @ts-ignore
+                result.forEach((doc):any => {
+                    console.log(doc.data());
+                    const item = doc.data();
+                    items.push(item);
                 })
+                // @ts-ignore
+                setItems(items);
+            });
         }
-    }
 
-    const cancelReservationByUser = async (item: any) => {
-        const confirmation = window.confirm("Atšaukti vykdymą");
-        if (confirmation) {
+    }, [])
 
-            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach(async (doc) => {
-                        await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Atšaukta naudotojo",
-                        })
+    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
-                        await history.go(0);
-                    })
-                })
-        }
-    }
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    // @ts-ignore
+    const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
-    const cancelReservationByProvider = async (item: any) => {
-        const confirmation = window.confirm("Atšaukti vykdymą");
-        if (confirmation) {
-
-            await db.collection("reservedOffers").where("id", "==", item.id).limit(1).get()
-                .then((querySnapshot) => {
-                    querySnapshot.forEach(async (doc) => {
-                        await db.collection("reservedOffers").doc(doc.id).update({
-                            status: "Atšaukta teikėjo",
-                        })
-
-                        await history.go(0);
-                    })
-                })
-        }
-    }
-
-    const [completedModalShow, setCompletedModalShow] = useState(false);
-
-    const handleCompletedModalShow = () => {
-        setCompletedModalShow(!completedModalShow);
-    }
-
+    const paginate = (pageNumber: React.SetStateAction<number>) => {setCurrentPage(pageNumber)}
 
     return (
         <div>
             <UserNavBarComponent profileImage={image} />
-                <div style={{display: "flex", marginLeft: "10rem"}}>
-                    {
-                        items.map((item) => {
-                            console.log(item.status);
-                            return (
-                                <div>
-                                    {
-                                        item.status === "rezervuotas" && item.user === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div>
-                                                        <Button variant="outline-dark" onClick={() => confirmReservation(item)}>Patvirtinti rezervaciją</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationWithoutPay(item)}>Atšaukti rezervaciją</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.email}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-                                    {
-                                        item.status === "rezervuotas" && item.reservedUser === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.phoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div className="alert alert-warning center-element" role="alert">
-                                                        <p>Laukite patvirtinimo</p>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationWithoutPay(item)}>Atšaukti rezervaciją</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-                                    {
-                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.user === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div>
-                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/teikejas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationByProvider(item)}>Atšaukti</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-                                    {
-                                        (item.status === "Patvirtinta" || item.status === "Atliktas" || item.status === "Vykdomas" || item.status === "Atidėtas") && item.reservedUser === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.phoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div>
-                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/progresas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger" onClick={() => cancelReservationByUser(item)}>Atšaukti</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-
-                                    {
-                                        item.status === "Laukiama mokėjimo" && item.user === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div>
-                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/teikejas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
-                                                    </div>
-                                                    <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
-                                                        Laukite mokėjimo
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-
-
-                                    {
-                                        item.status === "Laukiama mokėjimo" && item.reservedUser === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.phoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div>
-                                                        <Button variant="outline-dark" onClick={() => {history.push("/vykdymas/progresas"), store.dispatch(setReservedOffer(item))}}>Peržiūrėti progresą</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-dark" onClick={handlePaymentModalShow}>Atlikti mokėjimą</Button>
-                                                        <PaymentModalComponent show={paymentModalShow} onHide={() => handlePaymentModalShow()} item={item} />
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        <Button variant="outline-danger">Paslauga atlikta netinkamai</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-
-                                    {
-                                        item.status === "Mokėjimas atliktas" && item.user === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.reservedUserPhoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div className="alert alert-warning" role="alert" style={{marginTop: "2rem"}}>
-                                                        Patvirtinkite mokėjimo gavimą
-                                                    </div>
-                                                    <div className="center-element">
-                                                        <Button variant="outline-dark" onClick={handleCompletedModalShow}>Patvirtinti mokėjimo gavimą</Button>
-                                                        <CompletedOfferModalComponent reservedOffer={item} onHide={() => handleCompletedModalShow()} show={completedModalShow} />
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}} className="center-element">
-                                                        <Button variant="outline-danger">Negautas mokėjimas</Button>
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.reservedUser}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-
-
-                                    {
-                                        item.status === "Mokėjimas atliktas" && item.reservedUser === auth.currentUser?.uid ?
-                                            <Card style={{ marginLeft: "2rem", width: "18rem" }}>
-                                                <Card.Img variant="top" src={workInProgress} />
-                                                <Card.Body>
-                                                    <Card.Title>{item.title}</Card.Title>
-                                                    <Card.Text>
-                                                        {
-                                                            item.description.length >= 100 ? <div>{item.description.slice(0, 100)}...</div> : <div>{item.description}</div>
-                                                        }
-                                                    </Card.Text>
-                                                </Card.Body>
-                                                <ListGroup className="list-group-flush">
-                                                    <ListGroupItem>Užsakovas: {item.reservedUserNameAndSurname}</ListGroupItem>
-                                                    <ListGroupItem>{item.phoneNumber}</ListGroupItem>
-                                                    <ListGroupItem>{item.location}</ListGroupItem>
-                                                    <ListGroupItem>{item.address}</ListGroupItem>
-                                                    <ListGroupItem>{moment(item.reservedDay).format("YYYY-MM-DD")} - {item.reservedHour}</ListGroupItem>
-                                                </ListGroup>
-                                                <Card.Body>
-                                                    <div className="alert alert-success" role="alert" style={{marginTop: "2rem"}}>
-                                                        Atlikote mokėjimą sėkmingai
-                                                    </div>
-                                                    <div style={{marginTop: "2rem"}}>
-                                                        {/*@ts-ignore*/}
-                                                        <Link to={{pathname: "/kitas",  query:{user: item.user}}} style={{marginRight: "2rem"}}>Profilis</Link>
-                                                        <Card.Link href={`mailto:${item.userMail}`}>Susiekti el. paštu</Card.Link>
-                                                    </div>
-                                                </Card.Body>
-                                            </Card> : <div></div>
-                                    }
-
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-
-                {
-                    items.length === 0 ? <div style={{marginTop: "2rem"}} className="center-element">Nėra vykdomų pasiūlymų<Button style={{marginLeft: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Grįžti atgal</Button></div> :
-                        <div className="center-element" style={{marginTop: "2rem"}}>
-                            <Button style={{marginRight: "2rem"}} disabled={isStart} variant="primary" onClick={getPrev}>Ankstenis puslapis</Button>
-                            <Button disabled={isEnd} variant="secondary" onClick={getNext}>Kitas puslapis</Button>
-                        </div>
-                }
-            </div>
+            <FilterOffersInProgressPagination items={currentItems} loading={loading} />
+            <PaymentPaginationComponent itemsPerPage={itemsPerPage} totalItems={items.length} paginate={paginate}/>
+        </div>
     )
 }
 

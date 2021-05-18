@@ -8,11 +8,12 @@ import TimePicker from "react-time-picker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale } from  "react-datepicker";
 import lt from 'date-fns/locale/lt';
-import {useSelector} from "react-redux";
-import {selectUserEmail} from "../../features/user/userSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {selectModalError, selectUserEmail, sendModalError} from "../../features/user/userSlice";
 import {locations} from "./locations";
 // @ts-ignore
 import {v4 as uuid} from "uuid";
+import ModalNotificationComponent from "../main_page/ModalNotificationComponent";
 registerLocale('lt', lt)
 
 interface Props {
@@ -66,55 +67,62 @@ const ComfirmReservationModalComponent = (props: Props) => {
     const handleAddressChange = (event: any) => {
         setAddress(event.target.value)
     }
+    const error = useSelector(selectModalError);
+    const dispatch = useDispatch();
 
     const sendConfirmationForOffer = async (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
         event.preventDefault();
-        const confirm = window.confirm("Patvirtinti?");
-        if (confirm) {
-            const id = uuid();
-            // await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
-            //     .then((querySnapshot) => {
-            //         querySnapshot.forEach((doc) => {
-            //             docId = doc.id;
-            //         })
-            //     })
-            await db.collection("reservedOffers").add({
-                status: "rezervuotas",
-                price: props.item.price,
-                user: props.item.user,
-                userMail: props.item.userMail,
-                username: props.item.username,
-                profileImage: props.item.profileImage,
-                title: props.item.title,
-                description: props.item.description,
-                reservedDay: reservedTimeDay.toISOString(),
-                reservedHour: reservedTimeHour,
-                reservedUser: auth.currentUser?.uid,
-                reservedUserEmail: userEmail,
-                paymentStatus: "Neatliktas",
-                reservedUserNameAndSurname: name,
-                reservedUserPhoneNumber: phoneNumber,
-                phoneNumber: props.item.phoneNumber,
-                nameAndSurname: props.item.nameAndSurname,
-                location: location,
-                address: address,
-                id: id
+        if(address !== "" && location !== "" && reservedTimeDay !== null && reservedTimeHour !== null) {
+            const confirm = window.confirm("Patvirtinti?");
+            if (confirm) {
+                const id = uuid();
+                // await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
+                //     .then((querySnapshot) => {
+                //         querySnapshot.forEach((doc) => {
+                //             docId = doc.id;
+                //         })
+                //     })
+                await db.collection("reservedOffers").add({
+                    status: "rezervuotas",
+                    price: props.item.price,
+                    user: props.item.user,
+                    userMail: props.item.userMail,
+                    username: props.item.username,
+                    profileImage: props.item.profileImage,
+                    title: props.item.title,
+                    description: props.item.description,
+                    reservedDay: reservedTimeDay.toISOString(),
+                    reservedHour: reservedTimeHour,
+                    reservedUser: auth.currentUser?.uid,
+                    reservedUserEmail: userEmail,
+                    paymentStatus: "Neatliktas",
+                    reservedUserNameAndSurname: name,
+                    reservedUserPhoneNumber: phoneNumber,
+                    phoneNumber: props.item.phoneNumber,
+                    nameAndSurname: props.item.nameAndSurname,
+                    location: location,
+                    address: address,
+                    id: id,
+                    experienceLevel: props.item.experienceLevel,
+                    activity: props.item.activity,
 
-            }).then(async (docRef) => {
-                await db.collection("offerReview").doc(docRef.id).set({
-                    progressRating: 0,
-                    comments: []
+                }).then(async (docRef) => {
+                    await db.collection("offerReview").doc(docRef.id).set({
+                        progressRating: 0,
+                        comments: []
+                    })
                 })
-            })
-            await history.go(0);
+                await history.go(0);
+            }
+        } else {
+                dispatch(sendModalError("Nepalikite tuščių laukų"));
+                setTimeout(() => {
+                    dispatch(sendModalError(""))
+                }, 2000);
         }
 
+
     }
-
-    // const handleReservedTimeDayChange = (event: any) => {
-    //     setReservedTimeDay(event.target.value)
-    // }
-
 
     return (
         <Modal
@@ -133,6 +141,7 @@ const ComfirmReservationModalComponent = (props: Props) => {
             </Modal.Header>
             <Modal.Body>
                 <Form>
+                    <ModalNotificationComponent message={error} />
                     <Form.Group controlId="Select3">
                         <label htmlFor="location2" style={{marginRight: "1rem"}}>Paslaugos atlikimo vieta:</label>
                         <select name="location2" value={location} onChange={handleLocationChange} required>

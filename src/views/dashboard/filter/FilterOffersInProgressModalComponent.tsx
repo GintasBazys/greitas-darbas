@@ -26,7 +26,6 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
 
     const [category, setCategory] = useState("Klientų aptarnavimas");
     const [experience, setExperience] = useState("Pradedantysis");
-    const [rating, setRating] = useState("Mažesnis nei 5");
     const [price, setPrice] = useState("Kaina (didėjančiai)");
     const [location, setLocation] = useState("Akmenė");
     const [status, setStatus] = useState("rezervuotas");
@@ -44,9 +43,6 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
         setCategory(event.target.value)
     }
 
-    const handleRatingChange = (event: any) => {
-        setRating(event.target.value)
-    }
     const handleExperienceChange = (event: any) => {
         setExperience(event.target.value)
     }
@@ -54,12 +50,11 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
     const dispatch = useDispatch();
 
     const filter = async () => {
-        if(category !== "-" && experience !== "-" && price !== "-" && location !== "-" && rating !== "-" && status !== "-") {
+        if(category !== "-" && experience !== "-" && price !== "-" && location !== "-" && status !== "-") {
             await store.dispatch(setFilteredCategory(category));
             await store.dispatch(setFilteredExperience(experience));
             await store.dispatch(setFilteredPrice(price));
             await store.dispatch(setFilteredLocation(location));
-            await store.dispatch(setFilteredRating(rating));
             await store.dispatch(setFilteredStatus(status));
             await history.push("/paslauga/progresas/filtravimas");
         } else {
@@ -100,17 +95,6 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
                             <label style={{marginRight: "1rem"}} htmlFor="location">Patirtis:</label>
                             <select name="experience" value={experience} onChange={handleExperienceChange} required>
                                 {experienceLevels2.map((item: React.ReactNode) => <option>{item}</option>)}
-                            </select>
-                        </Form.Group>
-                        <Form.Group controlId="rating">
-                            <label style={{marginRight: "1rem"}} htmlFor="rating">Reitingas:</label>
-                            <select name="rating" value={rating} onChange={handleRatingChange} required>
-                                <option>-</option>
-                                <option>-</option>
-                                <option>Mažesnis nei 5</option>
-                                <option>Didesnis nei 5</option>
-                                <option>Didesnis nei 8</option>
-                                <option>Bet koks vertinimas</option>
                             </select>
                         </Form.Group>
                         <Form.Group controlId="price">

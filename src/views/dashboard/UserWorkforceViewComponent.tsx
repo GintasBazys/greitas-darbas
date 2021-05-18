@@ -16,6 +16,7 @@ import searchIcon from "../../assets/search.svg";
 import FilterRequestsModalComponent from "./filter/FilterRequestsModalComponent";
 import axios from "axios";
 import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
+import {Link} from "react-router-dom";
 
 const UserWorkforceViewComponent = () => {
     const image = useSelector(selectImage);
@@ -159,7 +160,8 @@ const UserWorkforceViewComponent = () => {
                                         </Card.Text>
                                     </Card.Body>
                                     <ListGroup className="list-group-flush">
-                                        <ListGroupItem>{item.nameAndSurname} {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
+                                        {/*@ts-ignore*/}
+                                        <ListGroupItem><Link to={{pathname: "/kitas",  query:{user: item.user}}}>{item.nameAndSurname}</Link> {item.userRating}<Image style={{marginLeft: "1px"}} src={star} fluid/></ListGroupItem>
                                         <ListGroupItem>Terminas: {moment(item.term).format("YYYY-MM-DD")}</ListGroupItem>
                                         <ListGroupItem>Biudžetas: {item.budget}€</ListGroupItem>
                                         <ListGroupItem>{item.phoneNumber}</ListGroupItem>

@@ -8,6 +8,9 @@ import history from "../../../history";
 import {Button, Form, Modal} from "react-bootstrap";
 import {locations} from "../locations";
 import {activities2} from "../registration/activities2";
+import {useDispatch, useSelector} from "react-redux";
+import {selectModalError, sendModalError} from "../../../features/user/userSlice";
+import ModalNotificationComponent from "../../main_page/ModalNotificationComponent";
 
 interface Props {
     show: boolean,
@@ -16,7 +19,6 @@ interface Props {
 
 const FilterRequestsInProgressModalComponent = (props: Props) => {
     const [category, setCategory] = useState("Klientų aptarnavimas");
-    const [rating, setRating] = useState("Mažesnis nei 5");
     const [price, setPrice] = useState("Kaina (didėjančiai)");
     const [location, setLocation] = useState("Akmenė");
     const [status, setStatus] = useState("rezervuotas");
@@ -35,17 +37,23 @@ const FilterRequestsInProgressModalComponent = (props: Props) => {
         setCategory(event.target.value)
     }
 
-    const handleRatingChange = (event: any) => {
-        setRating(event.target.value)
-    }
+    const error = useSelector(selectModalError);
+    const dispatch = useDispatch();
 
     const filter = async () => {
-        await store.dispatch(setFilteredCategory(category));
-        await store.dispatch(setFilteredPrice(price));
-        await store.dispatch(setFilteredLocation(location));
-        await store.dispatch(setFilteredRating(rating));
-        await store.dispatch(setFilteredStatus(status));
-        await history.push("/darbas/progresas/filtravimas");
+        if(category !== "-" && price !== "-" && location !== "-" && status !== "-") {
+            await store.dispatch(setFilteredCategory(category));
+            await store.dispatch(setFilteredPrice(price));
+            await store.dispatch(setFilteredLocation(location));
+            await store.dispatch(setFilteredStatus(status));
+            await history.push("/darbas/progresas/filtravimas");
+        } else {
+            dispatch(sendModalError("Nepasirinkote visų kriterijų"));
+            setTimeout(() => {
+                dispatch(sendModalError(""))
+            }, 2000);
+        }
+
     }
 
     return (
@@ -66,21 +74,11 @@ const FilterRequestsInProgressModalComponent = (props: Props) => {
             <Modal.Body>
                 <div>
                     <Form>
+                        <ModalNotificationComponent message={error} />
                         <Form.Group controlId="activity">
                             <label style={{marginRight: "1rem"}} htmlFor="location">Veikla:</label>
                             <select name="activity" value={category} onChange={handleCategoryChange} required>
                                 {activities2.map((item: React.ReactNode) => <option>{item}</option>)}
-                            </select>
-                        </Form.Group>
-                        <Form.Group controlId="rating">
-                            <label style={{marginRight: "1rem"}} htmlFor="rating">Reitingas:</label>
-                            <select name="rating" value={rating} onChange={handleRatingChange} required>
-                                <option>-</option>
-                                <option>-</option>
-                                <option>Mažesnis nei 5</option>
-                                <option>Didesnis nei 5</option>
-                                <option>Didesnis nei 8</option>
-                                <option>Bet koks vertinimas</option>
                             </select>
                         </Form.Group>
                         <Form.Group controlId="price">
