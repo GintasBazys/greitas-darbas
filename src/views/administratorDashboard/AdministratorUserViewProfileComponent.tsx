@@ -5,7 +5,6 @@ import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import { useHistory } from "react-router-dom";
 import * as firebase from "../../firebase";
 import {Button, Container, Image, Row} from "react-bootstrap";
-import AdministratorSendMessageModalComponent from "./AdministratorSendMessageModalComponent";
 
 const AdministratorUserViewProfileComponent = () => {
 

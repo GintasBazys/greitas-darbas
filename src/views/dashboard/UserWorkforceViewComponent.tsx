@@ -13,7 +13,6 @@ import UserRequestModalComponent from "./UserRequestModalComponent";
 import store from "../../app/store";
 import {setRequest} from "../../features/requests/requestsSlice";
 import searchIcon from "../../assets/search.svg";
-import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import FilterRequestsModalComponent from "./filter/FilterRequestsModalComponent";
 import axios from "axios";
 import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";

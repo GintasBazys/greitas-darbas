@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
-import Stripe from "../../Stripe";
 import {useSelector} from "react-redux";
 import {selectImage, selectUserEmail} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import axios from "axios";
 import Payments from "../administratorDashboard/Payments";
 import PaymentPaginationComponent from "../administratorDashboard/PaymentPaginationComponent";
-import LoadingComponent from "../LoadingComponent";
 
 const UserPaymentComponent = () => {
 

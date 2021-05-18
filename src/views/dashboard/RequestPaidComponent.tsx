@@ -3,7 +3,6 @@ import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {Button, Card, Col, Container, Image, ListGroup, ListGroupItem, Row} from "react-bootstrap";
-import star from "../../assets/star.svg";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
 import offerProgress from "../../assets/offer_progress.svg";
@@ -11,7 +10,6 @@ import {db} from "../../firebase";
 import {selectReservedRequest} from "../../features/requests/requestsSlice";
 import RequestsChangeProgressModalComponent from "./RequestsChangeProgressModalComponent";
 import history from "../../history";
-import axios from "axios";
 import moment from "moment";
 import workInProgress from "../../assets/work_in_progress.svg";
 

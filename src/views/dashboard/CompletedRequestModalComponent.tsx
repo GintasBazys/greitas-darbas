@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
-import axios from "axios";
-import Stripe from "../../Stripe";
 import RequestStripe from "../../RequestStripe";
 
 interface Props {

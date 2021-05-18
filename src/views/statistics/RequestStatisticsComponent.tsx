@@ -4,8 +4,6 @@ import {format} from "date-fns";
 
 const RequestsStatisticsComponent = (items: any) => {
     const doc = new jsPDF();
-    // const tableColumn = ["Pavadinimas", "Veikla", "Vietovė", "Statusas", "Mokėjimo statusas",
-    //     "Telefono nr.", "Valandinė kaina", "Paslaugos teikėjo paštas", "Sukūrimo data"];
     const tableColumn = ["Pavadinimas", "Veikla", "Vieta", "Statusas", "Data"];
     const tableRows: any[][] = [];
 

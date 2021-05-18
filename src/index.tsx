@@ -13,10 +13,7 @@ import {fetchWorkerAsync, fetchWorkerProfilePicture} from "./features/worker/wor
 
 auth.onAuthStateChanged( async user => {
 
-    //const matchAnyDashboardUrl = history.location.pathname.match(/pradzia/);
-
     let userStatus = "";
-
     let workerStatus = "";
 
     if (user) {

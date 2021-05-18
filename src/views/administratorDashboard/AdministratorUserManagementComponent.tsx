@@ -4,14 +4,9 @@ import {db} from "../../firebase";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {useSelector} from "react-redux";
 import {Button, Image, Container, Row, Col, Navbar} from "react-bootstrap";
-import LoadingComponent from "../LoadingComponent";
-import userControlImage from "../../assets/admin_user_control.svg";
-import adminUserLink from "../../assets/admin_user_link.svg";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
-import myOffersAndRequests from "../../assets/myoffersAndRequests.svg";
-
 const AdministratorUserManagementComponent = () => {
 
     const image = useSelector(selectWorkerImage);

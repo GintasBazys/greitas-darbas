@@ -1,7 +1,6 @@
 import React from "react";
 import LoadingComponent from "../LoadingComponent";
-import {Button, Card} from "react-bootstrap";
-import mail from "../../assets/mail.svg";
+import {Card} from "react-bootstrap";
 import money from "../../assets/money.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";

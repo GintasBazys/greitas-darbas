@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
-import Stripe from "../../Stripe";
 import {auth, db} from "../../firebase";
 
 const MainUserComponent = () => {

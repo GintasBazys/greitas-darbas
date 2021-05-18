@@ -7,7 +7,6 @@ import axios from "axios";
 import AdministratorDashboardNavbar from "./AdministratorDashboardNavbar";
 import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
-import worker from "../../assets/worker.svg";
 
 const UserListComponent = () => {
 

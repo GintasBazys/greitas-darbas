@@ -5,7 +5,6 @@ import UserNavBarComponent from "./UserNavbarComponent";
 import {db} from "../../firebase";
 import history from "../../history";
 import {Button, Card, Col, Container, Image, ListGroup, ListGroupItem, Row} from "react-bootstrap";
-import star from "../../assets/star.svg";
 
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
@@ -15,7 +14,6 @@ import RequestsProgressModalComponent from "./RequestsProgressModalComponent";
 import RequestsReviewModalComponent from "./RequestsReviewModalComponent";
 
 import moment from "moment";
-import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
 import CompletedRequestModalComponent from "./CompletedRequestModalComponent";
 import workInProgress from "../../assets/work_in_progress.svg";
 

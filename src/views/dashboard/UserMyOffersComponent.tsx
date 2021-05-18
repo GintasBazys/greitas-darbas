@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage, selectUser} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
-import {Button, Col, Container, ListGroupItem, Row, Image} from "react-bootstrap";
+import {Button, Col, Container, Row, Image} from "react-bootstrap";
 import LoadingComponent from "../LoadingComponent";
 import {usePagination} from "use-pagination-firestore";
 import {db, storageRef} from "../../firebase";

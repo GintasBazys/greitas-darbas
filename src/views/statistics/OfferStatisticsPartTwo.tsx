@@ -1,13 +1,10 @@
 import React from "react";
-import {format} from "date-fns";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const OfferStatisticsPartTwo = (items: any) => {
 
     const doc = new jsPDF();
-    // const tableColumn = ["Pavadinimas", "Veikla", "Vietovė", "Statusas", "Mokėjimo statusas",
-    //     "Telefono nr.", "Valandinė kaina", "Paslaugos teikėjo paštas", "Sukūrimo data"];
     const tableColumn = ["Patirtis", "Telefono nr.", "Valandine kaina", "Paslaugos teikejo pastas", "Reitingas"];
     const tableRows: any[][] = [];
 

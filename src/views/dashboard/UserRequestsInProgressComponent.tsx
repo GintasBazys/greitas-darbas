@@ -6,16 +6,13 @@ import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
 import {Link} from "react-router-dom";
 import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
-import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import store from "../../app/store";
 import {setReservedRequest} from "../../features/requests/requestsSlice";
 import history from "../../history";
 import searchIcon from "../../assets/search.svg";
-import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import workInProgress from "../../assets/work_in_progress.svg";
-import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
 import RequestCompleteModalComponent from "./RequestCompleteModalComponent";
 import FilterRequestsInProgressModalComponent from "./filter/FilterRequestsInProgressModalComponent";
 import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";

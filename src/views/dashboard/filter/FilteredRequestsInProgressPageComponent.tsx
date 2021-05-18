@@ -3,7 +3,6 @@ import {useSelector} from "react-redux";
 import {selectImage} from "../../../features/user/userSlice";
 import {
     selectCategory,
-    selectExperience,
     selectLocation,
     selectPrice, selectRating, selectStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
@@ -11,16 +10,11 @@ import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../../firebase";
 import history from "../../../history";
 import UserNavBarComponent from "../UserNavbarComponent";
-import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
+import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import workInProgress from "../../../assets/work_in_progress.svg";
 import moment from "moment";
 import {Link} from "react-router-dom";
 import store from "../../../app/store";
-import {setReservedOffer} from "../../../features/offers/offersSlice";
-import PaymentModalComponent from "../PaymentModalComponent";
-import CompletedOfferModalComponent from "../CompletedOfferModalComponent";
-import searchIcon from "../../../assets/search.svg";
-import FilterRequestsInProgressModalComponent from "./FilterRequestsInProgressModalComponent";
 import {setReservedRequest} from "../../../features/requests/requestsSlice";
 import RequestCompleteModalComponent from "../RequestCompleteModalComponent";
 

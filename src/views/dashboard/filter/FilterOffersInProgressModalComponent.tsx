@@ -13,6 +13,9 @@ import {
 } from "../../../features/filter/offersInProgressFilterSlice";
 import {activities2} from "../registration/activities2";
 import {experienceLevels2} from "../registration/experienceLevel2";
+import {useDispatch, useSelector} from "react-redux";
+import {selectModalError, sendModalError} from "../../../features/user/userSlice";
+import ModalNotificationComponent from "../../main_page/ModalNotificationComponent";
 
 interface Props {
     show: boolean,
@@ -47,17 +50,25 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
     const handleExperienceChange = (event: any) => {
         setExperience(event.target.value)
     }
-
+    const error = useSelector(selectModalError);
+    const dispatch = useDispatch();
 
     const filter = async () => {
-        console.log(experience);
-        await store.dispatch(setFilteredCategory(category));
-        await store.dispatch(setFilteredExperience(experience));
-        await store.dispatch(setFilteredPrice(price));
-        await store.dispatch(setFilteredLocation(location));
-        await store.dispatch(setFilteredRating(rating));
-        await store.dispatch(setFilteredStatus(status));
-        await history.push("/paslauga/progresas/filtravimas");
+        if(category !== "-" && experience !== "-" && price !== "-" && location !== "-" && rating !== "-" && status !== "-") {
+            await store.dispatch(setFilteredCategory(category));
+            await store.dispatch(setFilteredExperience(experience));
+            await store.dispatch(setFilteredPrice(price));
+            await store.dispatch(setFilteredLocation(location));
+            await store.dispatch(setFilteredRating(rating));
+            await store.dispatch(setFilteredStatus(status));
+            await history.push("/paslauga/progresas/filtravimas");
+        } else {
+            dispatch(sendModalError("Nepasirinkote visų kriterijų"));
+            setTimeout(() => {
+                dispatch(sendModalError(""))
+            }, 2000);
+        }
+
     }
 
     return (
@@ -78,6 +89,7 @@ const FilterOffersInProgressModalComponent = (props: Props) => {
             <Modal.Body>
                 <div>
                     <Form>
+                        <ModalNotificationComponent message={error} />
                         <Form.Group controlId="activity">
                             <label style={{marginRight: "1rem"}} htmlFor="location">Veikla:</label>
                             <select name="activity" value={category} onChange={handleCategoryChange} required>

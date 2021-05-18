@@ -7,7 +7,6 @@ import {selectReservedOffer, setReservedOffer, setReservedTime} from "../../feat
 import {db} from "../../firebase";
 import {Link} from "react-router-dom";
 import UserSendMessageModalComponent from "./UserSendMessageModalComponent";
-import star from "../../assets/star.svg";
 import history from "../../history";
 import ServiceProviderProgressModalComponent from "./ServiceProviderProgressModalComponent";
 import offerProgress from "../../assets/offer_progress.svg";

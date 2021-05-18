@@ -1,7 +1,7 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {logout, selectWorker} from "../../features/worker/workerSlice";
-import {Button, Dropdown, DropdownButton, Image, Navbar, NavDropdown} from "react-bootstrap";
+import {Dropdown, DropdownButton, Image, Navbar, NavDropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import history from "../../history";
 

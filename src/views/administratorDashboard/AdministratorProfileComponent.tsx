@@ -1,7 +1,5 @@
 import {
     fetchWorkerPictureAsync,
-    selectWorkerError,
-    sendWorkerError,
     selectWorkerImage,
     selectWorker, fetchWorkerAsync,
 } from "../../features/worker/workerSlice";
@@ -17,10 +15,8 @@ import {sendError} from "../../features/user/userSlice";
 const AdministratorProfileComponent = () => {
     const dispatch = useDispatch();
     let image = useSelector(selectWorkerImage);
-    let errorMessage = useSelector(selectWorkerError);
 
     const [email, setEmail] = useState("");
-    const [aboutMe, setAboutMe] = useState("");
     const user = firebase.auth.currentUser;
     const userBeforeChange = useSelector(selectWorker);
     useEffect(() => {

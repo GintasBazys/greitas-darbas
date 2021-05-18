@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
@@ -6,18 +6,15 @@ import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
 import {Link} from "react-router-dom";
 import {Button, Card, Form, Image, ListGroup, ListGroupItem} from "react-bootstrap";
-import star from "../../assets/star.svg";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 import history from "../../history";
-import axios from "axios";
 import workInProgress from "../../assets/work_in_progress.svg";
 import searchIcon from "../../assets/search.svg";
 import store from "../../app/store";
 import {setReservedOffer} from "../../features/offers/offersSlice";
 import PaymentModalComponent from "./PaymentModalComponent";
 import CompletedOfferModalComponent from "./CompletedOfferModalComponent";
-import FilterOffersModalComponent from "./filter/FilterOffersModalComponent";
 import FilterOffersInProgressModalComponent from "./filter/FilterOffersInProgressModalComponent";
 import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSlice";
 

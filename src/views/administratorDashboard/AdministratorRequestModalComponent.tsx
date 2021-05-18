@@ -3,9 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {db} from "../../firebase";
 import {Button, Form, Image, Modal} from "react-bootstrap";
 import {locations} from "../dashboard/locations";
-import {days} from "../dashboard/days";
-import {selectError, sendError} from "../../features/user/userSlice";
-import {updateRequest} from "../../features/requests/requestsSlice";
+import {selectError} from "../../features/user/userSlice";
 import ModalNotificationComponent from "../main_page/ModalNotificationComponent";
 
 interface Props {

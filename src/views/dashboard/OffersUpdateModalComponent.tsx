@@ -4,10 +4,8 @@ import {db} from "../../firebase";
 import {selectError, sendError} from "../../features/user/userSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {updateOffer} from "../../features/offers/offersSlice";
-import history from "../../history";
 import ModalNotificationComponent from "../main_page/ModalNotificationComponent";
 import {locations} from "./locations";
-import {days} from "./days";
 
 interface Props {
     show: boolean,

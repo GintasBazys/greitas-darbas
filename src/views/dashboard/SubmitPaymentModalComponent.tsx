@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import {selectReservedOffer, selectReservedTime} from "../../features/offers/offersSlice";
 import {db} from "../../firebase";
 import history from "../../history";
 import {Button, Form, Modal} from "react-bootstrap";
-import Stripe from "../../Stripe";
 
 interface Props {
     show: boolean,

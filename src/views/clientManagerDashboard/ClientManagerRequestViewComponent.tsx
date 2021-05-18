@@ -3,10 +3,7 @@ import {useSelector} from "react-redux";
 import {selectWorkerImage} from "../../features/worker/workerSlice";
 import {usePagination} from "use-pagination-firestore";
 import {db} from "../../firebase";
-import AdministratorDashboardNavbar from "../administratorDashboard/AdministratorDashboardNavbar";
-import {Link} from "react-router-dom";
 import {Button, Container, Image, Table} from "react-bootstrap";
-import star from "../../assets/star.svg";
 import AdministratorRequestModalComponent from "../administratorDashboard/AdministratorRequestModalComponent";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";

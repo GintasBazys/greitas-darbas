@@ -2,7 +2,7 @@ import React from "react";
 import "filepond/dist/filepond.min.css";
 import "filepond/dist/filepond.css";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
-import {Button, Col, Container, Form, Image, Row} from "react-bootstrap";
+import {Button, Col, Container, Image, Row} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
 import {
     logout,

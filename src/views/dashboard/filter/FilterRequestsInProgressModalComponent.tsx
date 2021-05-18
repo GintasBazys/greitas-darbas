@@ -1,15 +1,13 @@
 import React, {useState} from "react";
 import store from "../../../app/store";
 import {
-    setFilteredCategory,
-    setFilteredExperience, setFilteredLocation,
+    setFilteredCategory, setFilteredLocation,
     setFilteredPrice, setFilteredRating, setFilteredStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
 import history from "../../../history";
 import {Button, Form, Modal} from "react-bootstrap";
 import {locations} from "../locations";
 import {activities2} from "../registration/activities2";
-import {experienceLevels2} from "../registration/experienceLevel2";
 
 interface Props {
     show: boolean,

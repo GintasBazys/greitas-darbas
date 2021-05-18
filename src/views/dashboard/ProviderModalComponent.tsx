@@ -1,7 +1,5 @@
 import React, {useState} from "react";
 import {Button, Form, Image, Modal} from "react-bootstrap";
-import {locations} from "./locations";
-import {days} from "./days";
 import {activities} from "./registration/activities";
 import {experienceLevels} from "./registration/experienceLevel";
 import {auth, db} from "../../firebase";

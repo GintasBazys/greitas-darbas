@@ -2,13 +2,12 @@ import React, {useState} from "react";
 import store from "../../../app/store";
 import {
     setFilteredCategory,
-    setFilteredExperience, setFilteredLocation,
+    setFilteredLocation,
     setFilteredPrice, setFilteredRating
 } from "../../../features/filter/offersInProgressFilterSlice";
 import history from "../../../history";
 import {Button, Form, Modal} from "react-bootstrap";
 import {activities2} from "../registration/activities2";
-import {experienceLevels2} from "../registration/experienceLevel2";
 import {locations2} from "../locations2";
 import ModalNotificationComponent from "../../main_page/ModalNotificationComponent";
 import {selectModalError, sendModalError} from "../../../features/user/userSlice";

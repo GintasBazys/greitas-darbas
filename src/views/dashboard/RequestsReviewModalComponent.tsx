@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {auth, db, offerReview} from "../../firebase";
+import {db} from "../../firebase";
 import {useDispatch} from "react-redux";
 
 interface Props {

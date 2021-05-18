@@ -1,13 +1,11 @@
 import React from "react";
 import jsPDF from "jspdf";
-import {format} from "date-fns";
 // @ts-ignore
 import moment from "moment/min/moment-with-locales";
 
 const UserStatisticsComponent = (items: any) => {
     const doc = new jsPDF();
-    // const tableColumn = ["Pavadinimas", "Veikla", "Vietovė", "Statusas", "Mokėjimo statusas",
-    //     "Telefono nr.", "Valandinė kaina", "Paslaugos teikėjo paštas", "Sukūrimo data"];
+
     const tableColumn = ["El. pašto adresas", "Telefono nr.", "Gyvenamoji vieta", "Gimimo metai"];
     const tableRows: any[][] = [];
 

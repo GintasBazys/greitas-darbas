@@ -1,6 +1,5 @@
 import React from "react";
 import jsPDF from "jspdf";
-import {format} from "date-fns";
 
 const RequestsStatisticsComponentPartTwo = (items: any) => {
     const doc = new jsPDF();

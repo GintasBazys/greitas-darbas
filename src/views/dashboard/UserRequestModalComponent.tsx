@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {locations} from "./locations";
 import {auth, db} from "../../firebase";
-// @ts-ignore
-import {v4 as uuid} from "uuid";
 import history from "../../history";
 import {useDispatch, useSelector} from "react-redux";
 import {selectModalError, selectUserEmail, sendModalError} from "../../features/user/userSlice";

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import {db} from "../../firebase";
-import axios from "axios";
 
 interface Props {
     reservedOffer: any,

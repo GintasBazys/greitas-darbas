@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Navbar, NavDropdown, Image, DropdownButton, Dropdown} from "react-bootstrap";
+import {Navbar, Image, DropdownButton, Dropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {selectUser, logout} from "../../features/user/userSlice";

@@ -1,7 +1,6 @@
 import React from "react";
 import {Button, Container, Form, Row, Col} from "react-bootstrap";
 import {useDispatch, useSelector} from "react-redux";
-import NotificationComponent from "./NotificationComponent";
 import NavbarComponent from "./NavbarComponent";
 import login from "../../assets/login.svg";
 import FooterComponent from "./FooterComponent";

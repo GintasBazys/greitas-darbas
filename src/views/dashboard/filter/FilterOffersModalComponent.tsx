@@ -5,7 +5,7 @@ import store from "../../../app/store";
 import {
     setFilteredCategory,
     setFilteredExperience, setFilteredLocation,
-    setFilteredPrice, setFilteredRating, setFilteredStatus
+    setFilteredPrice, setFilteredRating
 } from "../../../features/filter/offersInProgressFilterSlice";
 import history from "../../../history";
 import {activities2} from "../registration/activities2";

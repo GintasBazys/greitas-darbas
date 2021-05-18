@@ -1,10 +1,7 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {auth, db} from "../../firebase";
 import {Button, Form, Image, Modal} from "react-bootstrap";
 import {locations} from "./locations";
-import {days} from "./days";
-import history from "../../history";
 import {selectOffer} from "../../features/offers/offersSlice";
 import {selectUserEmail} from "../../features/user/userSlice";
 import ComfirmReservationModalComponent from "./ComfirmReservationModalComponent";

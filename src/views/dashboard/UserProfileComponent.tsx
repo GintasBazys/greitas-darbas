@@ -1,5 +1,4 @@
 import {
-    fetchPictureAsync,
     selectError,
     sendError,
     selectImage,

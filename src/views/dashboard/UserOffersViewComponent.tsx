@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useSelector} from "react-redux";
-import {selectImage, selectUserEmail} from "../../features/user/userSlice";
+import {selectImage} from "../../features/user/userSlice";
 import UserNavBarComponent from "./UserNavbarComponent";
 import {usePagination} from "use-pagination-firestore";
 import {auth, db} from "../../firebase";
@@ -19,10 +19,7 @@ import {setFilteredSearch} from "../../features/filter/offersInProgressFilterSli
 
 const UserOffersViewComponent = () => {
 
-    const userEmail = useSelector(selectUserEmail);
     const image = useSelector(selectImage);
-    //.where("status", "==", "naujas").where("status", "==", "atnaujintas")
-
 
     let {
         items,
