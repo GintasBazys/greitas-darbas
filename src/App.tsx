@@ -57,6 +57,7 @@ import UserHelpPageComponent from "./views/dashboard/UserHelpPageComponent";
 import FilteredRequestsInProgressPageComponent from "./views/dashboard/filter/FilteredRequestsInProgressPageComponent";
 import SearchOffersInProgressComponent from "./views/dashboard/filter/SearcOffersInProgressComponent";
 import SearchRequestsInProgressComponent from "./views/dashboard/filter/SearchRequestsInProgressComponent";
+import HelpPageComponent from "./views/main_page/HelpPageComponent";
 
 function App() {
   return <Router history={history}>
@@ -64,6 +65,7 @@ function App() {
       <Route exact path="/" component={HomeComponent} />
       <Route exact path="/prisijungti" component={Login} />
       <Route path="/darbuotojas/prisijungimas" component={WorkerLogin} />
+      <Route exact path="/pagalba" component={HelpPageComponent} />
       <PrivateRoute exact path="/pradzia" component={DashboardComponent} />
       <PrivateRoute exact path="/naudotojas/pagalba" component={UserHelpPageComponent} />
       <PrivateRoute exact path="/pradzia/profilis" component={UserUnconfirmedProfileComponent} />

@@ -32,10 +32,6 @@ const UserRegistrationComponent = () => {
 
     const image = useSelector(selectImage);
 
-    // window.addEventListener('popstate', function(event) {
-    //     history.go(1);
-    // });
-
     const handlePageChange = () => {
         history.push("/pradzia")
     }
@@ -160,7 +156,7 @@ const UserRegistrationComponent = () => {
 
                     <Col md={3}>
                         <div className="center">
-                            <Link to="/pagalba"><h1>Pagalba</h1></Link>
+                            <Link to="/naudotojas/pagalba"><h1>Pagalba</h1></Link>
                         </div>
 
                     </Col>

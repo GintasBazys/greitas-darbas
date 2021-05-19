@@ -1,26 +1,18 @@
-import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
-import {selectImage} from "../../features/user/userSlice";
-import UserNavBarComponent from "./UserNavbarComponent";
-import help from "../../assets/help.svg";
+import React, {useState} from "react";
 import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
-import HelpPageInformationModal from "./HelpPageInformationModal";
+import HelpPageInformationModal from "../dashboard/HelpPageInformationModal";
+import help from "../../assets/help.svg";
 
-const UserHelpPageComponent = () => {
-
-    const image = useSelector(selectImage);
-
+const HelpPageComponent = () => {
     const [modalShow, setModalShow] = useState(false);
 
     const handleModalShow = () => {
         setModalShow(!modalShow)
     }
-
     const email = "pagalba@greitas.lt";
 
     return (
         <div>
-            <UserNavBarComponent profileImage={image} />
             <Container fluid>
                 <Row>
                     <Col md={3} className="d-flex align-items-center justify-content-center">
@@ -55,4 +47,4 @@ const UserHelpPageComponent = () => {
     )
 }
 
-export default UserHelpPageComponent;
+export default HelpPageComponent;
