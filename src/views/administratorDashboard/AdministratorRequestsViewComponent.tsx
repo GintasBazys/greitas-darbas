@@ -39,10 +39,8 @@ const AdministratorRequestsViewComponent = () => {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         db.collection("requests").doc(doc.id).delete();
-                        //db.collection("users").doc()
                     })
                 })
-            //history.go(0);
         }
     }
 

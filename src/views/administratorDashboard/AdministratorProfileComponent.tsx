@@ -18,7 +18,6 @@ const AdministratorProfileComponent = () => {
 
     const [email, setEmail] = useState("");
     const user = firebase.auth.currentUser;
-    const userBeforeChange = useSelector(selectWorker);
     useEffect(() => {
         db.collection("workers").doc(auth.currentUser?.uid).get()
             .then((doc) => {
@@ -55,9 +54,7 @@ const AdministratorProfileComponent = () => {
                     await db.collection("workers").doc(auth.currentUser?.uid).update({
                         email: email
                     })
-                    history.push("/administracija");
                 }).catch((error) => {
-                //TODO veliau padaryti langa o ne prompt
                 const password = prompt("Re-enter password");
                 const cred = emailProvider.credential(
                     //@ts-ignore
@@ -71,7 +68,6 @@ const AdministratorProfileComponent = () => {
                             await db.collection("workers").doc(auth.currentUser?.uid).update({
                                 email: email
                             })
-                            history.push("administracija");
                         })
                 }).catch((error) => {
                     console.log(error.message);

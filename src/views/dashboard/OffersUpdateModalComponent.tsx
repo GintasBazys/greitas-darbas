@@ -22,7 +22,6 @@ const OffersUpdateModalComponent = (props: Props) => {
     const [isRemote, setIsRemote] = useState(false);
     const [title, setTitle] = useState("");
     const previousTitle = props.item.title;
-    const [availability, setAvailability] = useState([]);
 
     const dispatch = useDispatch();
 
@@ -35,7 +34,6 @@ const OffersUpdateModalComponent = (props: Props) => {
                     setLocation(doc.data()?.location);
                     setPrice(doc.data()?.price)
                     setTitle(doc.data()?.title);
-                    setAvailability(doc.data()?.availability)
                 })
             })
     }, [])
@@ -79,7 +77,6 @@ const OffersUpdateModalComponent = (props: Props) => {
     const errorMessage = useSelector(selectError);
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        //todo istestuoti laukus kad nepraleistu netinkamo formato
             event.preventDefault();
         if(description !== "" && phoneNumber !== "" && location !== "" && price !== "" && title !== "") {
 

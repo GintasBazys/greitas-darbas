@@ -1,14 +1,10 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {loginWorkerAsync, selectCheckedWorker, selectWorkerError, sendWorkerError,} from "./workerSlice";
+import {loginWorkerAsync, selectCheckedWorker, sendWorkerError,} from "./workerSlice";
 import WorkerLoginPageComponent from "../../views/main_page/WorkerLoginPageComponent";
-import {db} from "../../firebase";
-import {loginAsync, sendError} from "../user/userSlice";
-
 const WorkerLogin = () => {
 
     let checkedUser = useSelector(selectCheckedWorker);
-    const errorMessage = useSelector(selectWorkerError);
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -42,9 +38,6 @@ const WorkerLogin = () => {
         } else {
             dispatch(loginWorkerAsync({email: email, password: password, checkedRemember: checkedUser}))
             }
-            // dispatch(loginWorkerAsync({email: email, password: password, checkedRemember: checkedUser}))
-            // setEmail("");
-            // setPassword("");
     }
 
     return (

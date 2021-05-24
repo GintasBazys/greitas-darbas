@@ -1,10 +1,9 @@
 import React from "react";
-import {Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Nav, Navbar} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import history from "../../history";
 
-const NavbarComponent = () => {
-
+const HelpNavbarComponent = () => {
     return (
         <div>
             <Navbar bg="dark" expand="lg" className="sticky-top nav-position" variant="dark">
@@ -14,7 +13,6 @@ const NavbarComponent = () => {
                     <Nav className="ml-auto">
                         {history.location.pathname === "/" ? <Link className="nav-link" to="/prisijungti">Prisijungti</Link> : <Link className="nav-link" to="/">Pradžia</Link>}
                         <Link className="nav-link" to="/prisijungti">Registracija</Link>
-                        <Link className="nav-link" to="/pagalba">Pagalba</Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
@@ -22,4 +20,4 @@ const NavbarComponent = () => {
     )
 }
 
-export default NavbarComponent;
+export default HelpNavbarComponent;

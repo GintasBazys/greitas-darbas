@@ -82,7 +82,6 @@ const RequestsUpdateModalComponent = (props: Props) => {
     const errorMessage = useSelector(selectError);
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
-        //todo istestuoti laukus kad nepraleistu netinkamo formato
         event.preventDefault();
         if(description !== "" && phoneNumber !== "" && location !== "" && budget !== "" && title !== "") {
 

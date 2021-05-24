@@ -13,18 +13,13 @@ const HomeComponent = () => {
 
     return <div className="content-show">
         <NavbarComponent />
-        {/*{items.map((item) => {*/}
-        {/*    return <div>{item.username}</div>*/}
-        {/*})}*/}
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-            <h1>Sveiki atvykę į darbų dalijimosi platformą - Greitas Darbas</h1>
-            {/*<img style={{marginTop: "1.5rem"}} src={mainPicture}/>*/}
+            <h1>Sveiki atvykę į paslaugų dalijimosi platformą - Greitos paslaugos</h1>
             <img style={{marginTop: "1.5rem", height: "auto", maxWidth: "100%"}} src={main2} alt="Main picture"/>
             <h3 style={{textAlign: "center", marginTop: "30px", marginBottom: "30px"}}>Ieškokite įvairių sričių profesionalų, sūlykite savo paslaugas. Visi mokėjimai atliekami tik sistemoje.</h3>
             <Button variant="outline-dark" className="btn-lg" onClick={() => handleChangePage()}> Pradeti</Button>
         </div>
         <div>
-            {/*<Stripe />*/}
         </div>
         <FooterComponent />
     </div>

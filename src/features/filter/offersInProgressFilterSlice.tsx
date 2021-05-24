@@ -42,7 +42,7 @@ export const offersInProgressFilterSlice = createSlice( {
 })
 
 
-export const {setOffers, setFilteredCategory, setFilteredLocation, setFilteredPrice, setFilteredRating, setFilteredExperience, setFilteredStatus, setFilteredSearch} = offersInProgressFilterSlice.actions;
+export const {setFilteredCategory, setFilteredLocation, setFilteredPrice, setFilteredRating, setFilteredExperience, setFilteredStatus, setFilteredSearch} = offersInProgressFilterSlice.actions;
 
 export default offersInProgressFilterSlice.reducer;
 

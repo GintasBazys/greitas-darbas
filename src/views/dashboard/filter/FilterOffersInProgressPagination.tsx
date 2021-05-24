@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {auth, db} from "../../../firebase";
 import history from "../../../history";
-import UserNavBarComponent from "../UserNavbarComponent";
 import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
 import workInProgress from "../../../assets/work_in_progress.svg";
 import moment from "moment";

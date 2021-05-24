@@ -3,7 +3,6 @@ import * as firebase from "../../firebase";
 import {auth, db, secondaryApp} from "../../firebase";
 import defaultAvatar from "../../assets/avatar.png";
 import history from "../../history";
-import {sendError} from "../user/userSlice";
 
 export const workerSlice = createSlice( {
     name: "worker",
@@ -95,14 +94,12 @@ export const fetchWorkerAsync = (user: { uid: string | undefined }) => async (di
     await dispatch(fetchUser(userProfile.data()))
 }
 
-//nuotraukos pakeitimui
 export const fetchWorkerPictureAsync = (image: string) => async (dispatch: (arg0: { payload: any; type: string; }) => void) => {
     await firebase.workerCollection.doc(auth.currentUser?.uid).set({
         image: image
     }, {merge: true});
     const userRef = firebase.workerCollection.doc(auth.currentUser?.uid);
     userRef.get().then(doc => {
-        //console.log(doc.data()?.image)
         dispatch(fetchPicture(doc.data()?.image))
     }).catch((error) => {
         dispatch(sendWorkerError(error.message));

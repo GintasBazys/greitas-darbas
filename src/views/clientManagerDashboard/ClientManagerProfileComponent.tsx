@@ -12,14 +12,11 @@ import {fetchPictureAsync} from "../../features/user/userSlice";
 const ClientManagerProfileComponent = () => {
     let image = useSelector(selectWorkerImage);
     const dispatch = useDispatch();
-    let errorMessage = useSelector(selectWorkerError);
 
     const [email, setEmail] = useState("");
     const [aboutMe, setAboutMe] = useState("");
     const user = firebase.auth.currentUser;
-    const userBeforeChange = useSelector(selectWorker);
     const [username, setUsername] = useState("");
-    const [usernameBeforeChange, setUsernameBeforeChange] = useState("");
     const userId = firebase.auth.currentUser?.uid;
 
     useEffect( () => {
@@ -29,7 +26,6 @@ const ClientManagerProfileComponent = () => {
                 setEmail(user?.email);
                 setAboutMe(doc.data()?.aboutMe);
                 setUsername(doc.data()?.username);
-                setUsernameBeforeChange(doc.data()?.username);
             })
         ;
     }, [user])
@@ -54,9 +50,6 @@ const ClientManagerProfileComponent = () => {
             await db.collection("workers").doc(auth.currentUser?.uid).update({
                 aboutMe: aboutMe
             })
-            //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/darbuotojas/pagrindinis");
-            //console.log(username);
         }
 
     }
@@ -106,9 +99,7 @@ const ClientManagerProfileComponent = () => {
                     await db.collection("workers").doc(auth.currentUser?.uid).update({
                         email: email
                     })
-                    history.push("/darbuotojas/pagrindinis");
                 }).catch((error) => {
-                //TODO veliau padaryti langa o ne prompt
                 const password = prompt("Re-enter password");
                 const cred = emailProvider.credential(
                     //@ts-ignore
@@ -122,7 +113,6 @@ const ClientManagerProfileComponent = () => {
                             await db.collection("workers").doc(auth.currentUser?.uid).update({
                                 email: email
                             })
-                            await history.push("/darbuotojas/pagrindinis");
                         })
                 }).catch((error) => {
                     console.log(error.message);

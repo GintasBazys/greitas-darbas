@@ -1,6 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import * as firebase from "../../firebase"
-import history from "../../history";
 
 export const messagesSlice = createSlice( {
     name: "messages",

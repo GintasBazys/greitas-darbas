@@ -42,7 +42,6 @@ const FilteredRequestsInProgressPageComponent = () => {
     }
 
     useEffect(() => {
-        const itemst: any[] = [];
         if (price === "Kaina (mažėjančiai)") {
             const sorting = "desc";
             getIsUserOReservedUser(price, sorting).then(result => {

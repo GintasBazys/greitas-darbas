@@ -2,7 +2,6 @@ import React, { useState} from "react";
 
 import {useSelector, useDispatch} from "react-redux";
 import {signUpAsync, sendModalError, selectModalError} from "./userSlice";
-import NotificationComponent from "../../views/main_page/NotificationComponent";
 import {Button, Form} from "react-bootstrap";
 import {db} from "../../firebase";
 import ModalNotificationComponent from "../../views/main_page/ModalNotificationComponent";

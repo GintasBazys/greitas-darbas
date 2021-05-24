@@ -27,13 +27,13 @@ const MainUserComponent = () => {
     }, [])
 
     useEffect(() => {
-        db.collection("reservedOffers").where("reservedUser", "==", auth.currentUser?.uid).get()
+        db.collection("reservedOffers").where("user", "==", auth.currentUser?.uid).get()
             .then((querySnapshot) => {
                 setOffersInProgress(querySnapshot.docs.length)
             })
     }, [])
     useEffect(() => {
-        db.collection("requests").where("reservedUser", "==", auth.currentUser?.uid).get()
+        db.collection("requests").where("user", "==", auth.currentUser?.uid).get()
             .then((querySnapshot) => {
                 setRequestsInProgress(querySnapshot.docs.length)
             })

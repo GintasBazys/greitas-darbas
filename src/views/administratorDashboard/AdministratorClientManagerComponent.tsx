@@ -37,7 +37,6 @@ const AdministratorClientManagerComponent = () => {
                             status: "patvirtintas_naudotojas",
                         })
                     })
-                    //db.collection("users").doc()
                 })
         }
 
@@ -55,7 +54,6 @@ const AdministratorClientManagerComponent = () => {
                             status: "naujas",
                         })
                     })
-                    //db.collection("users").doc()
                 })
         }
 

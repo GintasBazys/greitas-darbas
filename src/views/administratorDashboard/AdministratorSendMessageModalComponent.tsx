@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {auth} from "../../firebase";
 import * as firebase from "../../firebase";
 import {selectWorkerEmail} from "../../features/worker/workerSlice";
@@ -18,7 +18,6 @@ const AdministratorSendMessageModalComponent = (props: Props) => {
     const workerEmail = useSelector(selectWorkerEmail);
 
     const [message, setMessage] = useState("");
-    const dispatch = useDispatch();
 
     const handleMessageChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
         setMessage(event.target.value)

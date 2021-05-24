@@ -76,12 +76,6 @@ const ComfirmReservationModalComponent = (props: Props) => {
             const confirm = window.confirm("Patvirtinti?");
             if (confirm) {
                 const id = uuid();
-                // await db.collection("offers").where("title", "==", props.item.title).limit(1).get()
-                //     .then((querySnapshot) => {
-                //         querySnapshot.forEach((doc) => {
-                //             docId = doc.id;
-                //         })
-                //     })
                 await db.collection("reservedOffers").add({
                     status: "rezervuotas",
                     price: props.item.price,

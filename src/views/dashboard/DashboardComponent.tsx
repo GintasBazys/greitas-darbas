@@ -22,10 +22,6 @@ const DashboardComponent = () => {
 
     const image = useSelector(selectImage);
 
-    // window.addEventListener('popstate', function(event) {
-    //     history.go(1);
-    // });
-
     const handleWorkerRegister = () => {
         history.push("/pradzia/darbuotojas")
     }
@@ -42,7 +38,7 @@ const DashboardComponent = () => {
                     <Col md={3}>
                         <div className="center">
                             <Link to="/pradzia/profilis"><h1>Peržiūrėti profilį</h1></Link>
-                            <Image src={image} alt="profilis" />
+                            <Image style={{"height": "auto", maxWidth: "100%"}} src={image} alt="profilis" />
                         </div>
 
                     </Col>

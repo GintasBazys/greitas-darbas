@@ -108,24 +108,10 @@ const UserWorkOfferManagementComponent = () => {
     }
 
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        //TODO pavadinimas unikalus
         setTitle(event.target.value)
     }
 
     const submitOffer = async () => {
-        //todo istestuoti laukus kad nepraleistu netinkamo formato
-
-        // if(title != "") {
-        //     db.collection("offers").where("title", "==", title).limit(1).get()
-        //         .then(() => {
-        //             dispatch(sendError("Skelbimas tokiu pavadinimu jau egzistuoja"))
-        //             setTimeout(() => {
-        //                 dispatch(sendError(""))
-        //             }, 2000);
-        //         }).catch((error) => {
-        //
-        //     })
-        // }
 
          if(description !== "" && phoneNumber !== "" && price !== 0 && title !== "" && phoneNumber.includes("+3706", 0)) {
 

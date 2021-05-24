@@ -76,7 +76,7 @@ export const signUpAsync  = (info: { username: string; email: string; password: 
             })
     })
         .catch((error) => {
-            dispatch(sendError(error.message))//TODO pakeisti klaidos pranesima
+            dispatch(sendError("Klaida"))
             setTimeout(() => {
                 dispatch(sendError(""))
             }, 5000)

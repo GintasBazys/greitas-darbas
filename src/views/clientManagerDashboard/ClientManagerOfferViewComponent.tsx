@@ -56,10 +56,8 @@ const ClientManagerOfferViewComponent = () => {
                                 });
                             })
                         })
-                        //db.collection("users").doc()
                     })
                 })
-            //history.go(0);
         }
     }
     moment.locale("lt")

@@ -3,7 +3,6 @@ import {useSelector} from "react-redux";
 import {Button, Form, Modal, Image} from "react-bootstrap";
 import {locations} from "../dashboard/locations";
 import {selectOffer} from "../../features/offers/offersSlice";
-import {selectUserEmail} from "../../features/user/userSlice";
 
 interface Props {
     show: boolean,
@@ -14,7 +13,6 @@ interface Props {
 const AdministratorOfferModalComponent = (props: Props) => {
 
     const item = useSelector(selectOffer);
-    const userEmail = useSelector(selectUserEmail);
     console.log(item.title);
 
     return (

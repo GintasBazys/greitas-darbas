@@ -23,16 +23,13 @@ const CompletedRequestModalComponent = (props: Props) => {
                         })
                 })
             })
-        db.collection("requestReview").doc()
     }, [])
 
-    const [docId, setDocId] = useState("");
     const [connectedAccount, setConnectedAccount] = useState(0);
 
     useEffect(() => {
         db.collection("users").doc(props.reservedRequest.reservedUser).get()
             .then((doc) => {
-                setDocId(doc.id);
                 setConnectedAccount(doc.data()?.connectedAccount)
             })
     }, [])

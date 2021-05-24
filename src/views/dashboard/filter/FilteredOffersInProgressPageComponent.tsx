@@ -4,7 +4,6 @@ import {selectImage} from "../../../features/user/userSlice";
 import UserNavBarComponent from "../UserNavbarComponent";
 import {
     selectCategory,
-    selectExperience,
     selectLocation,
     selectPrice, selectStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
@@ -19,7 +18,6 @@ const FilteredOffersInProgressPageComponent = () => {
     const price = useSelector(selectPrice);
     const location = useSelector(selectLocation);
     const status = useSelector(selectStatus);
-    const experience = useSelector(selectExperience);
 
     const [items, setItems]: any = useState([]);
 
@@ -53,7 +51,6 @@ const FilteredOffersInProgressPageComponent = () => {
 
                 // @ts-ignore
                 result.forEach((doc):any => {
-                    console.log(doc.data());
                     const item = doc.data();
                     items.push(item);
                 })
@@ -69,7 +66,6 @@ const FilteredOffersInProgressPageComponent = () => {
 
                 // @ts-ignore
                 result.forEach((doc):any => {
-                    console.log(doc.data());
                     const item = doc.data();
                     items.push(item);
                 })

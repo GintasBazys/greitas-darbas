@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import store from "../../../app/store";
 import {
     setFilteredCategory, setFilteredLocation,
-    setFilteredPrice, setFilteredRating, setFilteredStatus
+    setFilteredPrice, setFilteredStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
 import history from "../../../history";
 import {Button, Form, Modal} from "react-bootstrap";

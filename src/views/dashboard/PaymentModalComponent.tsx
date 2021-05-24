@@ -11,10 +11,6 @@ interface Props {
 
 const PaymentModalComponent = (props: Props) => {
 
-    const sendPayment = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        event.preventDefault();
-    }
-
     const [connectedId, setConnectedId] = useState("");
 
     useEffect(() => {

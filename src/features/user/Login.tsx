@@ -1,13 +1,12 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {loginAsync, selectCheckedUser, selectError, sendError} from "./userSlice";
+import {loginAsync, selectCheckedUser, sendError} from "./userSlice";
 import LoginPageComponent from "../../views/main_page/LoginPageComponent";
 import {db} from "../../firebase";
 
 const Login = () => {
 
     let checkedUser = useSelector(selectCheckedUser);
-    const errorMessage = useSelector(selectError);
     const dispatch = useDispatch();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

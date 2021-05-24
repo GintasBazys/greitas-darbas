@@ -21,7 +21,6 @@ const AdministratorUserViewProfileComponent = () => {
     const [aboutMe, setAboutMe] = useState("");
     const [username, setUsername] = useState("");
     const [profileImage, setProfileImage] = useState("");
-    const [user, setUser] = useState("");
 
     useEffect(() => {
 
@@ -37,7 +36,6 @@ const AdministratorUserViewProfileComponent = () => {
                     setUsername(doc.data()?.username);
                     setPortfolioImages(doc.data()?.portfolioImages);
                     setProfileImage(doc.data()?.image);
-                    setUser(doc.id);
                 })
 
             })

@@ -37,7 +37,6 @@ const AdministratorUserManagementComponent = () => {
                             status: "patvirtintas_darbuotojas",
                         })
                     })
-                    //db.collection("users").doc()
                 })
         }
 
@@ -55,7 +54,6 @@ const AdministratorUserManagementComponent = () => {
                             status: "naujas",
                         })
                     })
-                    //db.collection("users").doc()
                 })
         }
 

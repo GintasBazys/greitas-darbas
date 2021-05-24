@@ -1,6 +1,6 @@
 import React from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {logout, selectWorker} from "../../features/worker/workerSlice";
+import {useDispatch} from "react-redux";
+import {logout} from "../../features/worker/workerSlice";
 import {Dropdown, DropdownButton, Image, Navbar, NavDropdown} from "react-bootstrap";
 import {Link} from "react-router-dom";
 import history from "../../history";
@@ -9,7 +9,6 @@ import history from "../../history";
 const ClientManagerNavbarComponent = ({profileImage}) => {
 
     const dispatch = useDispatch();
-    const user = useSelector(selectWorker);
 
     return (
         <div>

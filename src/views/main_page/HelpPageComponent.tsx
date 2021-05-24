@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Button, Card, Col, Container, Image, Row} from "react-bootstrap";
 import HelpPageInformationModal from "../dashboard/HelpPageInformationModal";
 import help from "../../assets/help.svg";
+import HelpNavbarComponent from "./HelpNavbarComponent";
 
 const HelpPageComponent = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -13,6 +14,7 @@ const HelpPageComponent = () => {
 
     return (
         <div>
+            <HelpNavbarComponent />
             <Container fluid>
                 <Row>
                     <Col md={3} className="d-flex align-items-center justify-content-center">

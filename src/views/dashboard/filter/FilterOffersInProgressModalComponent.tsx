@@ -8,7 +8,6 @@ import {
     setFilteredExperience,
     setFilteredLocation,
     setFilteredPrice,
-    setFilteredRating,
     setFilteredStatus
 } from "../../../features/filter/offersInProgressFilterSlice";
 import {activities2} from "../registration/activities2";

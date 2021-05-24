@@ -13,13 +13,13 @@ const UserUnconfirmedNavbarComponent = ({profileImage}) => {
     return (
         <div>
             <Navbar bg="dark" expand="lg" className=" py-0 sticky-top dashboard-nav-width" variant="dark">
-                <Navbar.Brand><Link to="/pradzia" className="admin-navbar-brand">Pradžia</Link></Navbar.Brand>
+                <Navbar.Brand ><Link to="/pradzia" className="admin-navbar-brand" style={{color: "white", fontWeight: "bold"}}>Pradžia</Link></Navbar.Brand>
                 <Navbar.Toggle />
                 <Navbar.Collapse className="justify-content-end">
 
                     <NavDropdown
                         title={<div><Image src={profileImage} alt="user pic" roundedCircle className="dashboard-profile-image"/>
-                            <span className="dashboard-user-margin">{user}</span>
+                            <span className="dashboard-user-margin" style={{color: "white", fontWeight: "bold"}}>{user}</span>
                         </div>
                         }
                         id="basic-nav-dropdown">

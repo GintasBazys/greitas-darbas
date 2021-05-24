@@ -60,7 +60,6 @@ const UserSearchWorkerFormComponent = () => {
         }
     }
     const handleTitleChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        //TODO pavadinimas unikalus
         setTitle(event.target.value)
     }
     const handlePhoneNumberChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {

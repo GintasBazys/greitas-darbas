@@ -141,9 +141,6 @@ const UserProfileComponent = () => {
             await db.collection("users").doc(auth.currentUser?.uid).update({
                 aboutMe: aboutMe
             })
-            //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/pagrindinis");
-            //console.log(username);
         }
 
     }
@@ -160,9 +157,6 @@ const UserProfileComponent = () => {
             await db.collection("users").doc(auth.currentUser?.uid).update({
                 activity: activity
             })
-            //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/pagrindinis");
-            //console.log(username);
         }
 
     }
@@ -179,9 +173,6 @@ const UserProfileComponent = () => {
             await db.collection("users").doc(auth.currentUser?.uid).update({
                 experienceLevel: experienceLevel
             })
-            //await dispatch(fetchUserAsync({uid: userId}));
-            await history.push("/pagrindinis");
-            //console.log(username);
         }
 
     }
@@ -202,7 +193,6 @@ const UserProfileComponent = () => {
                     })
                     history.push("/pagrindinis");
                 }).catch((error) => {
-                //TODO veliau padaryti langa o ne prompt
                 const password = prompt("Re-enter password");
                 const cred = emailProvider.credential(
                     //@ts-ignore
@@ -218,7 +208,6 @@ const UserProfileComponent = () => {
                             })
                             await dispatch(updateOffers({mail: email}));
                             await dispatch(updateRequests({mail: email}));
-                            await history.push("pagrindinis");
                         })
                 }).catch((error) => {
                     console.log(error.message);

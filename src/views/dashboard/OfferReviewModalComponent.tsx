@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
-import {auth, db, offerReview} from "../../firebase";
-import {useDispatch, useSelector} from "react-redux";
+import {db, offerReview} from "../../firebase";
+import {useSelector} from "react-redux";
 import {selectReservedOffer} from "../../features/offers/offersSlice";
 
 interface Props {
@@ -13,7 +13,6 @@ const OfferReviewModalComponent = (props: Props) => {
 
     const [comment, setComment] = useState("");
 
-    const dispatch = useDispatch();
     const reservedOffer = useSelector(selectReservedOffer);
 
     const handleCommentChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {

@@ -47,7 +47,7 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                              stripe.paymentIntents.create({
                                  amount: amount * 100,
                                  currency: "EUR",
-                                 description: "Greitas Darbas Ltd",
+                                 description: "Greitos paslaugos Ltd",
                                  payment_method: id,
                                  confirm:true,
                                  customer: client.id,
@@ -75,7 +75,7 @@ app.post("/stripe/mokejimas", cors(), async (req, res) => {
                          stripe.paymentIntents.create({
                             amount: amount * 100,
                             currency: "EUR",
-                            description: "Greitas Darbas Ltd",
+                            description: "Greitos paslaugos Ltd",
                             payment_method: id,
                             customer: resp.data.data[0].id,
                             confirm:true,
@@ -117,7 +117,7 @@ app.post("/stripe/darbas/mokejimas", cors(), async (req, res) => {
                     stripe.paymentIntents.create({
                         amount: amount,
                         currency: "EUR",
-                        description: "Greitas Darbas Ltd",
+                        description: "Greitos paslaugos Ltd",
                         payment_method: id,
                         confirm:true,
                         customer: client.id,
@@ -145,7 +145,7 @@ app.post("/stripe/darbas/mokejimas", cors(), async (req, res) => {
                 stripe.paymentIntents.create({
                     amount: amount,
                     currency: "EUR",
-                    description: "Greitas Darbas Ltd",
+                    description: "Greitos paslaugos Ltd",
                     payment_method: id,
                     customer: resp.data.data[0].id,
                     confirm:true,
@@ -171,10 +171,6 @@ app.post("/stripe/darbas/mokejimas", cors(), async (req, res) => {
 app.post("/stripe/pervedimas", cors(), async (req, res) => {
     const {connectedAccount, amount, paymentId} = req.body;
 
-    // const topup =  await stripe.topups.create({
-    //     amount: amount,
-    //     currency: 'eur',
-    // });
     const transfer = await stripe.transfers.create({
         amount: amount,
         currency: "eur",
@@ -283,7 +279,6 @@ app.post("/stripe/connected", cors(), async (req, res) => {
 
     console.log(accountLinks);
     res.setHeader("Access-Control-Allow-Origin", "*")
-    //res.send(accountLinks.url);
     res.send({id: account.id, link: accountLinks.url})
 })
 

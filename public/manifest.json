@@ -1,6 +1,6 @@
 {
-  "short_name": "greitas",
-  "name": "Greitas Darbas",
+  "short_name": "grep",
+  "name": "Greitos Paslaugos",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
